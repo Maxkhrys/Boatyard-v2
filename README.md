@@ -35,12 +35,31 @@ kept since it tracks scroll position directly and introduces no movement.
 ```text
 src/
 ├── assets/images/     Source photography (optimised at build time)
-├── components/        Nav, Hero, Ritual, Locations, Booking, Footer
-├── layouts/Base.astro Fonts, meta, nav/footer, script entry
+├── components/        Nav, Hero, IntroStatement, Experience, Locations,
+│                      Pricing, Journal + JournalCard, MailingList, Footer
+├── layouts/Base.astro Fonts, meta, nav/footer, grain overlay, script entry
 ├── pages/index.astro  The one-pager
-├── scripts/main.ts    Lenis + GSAP: warming system, hero, nav, reveals
+├── scripts/main.ts    Lenis + GSAP: warming system, hero, pinned
+│                      Experience, statement fill, reveals, subscribe
 └── styles/global.css  Design tokens & shared primitives
 ```
 
-The hero headline is a placeholder — change the `headline` constant at the top
-of `src/components/Hero.astro`.
+## Standout moments
+
+Calm by default, with two cinematic scroll moments:
+
+1. **The Experience** — pinned section cycling Heat → Plunge → Repeat with
+   crossfading parallax imagery. Degrades to a calm stacked layout below
+   800px and under reduced motion.
+2. **Mailing list** — the warmest point of the page; the global colour
+   system peaks here (`endTrigger: #mailing`).
+
+## Placeholders to replace
+
+- Hero headline — `headline` constant in `src/components/Hero.astro`
+- Addresses & opening hours — `src/components/Locations.astro`, `Footer.astro`
+- Prices — `src/components/Pricing.astro`
+- Journal posts — data array in `src/components/Journal.astro` (cards are
+  CMS-ready via `JournalCard.astro` props)
+- Mailing-list form is front-end only — wire `#mailing-form` to a provider
+- Social URLs — `src/components/Footer.astro`

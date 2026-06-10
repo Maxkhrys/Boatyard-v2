@@ -1,44 +1,166 @@
 ---
 const year = new Date().getFullYear();
+
+// Addresses are placeholders — confirm the real details.
+const locations = [
+  { name: 'Wicklow Town', address: 'East Pier, Wicklow Harbour' },
+  { name: 'Arklow', address: 'North Quay, Arklow Harbour' },
+];
+
+const socials = [
+  { name: 'Instagram', url: 'https://www.instagram.com/theboatyardsauna' },
+  { name: 'Facebook', url: 'https://www.facebook.com/theboatyardsauna' },
+];
 ---
 
 <footer class="footer">
+  <svg class="footer__wave" viewBox="0 0 1440 48" preserveAspectRatio="none" aria-hidden="true">
+    <path
+      d="M0 24 C 180 8, 360 40, 540 24 S 900 8, 1080 24 S 1380 40, 1440 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1"
+    ></path>
+  </svg>
+
   <div class="container footer__inner">
-    <p class="footer__logo">The Boat Yard <em>Sauna</em></p>
-    <p class="footer__meta">Wicklow Town · Arklow · Ireland</p>
-    <p class="footer__meta">© {year} The Boat Yard Sauna</p>
+    <div class="footer__brand">
+      <p class="footer__logo">
+        The Boat Yard
+        <span class="footer__logo-descriptor">Sauna</span>
+      </p>
+      <p class="footer__tag">Cold sea. Hot cedar. Clear head.</p>
+    </div>
+
+    <div class="footer__locations">
+      {
+        locations.map((location) => (
+          <p class="footer__address">
+            <strong>{location.name}</strong>
+            {location.address}
+          </p>
+        ))
+      }
+    </div>
+
+    <div class="footer__social">
+      {
+        socials.map((social) => (
+          <a
+            class="link-underline"
+            href={social.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {social.name}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="container footer__base">
+    <p>© {year} The Boat Yard Sauna</p>
+    <p class="footer__credit">Made on the Irish coast</p>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding-block: 3.5rem;
-    border-top: 1px solid rgba(237, 242, 240, 0.1);
+    padding-block: clamp(3.5rem, 7vw, 5.5rem) 2.5rem;
+  }
+
+  .footer__wave {
+    display: block;
+    width: 100%;
+    height: 2.5rem;
+    color: rgba(200, 149, 108, 0.35);
+    margin-bottom: clamp(3rem, 6vw, 4.5rem);
   }
 
   .footer__inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 1rem 2.5rem;
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 800px) {
+    .footer__inner {
+      grid-template-columns: 1.4fr 1.3fr 0.8fr;
+      gap: 2rem;
+    }
   }
 
   .footer__logo {
     font-family: var(--font-display);
-    font-size: 1.15rem;
+    font-size: 1.35rem;
+    font-weight: 480;
+    letter-spacing: -0.01em;
   }
 
-  .footer__logo em {
-    font-style: italic;
+  .footer__logo-descriptor {
+    display: block;
+    margin-top: 0.3rem;
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
     color: var(--cedar);
   }
 
-  .footer__meta {
+  .footer__tag {
+    margin-top: 1.1rem;
     font-size: var(--text-small);
-    color: var(--ink-faint);
+    color: var(--ink-mid);
   }
 
-  .footer__meta:last-child {
-    margin-left: auto;
+  .footer__locations {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .footer__address {
+    font-size: var(--text-small);
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .footer__address strong {
+    display: block;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .footer__social {
+    display: flex;
+    flex-direction: row;
+    gap: 1.75rem;
+    align-items: start;
+  }
+
+  @media (min-width: 800px) {
+    .footer__social {
+      flex-direction: column;
+      gap: 0.9rem;
+      justify-self: end;
+    }
+  }
+
+  .footer__social a {
+    font-size: var(--text-small);
+    font-weight: 500;
+  }
+
+  .footer__base {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--mist-10);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: var(--text-tiny);
+    color: var(--ink-faint);
   }
 </style>

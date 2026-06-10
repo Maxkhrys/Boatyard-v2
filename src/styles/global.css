@@ -1,7 +1,10 @@
 /* ------------------------------------------------------------------
    The Boat Yard Sauna — design system
    Concept: "From the Pier to the Heat" — the page starts cold (deep
-   navy, sea mist) and warms toward cedar/amber as you scroll.
+   navy, sea mist) and warms toward cedar/amber as you scroll, peaking
+   at the mailing-list section.
+   Direction: quiet Scandinavian luxury, punctuated by a few cinematic
+   scroll moments. Calm by default.
    ------------------------------------------------------------------ */
 
 :root {
@@ -9,41 +12,48 @@
   --navy: #0b1d2e;
   --navy-deep: #081522;
   --mist: #edf2f0;
-  --mist-60: rgba(237, 242, 240, 0.6);
-  --mist-30: rgba(237, 242, 240, 0.3);
+  --mist-70: rgba(237, 242, 240, 0.7);
+  --mist-50: rgba(237, 242, 240, 0.5);
+  --mist-25: rgba(237, 242, 240, 0.25);
+  --mist-10: rgba(237, 242, 240, 0.1);
   --cedar: #c8956c;
   --cedar-deep: #a06b42;
   --amber: #e0a868;
 
-  /* Scroll-driven (set by JS as the page warms; these are the cold defaults) */
+  /* Scroll-driven (set by JS as the page warms; cold defaults) */
   --bg: var(--navy);
-  --warmth: 0; /* 0 = pier, 1 = heat */
+  --warmth: 0; /* 0 = pier, 1 = the stove */
 
   --ink: var(--mist);
-  --ink-soft: var(--mist-60);
-  --ink-faint: var(--mist-30);
+  --ink-soft: var(--mist-70);
+  --ink-mid: var(--mist-50);
+  --ink-faint: var(--mist-25);
 
-  /* Type */
+  /* Type — Fraunces for display, Inter for everything functional */
   --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
 
-  --text-hero: clamp(3rem, 11vw, 8.5rem);
-  --text-h2: clamp(2.25rem, 6vw, 4.75rem);
-  --text-h3: clamp(1.5rem, 3vw, 2.25rem);
+  --text-hero: clamp(3.25rem, 11vw, 9rem);
+  --text-h2: clamp(2.4rem, 6vw, 4.5rem);
+  --text-statement: clamp(1.85rem, 4.8vw, 3.75rem);
+  --text-h3: clamp(1.4rem, 2.6vw, 2rem);
   --text-body: clamp(1rem, 1.1vw, 1.125rem);
   --text-small: 0.875rem;
-  --text-eyebrow: clamp(0.7rem, 0.8vw, 0.8rem);
+  --text-tiny: 0.75rem;
+  --text-eyebrow: clamp(0.68rem, 0.8vw, 0.78rem);
 
   /* Rhythm */
-  --space-section: clamp(6rem, 14vw, 12rem);
-  --gutter: clamp(1.25rem, 4vw, 4rem);
-  --content-max: 80rem;
+  --space-section: clamp(7rem, 16vw, 14rem);
+  --gutter: clamp(1.25rem, 4.5vw, 5rem);
+  --content-max: 84rem;
 
-  /* Motion */
-  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-  --hover-duration: 0.4s;
+  /* Motion — one signature ease everywhere, no browser defaults */
+  --ease: cubic-bezier(0.625, 0.05, 0, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --dur: 0.55s;
+  --dur-slow: 0.9s;
 
-  --nav-height: 4.5rem;
+  --nav-height: 5rem;
 }
 
 /* ---------- Reset / base ---------- */
@@ -72,7 +82,8 @@ html.lenis {
 body {
   font-family: var(--font-body);
   font-size: var(--text-body);
-  line-height: 1.6;
+  font-weight: 400;
+  line-height: 1.65;
   color: var(--ink);
   background-color: var(--bg);
   -webkit-font-smoothing: antialiased;
@@ -88,11 +99,23 @@ body::after {
   pointer-events: none;
   background: radial-gradient(
     120% 90% at 50% 110%,
-    rgba(224, 168, 104, 0.28) 0%,
+    rgba(224, 168, 104, 0.3) 0%,
     rgba(200, 149, 108, 0.1) 45%,
     transparent 75%
   );
   opacity: var(--warmth);
+}
+
+/* Film grain — a single static noise tile, blended for warmth */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
 }
 
 img {
@@ -105,10 +128,20 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 480;
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  font-weight: 440;
+  font-optical-sizing: auto;
+  line-height: 1;
+  letter-spacing: -0.03em;
   text-wrap: balance;
+}
+
+h2 {
+  line-height: 1.04;
+}
+
+h3 {
+  line-height: 1.12;
+  letter-spacing: -0.02em;
 }
 
 p {
@@ -143,7 +176,7 @@ a {
   font-family: var(--font-body);
   font-size: var(--text-eyebrow);
   font-weight: 600;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.34em;
   text-transform: uppercase;
   color: var(--cedar);
 }
@@ -152,28 +185,29 @@ a {
   padding-block: var(--space-section);
 }
 
-/* Buttons & links — soft scale + colour micro-interactions */
+/* Buttons — soft scale + colour, signature ease, no defaults */
 
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.6em;
-  padding: 0.95em 2.1em;
+  padding: 1em 2.2em;
   border: 1px solid transparent;
   border-radius: 999px;
   font-family: var(--font-body);
   font-size: var(--text-small);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
   transition:
-    transform var(--hover-duration) var(--ease-out),
-    background-color var(--hover-duration) var(--ease-out),
-    border-color var(--hover-duration) var(--ease-out),
-    color var(--hover-duration) var(--ease-out),
-    box-shadow var(--hover-duration) var(--ease-out);
+    transform var(--dur) var(--ease),
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
 }
 
 .btn:hover {
@@ -181,7 +215,8 @@ a {
 }
 
 .btn:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  transition-duration: 0.15s;
 }
 
 .btn--primary {
@@ -191,11 +226,11 @@ a {
 
 .btn--primary:hover {
   background: var(--amber);
-  box-shadow: 0 8px 32px rgba(200, 149, 108, 0.35);
+  box-shadow: 0 10px 36px rgba(200, 149, 108, 0.35);
 }
 
 .btn--ghost {
-  border-color: var(--mist-30);
+  border-color: var(--mist-25);
   color: var(--ink);
   background: transparent;
 }
@@ -205,23 +240,25 @@ a {
   color: var(--cedar);
 }
 
+/* Links — sliding underline */
+
 .link-underline {
   position: relative;
   text-decoration: none;
-  transition: color var(--hover-duration) var(--ease-out);
+  transition: color var(--dur) var(--ease);
 }
 
 .link-underline::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -0.2em;
+  bottom: -0.25em;
   width: 100%;
   height: 1px;
   background: var(--cedar);
   transform: scaleX(0);
   transform-origin: right;
-  transition: transform var(--hover-duration) var(--ease-out);
+  transition: transform var(--dur) var(--ease);
 }
 
 .link-underline:hover {
@@ -231,6 +268,30 @@ a {
 .link-underline:hover::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+/* Forms */
+
+.field {
+  width: 100%;
+  padding: 1em 0.25em;
+  border: 0;
+  border-bottom: 1px solid var(--mist-25);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--ink);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+}
+
+.field:focus {
+  outline: none;
+  border-bottom-color: var(--cedar);
 }
 
 /* Scroll reveals — pre-hidden only when JS is running */

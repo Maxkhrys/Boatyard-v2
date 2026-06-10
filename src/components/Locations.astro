@@ -3,12 +3,20 @@ import { Image } from 'astro:assets';
 import wicklowImage from '../assets/images/wicklow-pier-lighthouse-day.jpeg';
 import arklowImage from '../assets/images/sauna-gate-harbour.jpeg';
 
-// Placeholder content — addresses and times to be confirmed.
+// Addresses & hours are placeholders — confirm with the real details.
 const locations = [
   {
     name: 'Wicklow Town',
     blurb:
       'On the East Pier beneath the lighthouse, looking back across the harbour. Sunrise sessions are something else.',
+    address: 'East Pier, Wicklow Harbour, Wicklow Town', // PLACEHOLDER
+    hours: [
+      { days: 'Mon – Fri', times: '7:00 — 21:00' }, // PLACEHOLDER
+      { days: 'Sat – Sun', times: '8:00 — 20:00' }, // PLACEHOLDER
+    ],
+    mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Wicklow',
+    bookUrl:
+      'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
     image: wicklowImage,
     alt: 'Red and white lighthouse on the stone pier at Wicklow harbour',
   },
@@ -16,6 +24,14 @@ const locations = [
     name: 'Arklow',
     blurb:
       'Through the boat yard gate and straight onto the water’s edge. Moorings, masts, and steam rising off the slipway.',
+    address: 'North Quay, Arklow Harbour, Arklow', // PLACEHOLDER
+    hours: [
+      { days: 'Mon – Fri', times: '7:00 — 21:00' }, // PLACEHOLDER
+      { days: 'Sat – Sun', times: '8:00 — 20:00' }, // PLACEHOLDER
+    ],
+    mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Arklow',
+    bookUrl:
+      'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_Boat_Yard_Sauna_Arklow',
     image: arklowImage,
     alt: 'The Boat Yard Sauna gateway framing a harbour full of moored boats',
   },
@@ -36,17 +52,55 @@ const locations = [
                 src={location.image}
                 alt={location.alt}
                 widths={[480, 760]}
-                sizes="(min-width: 768px) 45vw, 90vw"
+                sizes="(min-width: 800px) 45vw, 92vw"
                 format="webp"
                 quality={70}
                 loading="lazy"
               />
             </div>
-            <h3 class="locations__name">{location.name}</h3>
-            <p class="locations__blurb">{location.blurb}</p>
-            <a href="#book" class="link-underline locations__link">
-              Book {location.name} →
-            </a>
+
+            <div class="locations__body">
+              <h3 class="locations__name">{location.name}</h3>
+              <p class="locations__blurb">{location.blurb}</p>
+
+              <dl class="locations__details">
+                <div class="locations__detail">
+                  <dt>Where</dt>
+                  <dd>
+                    {location.address}
+                    <a
+                      class="link-underline locations__map"
+                      href={location.mapUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open in Maps
+                    </a>
+                  </dd>
+                </div>
+                <div class="locations__detail">
+                  <dt>Hours</dt>
+                  <dd>
+                    {location.hours.map((slot) => (
+                      <span class="locations__hours-row">
+                        <span>{slot.days}</span>
+                        <span>{slot.times}</span>
+                      </span>
+                    ))}
+                    <span class="locations__hours-note">Subject to tides &amp; weather</span>
+                  </dd>
+                </div>
+              </dl>
+
+              <a
+                class="btn btn--primary locations__book"
+                href={location.bookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Book {location.name}
+              </a>
+            </div>
           </article>
         ))
       }
@@ -62,12 +116,12 @@ const locations = [
   }
 
   .locations__grid {
-    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    margin-top: clamp(3.5rem, 7vw, 6rem);
     display: grid;
-    gap: clamp(3rem, 6vw, 5rem);
+    gap: clamp(3.5rem, 6vw, 5rem);
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 800px) {
     .locations__grid {
       grid-template-columns: 1fr 1fr;
     }
@@ -83,31 +137,70 @@ const locations = [
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.8s var(--ease-out);
+    transition: transform 1.1s var(--ease);
   }
 
   .locations__card:hover .locations__media img {
-    transform: scale(1.05);
+    transform: scale(1.045);
   }
 
   .locations__name {
     font-size: var(--text-h3);
-    margin-top: 1.75rem;
+    margin-top: 1.9rem;
   }
 
   .locations__blurb {
-    margin-top: 0.75rem;
+    margin-top: 0.8rem;
     color: var(--ink-soft);
-    max-width: 44ch;
+    max-width: 46ch;
   }
 
-  .locations__link {
-    display: inline-block;
-    margin-top: 1.25rem;
-    font-size: var(--text-small);
+  .locations__details {
+    margin-top: 1.9rem;
+    display: grid;
+    gap: 1.4rem;
+    padding-top: 1.9rem;
+    border-top: 1px solid var(--mist-10);
+  }
+
+  .locations__detail dt {
+    font-size: var(--text-tiny);
     font-weight: 600;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.3em;
     text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .locations__detail dd {
+    margin: 0.45rem 0 0;
+    font-size: var(--text-small);
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .locations__map {
+    display: inline-block;
+    margin-left: 0.9em;
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .locations__hours-row {
+    display: flex;
+    justify-content: space-between;
+    max-width: 22rem;
+    gap: 2rem;
+  }
+
+  .locations__hours-note {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: var(--text-tiny);
+    color: var(--ink-faint);
+  }
+
+  .locations__book {
+    margin-top: 2.1rem;
   }
 
   @media (prefers-reduced-motion: reduce) {

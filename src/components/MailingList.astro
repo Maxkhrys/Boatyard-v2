@@ -1,0 +1,171 @@
+---
+---
+
+<section class="mailing section" id="mailing">
+  <div class="container mailing__inner">
+    <p class="eyebrow" data-reveal>The harbour line</p>
+    <h2 class="mailing__heading" data-reveal>
+      Sea temperature, sauna times &amp; news — straight to your inbox.
+    </h2>
+    <p class="mailing__sub" data-reveal>
+      One short note a week. No noise, just the water.
+    </p>
+
+    <form class="mailing__form" id="mailing-form" novalidate data-reveal>
+      <label class="sr-only" for="mailing-email">Email address</label>
+      <input
+        class="field mailing__field"
+        id="mailing-email"
+        type="email"
+        name="email"
+        placeholder="you@somewhere.ie"
+        autocomplete="email"
+        required
+      />
+      <button class="btn btn--primary mailing__submit" type="submit">
+        <span class="mailing__submit-label">Subscribe</span>
+        <span class="mailing__submit-done" aria-hidden="true">You’re in</span>
+      </button>
+      <p class="mailing__confirm" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<style>
+  /* The warmest point of the page — let the global warming system peak,
+     and add a local ember glow on top */
+  .mailing {
+    position: relative;
+    padding-block: clamp(8rem, 18vw, 15rem);
+    overflow: hidden;
+  }
+
+  .mailing::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      90% 70% at 50% 100%,
+      rgba(224, 168, 104, 0.22) 0%,
+      rgba(200, 149, 108, 0.07) 50%,
+      transparent 80%
+    );
+  }
+
+  .mailing__inner {
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mailing__heading {
+    margin-top: 1.5rem;
+    font-size: var(--text-h2);
+    max-width: 22ch;
+  }
+
+  .mailing__sub {
+    margin-top: 1.5rem;
+    color: var(--ink-soft);
+  }
+
+  .mailing__form {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    width: min(34rem, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    align-items: center;
+  }
+
+  @media (min-width: 640px) {
+    .mailing__form {
+      flex-direction: row;
+      align-items: flex-end;
+    }
+  }
+
+  .mailing__field {
+    text-align: left;
+  }
+
+  .mailing__submit {
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+
+  /* Submit micro-interaction: labels swap inside the button */
+  .mailing__submit-label,
+  .mailing__submit-done {
+    display: block;
+    grid-area: 1 / 1;
+    transition: transform var(--dur-slow) var(--ease), opacity var(--dur-slow) var(--ease);
+  }
+
+  .mailing__submit {
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .mailing__submit-done {
+    position: absolute;
+    opacity: 0;
+    transform: translateY(120%);
+  }
+
+  .mailing__form.is-subscribed .mailing__submit {
+    background: var(--mist);
+    color: var(--navy-deep);
+    pointer-events: none;
+  }
+
+  .mailing__form.is-subscribed .mailing__submit-label {
+    opacity: 0;
+    transform: translateY(-120%);
+  }
+
+  .mailing__form.is-subscribed .mailing__submit-done {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .mailing__form.is-subscribed .mailing__field {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .mailing__confirm {
+    width: 100%;
+    min-height: 1.4em;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  @media (min-width: 640px) {
+    .mailing__confirm {
+      position: absolute;
+      top: 100%;
+      margin-top: 1rem;
+    }
+
+    .mailing__form {
+      position: relative;
+    }
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+</style>
