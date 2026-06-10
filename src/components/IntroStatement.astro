@@ -1,0 +1,60 @@
+---
+// One sentence, three breaths. Each line fills with ink as you scroll.
+const lines = [
+  'The cold sea strips everything back.',
+  'The hot cedar gives it back, slowly.',
+  'Somewhere between the two, you surface.',
+];
+---
+
+<section class="statement section" id="intro">
+  <div class="container">
+    <p class="statement__text">
+      {
+        lines.map((line) => (
+          <span class="statement__line">
+            {line.split(' ').map((word) => (
+              <span class="statement__word">{word} </span>
+            ))}
+          </span>
+        ))
+      }
+    </p>
+  </div>
+</section>
+
+<style>
+  .statement {
+    padding-block: clamp(9rem, 22vw, 17rem);
+  }
+
+  .statement__text {
+    font-family: var(--font-display);
+    font-size: var(--text-statement);
+    font-weight: 420;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+    margin-inline: auto;
+    text-wrap: balance;
+  }
+
+  .statement__line {
+    display: block;
+  }
+
+  .statement__line + .statement__line {
+    margin-top: 0.4em;
+  }
+
+  /* Words start as ghosts; the scrubbed timeline inks them in */
+  html.js .statement__word {
+    opacity: 0.14;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .statement__word {
+      opacity: 1;
+    }
+  }
+</style>

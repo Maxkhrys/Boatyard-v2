@@ -1,0 +1,326 @@
+/* ------------------------------------------------------------------
+   The Boat Yard Sauna — design system
+   Concept: "From the Pier to the Heat" — the page starts cold (deep
+   navy, sea mist) and warms toward cedar/amber as you scroll, peaking
+   at the mailing-list section.
+   Direction: quiet Scandinavian luxury, punctuated by a few cinematic
+   scroll moments. Calm by default.
+   ------------------------------------------------------------------ */
+
+:root {
+  /* Palette */
+  --navy: #0b1d2e;
+  --navy-deep: #081522;
+  --mist: #edf2f0;
+  --mist-70: rgba(237, 242, 240, 0.7);
+  --mist-50: rgba(237, 242, 240, 0.5);
+  --mist-25: rgba(237, 242, 240, 0.25);
+  --mist-10: rgba(237, 242, 240, 0.1);
+  --cedar: #c8956c;
+  --cedar-deep: #a06b42;
+  --amber: #e0a868;
+
+  /* Scroll-driven (set by JS as the page warms; cold defaults) */
+  --bg: var(--navy);
+  --warmth: 0; /* 0 = pier, 1 = the stove */
+
+  --ink: var(--mist);
+  --ink-soft: var(--mist-70);
+  --ink-mid: var(--mist-50);
+  --ink-faint: var(--mist-25);
+
+  /* Type — Fraunces for display, Inter for everything functional */
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-hero: clamp(3.25rem, 11vw, 9rem);
+  --text-h2: clamp(2.4rem, 6vw, 4.5rem);
+  --text-statement: clamp(1.85rem, 4.8vw, 3.75rem);
+  --text-h3: clamp(1.4rem, 2.6vw, 2rem);
+  --text-body: clamp(1rem, 1.1vw, 1.125rem);
+  --text-small: 0.875rem;
+  --text-tiny: 0.75rem;
+  --text-eyebrow: clamp(0.68rem, 0.8vw, 0.78rem);
+
+  /* Rhythm */
+  --space-section: clamp(7rem, 16vw, 14rem);
+  --gutter: clamp(1.25rem, 4.5vw, 5rem);
+  --content-max: 84rem;
+
+  /* Motion — one signature ease everywhere, no browser defaults */
+  --ease: cubic-bezier(0.625, 0.05, 0, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --dur: 0.55s;
+  --dur-slow: 0.9s;
+
+  --nav-height: 5rem;
+}
+
+/* ---------- Reset / base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.lenis {
+  height: auto;
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 400;
+  line-height: 1.65;
+  color: var(--ink);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Warm amber glow that strengthens as the page warms */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 90% at 50% 110%,
+    rgba(224, 168, 104, 0.3) 0%,
+    rgba(200, 149, 108, 0.1) 45%,
+    transparent 75%
+  );
+  opacity: var(--warmth);
+}
+
+/* Film grain — a single static noise tile, blended for warmth */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 440;
+  font-optical-sizing: auto;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+h2 {
+  line-height: 1.04;
+}
+
+h3 {
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--cedar);
+  color: var(--navy-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cedar);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- Shared primitives ---------- */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--cedar);
+}
+
+.section {
+  padding-block: var(--space-section);
+}
+
+/* Buttons — soft scale + colour, signature ease, no defaults */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  padding: 1em 2.2em;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--dur) var(--ease),
+    background-color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.btn:hover {
+  transform: scale(1.04);
+}
+
+.btn:active {
+  transform: scale(0.96);
+  transition-duration: 0.15s;
+}
+
+.btn--primary {
+  background: var(--cedar);
+  color: var(--navy-deep);
+}
+
+.btn--primary:hover {
+  background: var(--amber);
+  box-shadow: 0 10px 36px rgba(200, 149, 108, 0.35);
+}
+
+.btn--ghost {
+  border-color: var(--mist-25);
+  color: var(--ink);
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  border-color: var(--cedar);
+  color: var(--cedar);
+}
+
+/* Links — sliding underline */
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.25em;
+  width: 100%;
+  height: 1px;
+  background: var(--cedar);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--dur) var(--ease);
+}
+
+.link-underline:hover {
+  color: var(--cedar);
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Forms */
+
+.field {
+  width: 100%;
+  padding: 1em 0.25em;
+  border: 0;
+  border-bottom: 1px solid var(--mist-25);
+  border-radius: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--ink);
+  transition: border-color var(--dur) var(--ease);
+}
+
+.field::placeholder {
+  color: var(--ink-faint);
+}
+
+.field:focus {
+  outline: none;
+  border-bottom-color: var(--cedar);
+}
+
+/* Scroll reveals — pre-hidden only when JS is running */
+
+html.js [data-reveal] {
+  opacity: 0;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.js [data-reveal] {
+    opacity: 1;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+}

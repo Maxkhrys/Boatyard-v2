@@ -1,0 +1,182 @@
+---
+import { Image } from 'astro:assets';
+import heatImage from '../assets/images/sauna-hats-cedar-door.jpeg';
+import plungeImage from '../assets/images/sea-steps-sunrise.jpeg';
+import repeatImage from '../assets/images/sauna-gate-harbour.jpeg';
+
+// Placeholder copy — refine in a later pass.
+const beats = [
+  {
+    number: '01',
+    title: 'Heat',
+    text: 'The stove is lit before sunrise. Wood-fired cedar at ninety degrees, eucalyptus on the stones, the harbour framed in the window.',
+    image: heatImage,
+    alt: 'Grey felt sauna hats hanging on the cedar door of a barrel sauna',
+  },
+  {
+    number: '02',
+    title: 'Plunge',
+    text: 'Out the door, down the steps, into the Irish Sea. Ten seconds of cold that rearranges the whole day.',
+    image: plungeImage,
+    alt: 'Stone steps with handrails leading into a calm sea at sunrise',
+  },
+  {
+    number: '03',
+    title: 'Repeat',
+    text: 'Back to the heat. Three rounds, maybe four. Stay until the line between you and the weather goes quiet.',
+    image: repeatImage,
+    alt: 'The Boat Yard Sauna gateway framing a harbour full of moored boats',
+  },
+];
+---
+
+<section class="experience" id="experience">
+  <div class="experience__stage">
+    {
+      beats.map((beat, index) => (
+        <article class="experience__beat" data-beat={index}>
+          <figure class="experience__media">
+            <Image
+              src={beat.image}
+              alt={beat.alt}
+              widths={[480, 740]}
+              sizes="(min-width: 800px) 100vw, 92vw"
+              format="webp"
+              quality={70}
+              loading="lazy"
+            />
+          </figure>
+          <div class="experience__copy">
+            <p class="experience__number">{beat.number}</p>
+            <h2 class="experience__title">{beat.title}</h2>
+            <p class="experience__text">{beat.text}</p>
+          </div>
+        </article>
+      ))
+    }
+
+    <div class="experience__rail" aria-hidden="true">
+      <span class="experience__rail-fill"></span>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ----- Calm fallback: stacked beats (mobile / reduced motion / no JS) ----- */
+
+  .experience__stage {
+    display: grid;
+    gap: clamp(4rem, 10vw, 7rem);
+    padding-block: var(--space-section);
+    padding-inline: var(--gutter);
+    max-width: var(--content-max);
+    margin-inline: auto;
+  }
+
+  .experience__media {
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .experience__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    aspect-ratio: 4 / 5;
+  }
+
+  .experience__copy {
+    margin-top: 1.75rem;
+    max-width: 44ch;
+  }
+
+  .experience__number {
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    color: var(--cedar);
+  }
+
+  .experience__title {
+    font-size: var(--text-h2);
+    margin-top: 0.6rem;
+  }
+
+  .experience__text {
+    margin-top: 1.25rem;
+    color: var(--ink-soft);
+  }
+
+  .experience__rail {
+    display: none;
+  }
+
+  /* ----- Cinematic mode: JS pins the stage and crossfades the beats ----- */
+
+  .experience.is-cinematic .experience__stage {
+    display: block;
+    height: 100vh;
+    height: 100svh;
+    max-width: none;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .experience.is-cinematic .experience__beat {
+    position: absolute;
+    inset: 0;
+  }
+
+  .experience.is-cinematic .experience__media {
+    position: absolute;
+    inset: 0;
+    border-radius: 0;
+  }
+
+  .experience.is-cinematic .experience__media img {
+    aspect-ratio: auto;
+    width: 100%;
+    height: 100%;
+    will-change: transform;
+  }
+
+  .experience.is-cinematic .experience__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(8, 21, 34, 0.82) 0%, rgba(8, 21, 34, 0.15) 55%),
+      rgba(8, 21, 34, 0.2);
+  }
+
+  .experience.is-cinematic .experience__copy {
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: clamp(3rem, 9vh, 6rem);
+    margin: 0;
+    max-width: min(44ch, 70vw);
+  }
+
+  .experience.is-cinematic .experience__rail {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: var(--gutter);
+    transform: translateY(-50%);
+    width: 1px;
+    height: clamp(8rem, 24vh, 14rem);
+    background: var(--mist-10);
+    overflow: hidden;
+  }
+
+  .experience.is-cinematic .experience__rail-fill {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: var(--cedar);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+</style>

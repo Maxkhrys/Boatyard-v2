@@ -1,0 +1,261 @@
+---
+import { Image } from 'astro:assets';
+import heroImage from '../assets/images/harbour-dusk-boats.jpeg';
+
+// Placeholder copy — change here.
+const headline = 'Sea. Steam. Repeat.';
+const subline = 'A wood-fired seaside sauna on the harbour’s edge — Wicklow Town & Arklow.';
+
+const words = headline.split(' ');
+---
+
+<section class="hero" id="top">
+  <div class="hero__media" aria-hidden="true">
+    <Image
+      src={heroImage}
+      alt=""
+      widths={[480, 740]}
+      sizes="100vw"
+      format="webp"
+      quality={72}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="hero__wash" aria-hidden="true"></div>
+
+  <div class="hero__mist" aria-hidden="true">
+    <span class="hero__mist-layer hero__mist-layer--a"></span>
+    <span class="hero__mist-layer hero__mist-layer--b"></span>
+  </div>
+
+  <div class="hero__content container">
+    <h1 class="hero__title" aria-label={headline}>
+      {
+        words.map((word) => (
+          <span class="hero__word" aria-hidden="true">
+            <span class="hero__word-inner">{word}</span>
+          </span>
+        ))
+      }
+    </h1>
+    <p class="hero__subline" data-hero-fade>{subline}</p>
+    <a
+      href="#locations"
+      class="btn btn--primary hero__cta"
+      data-hero-fade
+    >Book a Session</a>
+  </div>
+
+  <a class="hero__scroll" href="#intro" data-hero-fade aria-label="Scroll to explore">
+    <span class="hero__scroll-label">Scroll</span>
+    <span class="hero__scroll-line"><span></span></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+  }
+
+  .hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    /* Slight head start so the ken-burns zoom never reveals edges */
+    transform: scale(1.06);
+    will-change: transform;
+  }
+
+  /* Cold navy wash keeps the photo on-palette and the headline legible */
+  .hero__wash {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(11, 29, 46, 0.55) 0%,
+        rgba(11, 29, 46, 0.16) 45%,
+        rgba(11, 29, 46, 0.85) 100%
+      ),
+      rgba(11, 29, 46, 0.2);
+  }
+
+  /* Drifting sea mist */
+  .hero__mist {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero__mist-layer {
+    position: absolute;
+    inset: -30%;
+    background: radial-gradient(
+      ellipse 55% 40% at 30% 60%,
+      rgba(237, 242, 240, 0.12) 0%,
+      transparent 65%
+    );
+    filter: blur(10px);
+    animation: mist-drift 34s ease-in-out infinite alternate;
+  }
+
+  .hero__mist-layer--b {
+    background: radial-gradient(
+      ellipse 50% 35% at 70% 45%,
+      rgba(237, 242, 240, 0.08) 0%,
+      transparent 60%
+    );
+    animation-duration: 44s;
+    animation-delay: -16s;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes mist-drift {
+    from {
+      transform: translate3d(-6%, 2%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(6%, -3%, 0) scale(1.15);
+    }
+  }
+
+  .hero__content {
+    position: relative;
+    padding-block: clamp(6rem, 16vh, 9rem) clamp(6rem, 15vh, 9rem);
+  }
+
+  .hero__title {
+    font-size: var(--text-hero);
+    font-weight: 420;
+    line-height: 0.94;
+    letter-spacing: -0.035em;
+    color: var(--mist);
+    max-width: 12ch;
+  }
+
+  .hero__word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.1em;
+    margin-bottom: -0.1em;
+    padding-right: 0.18em;
+    margin-right: -0.04em;
+  }
+
+  html.js .hero__word-inner {
+    display: inline-block;
+    transform: translateY(115%);
+  }
+
+  .hero__subline {
+    margin-top: 2rem;
+    max-width: 36ch;
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .hero__cta {
+    margin-top: 2.75rem;
+  }
+
+  html.js [data-hero-fade] {
+    opacity: 0;
+  }
+
+  /* Scroll indicator — quiet label + a line that breathes downward */
+  .hero__scroll {
+    position: absolute;
+    bottom: 2.25rem;
+    right: var(--gutter);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    text-decoration: none;
+    color: var(--ink-soft);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .hero__scroll:hover {
+    color: var(--cedar);
+  }
+
+  .hero__scroll-label {
+    font-size: var(--text-tiny);
+    font-weight: 500;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+  }
+
+  .hero__scroll-line {
+    display: block;
+    width: 1px;
+    height: 3.5rem;
+    overflow: hidden;
+    background: var(--mist-10);
+  }
+
+  .hero__scroll-line span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, currentColor);
+    animation: hint-fall 2.6s var(--ease) infinite;
+  }
+
+  @keyframes hint-fall {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero__scroll {
+      right: auto;
+      left: var(--gutter);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .hero__word-inner {
+      transform: none;
+    }
+
+    html.js [data-hero-fade] {
+      opacity: 1;
+    }
+
+    .hero__media img {
+      transform: none;
+      will-change: auto;
+    }
+
+    .hero__mist-layer,
+    .hero__scroll-line span {
+      animation: none;
+    }
+  }
+</style>

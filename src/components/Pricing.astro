@@ -1,0 +1,189 @@
+---
+// PLACEHOLDER prices — replace with the real rates.
+const sessions = [
+  {
+    name: 'Sauna Session',
+    price: '€20',
+    unit: 'per person · 50 min',
+    description: 'A shared session in the barrel — heat, plunge and the harbour view. Towels and sauna hats provided.',
+    featured: false,
+  },
+  {
+    name: 'Contrast Therapy',
+    price: '€35',
+    unit: 'per person · 75 min',
+    description: 'Guided rounds of heat and cold with breathing work in between. Our favourite way to do it properly.',
+    featured: true,
+  },
+  {
+    name: 'Private Hire',
+    price: '€120',
+    unit: 'up to 6 people · 60 min',
+    description: 'The whole sauna to yourselves — birthdays, swim clubs, or a quiet hour with people you like.',
+    featured: false,
+  },
+];
+
+const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you think', 'Sandals for the pier'];
+---
+
+<section class="pricing section" id="sessions">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Sessions &amp; pricing</p>
+    <h2 class="pricing__heading" data-reveal>Simple as the sea.</h2>
+
+    <div class="pricing__grid">
+      {
+        sessions.map((session) => (
+          <article class:list={['pricing__card', { 'pricing__card--featured': session.featured }]} data-reveal>
+            {session.featured && <p class="pricing__badge">Most loved</p>}
+            <h3 class="pricing__name">{session.name}</h3>
+            <p class="pricing__price">
+              {session.price}
+              <span class="pricing__unit">{session.unit}</span>
+            </p>
+            <p class="pricing__description">{session.description}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <aside class="pricing__bring" data-reveal>
+      <h3 class="pricing__bring-title">What to bring</h3>
+      <ul class="pricing__bring-list">
+        {bring.map((item) => <li>{item}</li>)}
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<style>
+  .pricing__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+  }
+
+  .pricing__grid {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 800px) {
+    .pricing__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .pricing__card {
+    position: relative;
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+    border: 1px solid var(--mist-10);
+    border-radius: 6px;
+    transition:
+      border-color var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      background-color var(--dur) var(--ease);
+  }
+
+  .pricing__card:hover {
+    border-color: var(--mist-25);
+    transform: translateY(-4px);
+  }
+
+  .pricing__card--featured {
+    border-color: rgba(200, 149, 108, 0.45);
+    background: rgba(200, 149, 108, 0.06);
+  }
+
+  .pricing__card--featured:hover {
+    border-color: var(--cedar);
+  }
+
+  .pricing__badge {
+    position: absolute;
+    top: -0.7rem;
+    left: clamp(1.75rem, 3vw, 2.5rem);
+    padding: 0.25em 0.9em;
+    border-radius: 999px;
+    background: var(--cedar);
+    color: var(--navy-deep);
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .pricing__name {
+    font-size: var(--text-h3);
+  }
+
+  .pricing__price {
+    margin-top: 1.4rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-weight: 440;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .pricing__unit {
+    display: block;
+    margin-top: 0.55rem;
+    font-family: var(--font-body);
+    font-size: var(--text-tiny);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  .pricing__description {
+    margin-top: 1.3rem;
+    font-size: var(--text-small);
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+
+  .pricing__bring {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: 2.25rem;
+    border-top: 1px solid var(--mist-10);
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 800px) {
+    .pricing__bring {
+      grid-template-columns: 1fr 2fr;
+      align-items: baseline;
+    }
+  }
+
+  .pricing__bring-title {
+    font-size: var(--text-h3);
+  }
+
+  .pricing__bring-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem 0.75rem;
+  }
+
+  .pricing__bring-list li {
+    padding: 0.5em 1.1em;
+    border: 1px solid var(--mist-10);
+    border-radius: 999px;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+
+  .pricing__bring-list li:hover {
+    border-color: var(--cedar);
+    color: var(--ink);
+  }
+</style>
