@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import wicklowImage from '../assets/images/wicklow-pier-lighthouse-day.jpeg';
+import wicklowImage from '../assets/images/aerial-wicklow-harbour.jpg';
 import arklowImage from '../assets/images/sauna-gate-harbour.jpeg';
 
 // Addresses & hours are placeholders — confirm with the real details.
@@ -18,7 +18,7 @@ const locations = [
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
     image: wicklowImage,
-    alt: 'Red and white lighthouse on the stone pier at Wicklow harbour',
+    alt: 'Aerial view of Wicklow harbour, the pier road and headland in golden evening light',
   },
   {
     name: 'Arklow',
@@ -47,11 +47,12 @@ const locations = [
       {
         locations.map((location) => (
           <article class="locations__card" data-reveal>
-            <div class="locations__media">
+            <div class="locations__media" data-media>
               <Image
                 src={location.image}
                 alt={location.alt}
-                widths={[480, 760]}
+                width={1400}
+                widths={[480, 800, 1400]}
                 sizes="(min-width: 800px) 45vw, 92vw"
                 format="webp"
                 quality={70}

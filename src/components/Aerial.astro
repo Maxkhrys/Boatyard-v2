@@ -1,0 +1,173 @@
+---
+import { Image } from 'astro:assets';
+import fleetImage from '../assets/images/aerial-moored-fleet.jpg';
+import boatImage from '../assets/images/aerial-fishing-boat.jpg';
+import kayakImage from '../assets/images/aerial-kayak.jpg';
+
+const shots = {
+  fleet: {
+    image: fleetImage,
+    alt: 'Aerial view straight down on sailboats moored across teal harbour water',
+    caption: 'The fleet at rest — Wicklow harbour',
+  },
+  boat: {
+    image: boatImage,
+    alt: 'Aerial view of a small fishing boat alone on emerald sea',
+    caption: 'First out, before the heat',
+  },
+  kayak: {
+    image: kayakImage,
+    alt: 'Aerial view of an orange kayak crossing dark green water',
+    caption: 'Crossing the dark water',
+  },
+};
+---
+
+<section class="aerial section" id="aerial">
+  <div class="container">
+    <p class="eyebrow" data-reveal>The harbour from above</p>
+    <h2 class="aerial__heading" data-reveal>Same water,<br />a different angle.</h2>
+    <p class="aerial__intro" data-reveal>
+      Everything we do happens on this stretch of sea — the boats, the swimmers, the steam.
+      Seen from above, it makes a kind of sense.
+    </p>
+  </div>
+
+  <div class="container aerial__grid">
+    <figure class="aerial__item aerial__item--fleet">
+      <div class="aerial__media" data-media data-parallax="4">
+      <Image
+        src={shots.fleet.image}
+        alt={shots.fleet.alt}
+        width={1700}
+        widths={[640, 1100, 1700]}
+        sizes="(min-width: 900px) 62vw, 92vw"
+        format="webp"
+        quality={68}
+        loading="lazy"
+      />
+      </div>
+      <figcaption class="aerial__caption">{shots.fleet.caption}</figcaption>
+    </figure>
+
+    <figure class="aerial__item aerial__item--boat">
+      <div class="aerial__media" data-media data-parallax="7">
+      <Image
+        src={shots.boat.image}
+        alt={shots.boat.alt}
+        width={860}
+        widths={[480, 860]}
+        sizes="(min-width: 900px) 30vw, 46vw"
+        format="webp"
+        quality={68}
+        loading="lazy"
+      />
+      </div>
+      <figcaption class="aerial__caption">{shots.boat.caption}</figcaption>
+    </figure>
+
+    <figure class="aerial__item aerial__item--kayak">
+      <div class="aerial__media" data-media data-parallax="5">
+      <Image
+        src={shots.kayak.image}
+        alt={shots.kayak.alt}
+        width={860}
+        widths={[480, 860]}
+        sizes="(min-width: 900px) 34vw, 46vw"
+        format="webp"
+        quality={68}
+        loading="lazy"
+      />
+      </div>
+      <figcaption class="aerial__caption">{shots.kayak.caption}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .aerial__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+  }
+
+  .aerial__intro {
+    margin-top: 2rem;
+    max-width: 48ch;
+    color: var(--ink-soft);
+  }
+
+  /* Mobile-first: a clean stack, the two square shots side by side */
+  .aerial__grid {
+    margin-top: clamp(3.5rem, 7vw, 6rem);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(1rem, 2.5vw, 1.75rem);
+  }
+
+  .aerial__item {
+    margin: 0;
+    position: relative;
+  }
+
+  .aerial__item--fleet {
+    grid-column: 1 / -1;
+  }
+
+  /* The actual image box — clipped for the reveal, oversized inner image
+     so the parallax drift never shows an edge. Captions live outside it. */
+  .aerial__media {
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .aerial__item :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: cover;
+  }
+
+  .aerial__item--fleet :global(img) {
+    aspect-ratio: 16 / 10;
+  }
+
+  .aerial__item--boat :global(img),
+  .aerial__item--kayak :global(img) {
+    aspect-ratio: 1 / 1;
+  }
+
+  .aerial__caption {
+    margin-top: 0.9rem;
+    font-size: var(--text-tiny);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  /* Editorial asymmetry from tablet up */
+  @media (min-width: 900px) {
+    .aerial__grid {
+      grid-template-columns: repeat(12, 1fr);
+      align-items: start;
+    }
+
+    .aerial__item--fleet {
+      grid-column: 1 / 9;
+    }
+
+    .aerial__item--boat {
+      grid-column: 9 / 13;
+      margin-top: clamp(4rem, 9vw, 8rem);
+    }
+
+    .aerial__item--kayak {
+      grid-column: 5 / 10;
+      margin-top: clamp(-3rem, -4vw, -1.5rem);
+    }
+
+    .aerial__item--kayak :global(img) {
+      aspect-ratio: 4 / 3;
+    }
+  }
+</style>

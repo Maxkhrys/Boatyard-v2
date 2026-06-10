@@ -1,7 +1,22 @@
 ---
+import { Image } from 'astro:assets';
+import coastImage from '../assets/images/aerial-coast-golden.jpg';
 ---
 
 <section class="mailing section" id="mailing">
+  <div class="mailing__backdrop" aria-hidden="true">
+    <Image
+      src={coastImage}
+      alt=""
+      width={1600}
+      widths={[960, 1600]}
+      sizes="100vw"
+      format="webp"
+      quality={60}
+      loading="lazy"
+    />
+  </div>
+
   <div class="container mailing__inner">
     <p class="eyebrow" data-reveal>The harbour line</p>
     <h2 class="mailing__heading" data-reveal>
@@ -38,6 +53,24 @@
     position: relative;
     padding-block: clamp(8rem, 18vw, 15rem);
     overflow: hidden;
+  }
+
+  /* Golden coastline, blended into the warm background as texture —
+     luminosity keeps the cedar tone, the mask fades it in from the top */
+  .mailing__backdrop {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.22;
+    mix-blend-mode: luminosity;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 80%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 35%, black 80%, transparent 100%);
+  }
+
+  .mailing__backdrop :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .mailing::before {
