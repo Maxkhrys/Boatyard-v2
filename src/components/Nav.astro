@@ -1,0 +1,69 @@
+---
+---
+
+<header class="site-nav" id="site-nav">
+  <div class="site-nav__inner">
+    <a href="#top" class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
+      The Boat Yard <em>Sauna</em>
+    </a>
+    <a href="#book" class="btn btn--primary site-nav__cta">Book</a>
+  </div>
+</header>
+
+<style>
+  .site-nav {
+    position: fixed;
+    inset: 0 0 auto 0;
+    z-index: 100;
+    height: var(--nav-height);
+    transition:
+      background-color 0.5s var(--ease-out),
+      border-color 0.5s var(--ease-out),
+      backdrop-filter 0.5s var(--ease-out);
+    border-bottom: 1px solid transparent;
+  }
+
+  /* Glassy blur once the page is scrolled; tint follows the warming --bg */
+  .site-nav.is-scrolled {
+    background-color: color-mix(in srgb, var(--bg) 55%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    backdrop-filter: blur(14px) saturate(1.3);
+    border-bottom-color: rgba(237, 242, 240, 0.08);
+  }
+
+  .site-nav__inner {
+    height: 100%;
+    max-width: var(--content-max);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .site-nav__logo {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+    font-weight: 540;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    transition:
+      color var(--hover-duration) var(--ease-out),
+      transform var(--hover-duration) var(--ease-out);
+  }
+
+  .site-nav__logo em {
+    font-style: italic;
+    color: var(--cedar);
+  }
+
+  .site-nav__logo:hover {
+    transform: scale(1.02);
+    color: var(--cedar);
+  }
+
+  .site-nav__cta {
+    padding: 0.7em 1.7em;
+  }
+</style>

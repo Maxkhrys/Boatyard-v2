@@ -1,0 +1,118 @@
+---
+import { Image } from 'astro:assets';
+import wicklowImage from '../assets/images/wicklow-pier-lighthouse-day.jpeg';
+import arklowImage from '../assets/images/sauna-gate-harbour.jpeg';
+
+// Placeholder content — addresses and times to be confirmed.
+const locations = [
+  {
+    name: 'Wicklow Town',
+    blurb:
+      'On the East Pier beneath the lighthouse, looking back across the harbour. Sunrise sessions are something else.',
+    image: wicklowImage,
+    alt: 'Red and white lighthouse on the stone pier at Wicklow harbour',
+  },
+  {
+    name: 'Arklow',
+    blurb:
+      'Through the boat yard gate and straight onto the water’s edge. Moorings, masts, and steam rising off the slipway.',
+    image: arklowImage,
+    alt: 'The Boat Yard Sauna gateway framing a harbour full of moored boats',
+  },
+];
+---
+
+<section class="locations section" id="locations">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Two harbours, one ritual</p>
+    <h2 class="locations__heading" data-reveal>Find us on the water’s edge.</h2>
+
+    <div class="locations__grid">
+      {
+        locations.map((location) => (
+          <article class="locations__card" data-reveal>
+            <div class="locations__media">
+              <Image
+                src={location.image}
+                alt={location.alt}
+                widths={[480, 760]}
+                sizes="(min-width: 768px) 45vw, 90vw"
+                format="webp"
+                quality={70}
+                loading="lazy"
+              />
+            </div>
+            <h3 class="locations__name">{location.name}</h3>
+            <p class="locations__blurb">{location.blurb}</p>
+            <a href="#book" class="link-underline locations__link">
+              Book {location.name} →
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .locations__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+    max-width: 16ch;
+  }
+
+  .locations__grid {
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+    display: grid;
+    gap: clamp(3rem, 6vw, 5rem);
+  }
+
+  @media (min-width: 768px) {
+    .locations__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .locations__media {
+    overflow: hidden;
+    border-radius: 4px;
+    aspect-ratio: 4 / 3;
+  }
+
+  .locations__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease-out);
+  }
+
+  .locations__card:hover .locations__media img {
+    transform: scale(1.05);
+  }
+
+  .locations__name {
+    font-size: var(--text-h3);
+    margin-top: 1.75rem;
+  }
+
+  .locations__blurb {
+    margin-top: 0.75rem;
+    color: var(--ink-soft);
+    max-width: 44ch;
+  }
+
+  .locations__link {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .locations__card:hover .locations__media img {
+      transform: none;
+    }
+  }
+</style>

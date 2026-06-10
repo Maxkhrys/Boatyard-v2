@@ -1,0 +1,265 @@
+/* ------------------------------------------------------------------
+   The Boat Yard Sauna — design system
+   Concept: "From the Pier to the Heat" — the page starts cold (deep
+   navy, sea mist) and warms toward cedar/amber as you scroll.
+   ------------------------------------------------------------------ */
+
+:root {
+  /* Palette */
+  --navy: #0b1d2e;
+  --navy-deep: #081522;
+  --mist: #edf2f0;
+  --mist-60: rgba(237, 242, 240, 0.6);
+  --mist-30: rgba(237, 242, 240, 0.3);
+  --cedar: #c8956c;
+  --cedar-deep: #a06b42;
+  --amber: #e0a868;
+
+  /* Scroll-driven (set by JS as the page warms; these are the cold defaults) */
+  --bg: var(--navy);
+  --warmth: 0; /* 0 = pier, 1 = heat */
+
+  --ink: var(--mist);
+  --ink-soft: var(--mist-60);
+  --ink-faint: var(--mist-30);
+
+  /* Type */
+  --font-display: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --text-hero: clamp(3rem, 11vw, 8.5rem);
+  --text-h2: clamp(2.25rem, 6vw, 4.75rem);
+  --text-h3: clamp(1.5rem, 3vw, 2.25rem);
+  --text-body: clamp(1rem, 1.1vw, 1.125rem);
+  --text-small: 0.875rem;
+  --text-eyebrow: clamp(0.7rem, 0.8vw, 0.8rem);
+
+  /* Rhythm */
+  --space-section: clamp(6rem, 14vw, 12rem);
+  --gutter: clamp(1.25rem, 4vw, 4rem);
+  --content-max: 80rem;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --hover-duration: 0.4s;
+
+  --nav-height: 4.5rem;
+}
+
+/* ---------- Reset / base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+html.lenis {
+  height: auto;
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Warm amber glow that strengthens as the page warms */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    120% 90% at 50% 110%,
+    rgba(224, 168, 104, 0.28) 0%,
+    rgba(200, 149, 108, 0.1) 45%,
+    transparent 75%
+  );
+  opacity: var(--warmth);
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 480;
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--cedar);
+  color: var(--navy-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cedar);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------- Shared primitives ---------- */
+
+.container {
+  width: 100%;
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-eyebrow);
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cedar);
+}
+
+.section {
+  padding-block: var(--space-section);
+}
+
+/* Buttons & links — soft scale + colour micro-interactions */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  padding: 0.95em 2.1em;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--hover-duration) var(--ease-out),
+    background-color var(--hover-duration) var(--ease-out),
+    border-color var(--hover-duration) var(--ease-out),
+    color var(--hover-duration) var(--ease-out),
+    box-shadow var(--hover-duration) var(--ease-out);
+}
+
+.btn:hover {
+  transform: scale(1.04);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn--primary {
+  background: var(--cedar);
+  color: var(--navy-deep);
+}
+
+.btn--primary:hover {
+  background: var(--amber);
+  box-shadow: 0 8px 32px rgba(200, 149, 108, 0.35);
+}
+
+.btn--ghost {
+  border-color: var(--mist-30);
+  color: var(--ink);
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  border-color: var(--cedar);
+  color: var(--cedar);
+}
+
+.link-underline {
+  position: relative;
+  text-decoration: none;
+  transition: color var(--hover-duration) var(--ease-out);
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.2em;
+  width: 100%;
+  height: 1px;
+  background: var(--cedar);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--hover-duration) var(--ease-out);
+}
+
+.link-underline:hover {
+  color: var(--cedar);
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Scroll reveals — pre-hidden only when JS is running */
+
+html.js [data-reveal] {
+  opacity: 0;
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  html.js [data-reveal] {
+    opacity: 1;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .btn:hover,
+  .btn:active {
+    transform: none;
+  }
+}

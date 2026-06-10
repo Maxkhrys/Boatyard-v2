@@ -1,0 +1,213 @@
+---
+import { Image } from 'astro:assets';
+import heroImage from '../assets/images/harbour-dusk-boats.jpeg';
+
+// Placeholder copy — change here.
+const headline = 'Sea. Steam. Repeat.';
+const subline = 'A wood-fired seaside sauna on the harbour’s edge — Wicklow Town & Arklow.';
+
+const words = headline.split(' ');
+---
+
+<section class="hero" id="top">
+  <div class="hero__media" aria-hidden="true">
+    <Image
+      src={heroImage}
+      alt=""
+      widths={[480, 740]}
+      sizes="100vw"
+      format="webp"
+      quality={72}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </div>
+
+  <div class="hero__wash" aria-hidden="true"></div>
+
+  <div class="hero__mist" aria-hidden="true">
+    <span class="hero__mist-layer hero__mist-layer--a"></span>
+    <span class="hero__mist-layer hero__mist-layer--b"></span>
+  </div>
+
+  <div class="hero__content container">
+    <h1 class="hero__title" aria-label={headline}>
+      {
+        words.map((word) => (
+          <span class="hero__word" aria-hidden="true">
+            <span class="hero__word-inner">{word}</span>
+          </span>
+        ))
+      }
+    </h1>
+    <p class="hero__subline" data-hero-fade>{subline}</p>
+    <a href="#book" class="btn btn--primary hero__cta" data-hero-fade>Book a Session</a>
+  </div>
+
+  <div class="hero__scroll-hint" data-hero-fade aria-hidden="true">
+    <span></span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+  }
+
+  .hero__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+    /* Slight head start so the ken-burns zoom never reveals edges */
+    transform: scale(1.08);
+    will-change: transform;
+  }
+
+  /* Cold navy wash keeps the photo on-palette and the headline legible */
+  .hero__wash {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background:
+      linear-gradient(to bottom, rgba(11, 29, 46, 0.55) 0%, rgba(11, 29, 46, 0.18) 45%, rgba(11, 29, 46, 0.82) 100%),
+      rgba(11, 29, 46, 0.22);
+  }
+
+  /* Drifting sea mist */
+  .hero__mist {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .hero__mist-layer {
+    position: absolute;
+    inset: -30%;
+    background: radial-gradient(
+      ellipse 55% 40% at 30% 60%,
+      rgba(237, 242, 240, 0.13) 0%,
+      transparent 65%
+    );
+    filter: blur(10px);
+    animation: mist-drift 26s ease-in-out infinite alternate;
+  }
+
+  .hero__mist-layer--b {
+    background: radial-gradient(
+      ellipse 50% 35% at 70% 45%,
+      rgba(237, 242, 240, 0.09) 0%,
+      transparent 60%
+    );
+    animation-duration: 34s;
+    animation-delay: -12s;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes mist-drift {
+    from {
+      transform: translate3d(-6%, 2%, 0) scale(1);
+    }
+    to {
+      transform: translate3d(6%, -3%, 0) scale(1.15);
+    }
+  }
+
+  .hero__content {
+    position: relative;
+    padding-block: clamp(6rem, 16vh, 9rem) clamp(5rem, 14vh, 8rem);
+  }
+
+  .hero__title {
+    font-size: var(--text-hero);
+    color: var(--mist);
+    max-width: 12ch;
+  }
+
+  .hero__word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: bottom;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  html.js .hero__word-inner {
+    display: inline-block;
+    transform: translateY(115%);
+  }
+
+  .hero__subline {
+    margin-top: 1.75rem;
+    max-width: 38ch;
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    color: var(--ink-soft);
+  }
+
+  .hero__cta {
+    margin-top: 2.5rem;
+  }
+
+  html.js [data-hero-fade] {
+    opacity: 0;
+  }
+
+  .hero__scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    right: var(--gutter);
+    width: 1px;
+    height: 4rem;
+    overflow: hidden;
+  }
+
+  .hero__scroll-hint span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, var(--mist-60));
+    animation: hint-fall 2.2s var(--ease-out) infinite;
+  }
+
+  @keyframes hint-fall {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html.js .hero__word-inner {
+      transform: none;
+    }
+
+    html.js [data-hero-fade] {
+      opacity: 1;
+    }
+
+    .hero__media img {
+      transform: none;
+      will-change: auto;
+    }
+
+    .hero__mist-layer,
+    .hero__scroll-hint span {
+      animation: none;
+    }
+  }
+</style>
