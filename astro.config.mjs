@@ -6,6 +6,7 @@ import vercel from '@astrojs/vercel';
 
 const projectId = process.env.SANITY_PROJECT_ID;
 const dataset = process.env.SANITY_DATASET ?? 'production';
+const apiToken = process.env.SANITY_API_TOKEN;
 
 // Static site with on-demand API routes (e.g. /api/subscribe) and
 // Sanity Studio at /admin (when SANITY_PROJECT_ID is set) running as
@@ -19,6 +20,7 @@ if (projectId) {
       dataset,
       studioBasePath: '/admin',
       useCdn: false,
+      ...(apiToken && { apiToken }),
     }),
   );
 }
