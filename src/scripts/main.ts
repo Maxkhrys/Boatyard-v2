@@ -65,6 +65,7 @@ if (reducedMotion) {
         stagger: 0.13,
         ease: 'expo.out',
         transformOrigin: 'left bottom',
+        overwrite: 'auto',
       },
     )
     .fromTo(

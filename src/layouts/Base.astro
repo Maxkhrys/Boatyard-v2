@@ -37,6 +37,7 @@ const {
     </script>
   </head>
   <body>
+    <canvas class="ripple-canvas" aria-hidden="true"></canvas>
     <Nav />
     <main id="page">
       <slot />
@@ -45,6 +46,26 @@ const {
     <div class="grain" aria-hidden="true"></div>
     <script>
       import '../scripts/main';
+      import '../scripts/ripple';
     </script>
   </body>
 </html>
+
+<style is:global>
+  .ripple-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  @media (max-width: 799.98px), (pointer: coarse) {
+    .ripple-canvas {
+      display: none;
+    }
+  }
+</style>
