@@ -4,8 +4,8 @@ import react from '@astrojs/react';
 import sanity from '@sanity/astro';
 import vercel from '@astrojs/vercel';
 
-const projectId = process.env.SANITY_PROJECT_ID;
-const dataset = process.env.SANITY_DATASET ?? 'production';
+const projectId = process.env.PUBLIC_SANITY_PROJECT_ID;
+const dataset = process.env.PUBLIC_SANITY_DATASET ?? 'production';
 const apiToken = process.env.SANITY_API_TOKEN;
 
 // Static site with on-demand API routes (e.g. /api/subscribe) and

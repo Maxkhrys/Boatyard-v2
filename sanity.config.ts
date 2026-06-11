@@ -2,8 +2,8 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { visionTool } from '@sanity/vision';
 
-const projectId = import.meta.env.SANITY_PROJECT_ID as string | undefined;
-const dataset = (import.meta.env.SANITY_DATASET as string | undefined) ?? 'production';
+const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID as string | undefined;
+const dataset = (import.meta.env.PUBLIC_SANITY_DATASET as string | undefined) ?? 'production';
 
 export default defineConfig({
   name: 'default',
@@ -11,5 +11,4 @@ export default defineConfig({
   projectId: projectId ?? 'project-id-not-set',
   dataset: dataset,
   plugins: [structureTool(), visionTool()],
-  basePath: '/admin',
 });

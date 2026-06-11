@@ -10,8 +10,8 @@ import winterImage from '../assets/images/pier-lighthouse-moonrise.jpeg';
    so the site always builds.
    ------------------------------------------------------------------ */
 
-const projectId = import.meta.env.SANITY_PROJECT_ID as string | undefined;
-const dataset = (import.meta.env.SANITY_DATASET as string | undefined) ?? 'production';
+const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID as string | undefined;
+const dataset = (import.meta.env.PUBLIC_SANITY_DATASET as string | undefined) ?? 'production';
 const apiVersion = 'v2024-01-01';
 
 export interface PortableTextSpan {
