@@ -39,8 +39,8 @@
   --text-h3: clamp(1.4rem, 2.6vw, 2rem);
   --text-body: clamp(1rem, 1.1vw, 1.125rem);
   --text-small: 0.875rem;
-  --text-tiny: 0.75rem;
-  --text-eyebrow: clamp(0.68rem, 0.8vw, 0.78rem);
+  --text-tiny: 0.8rem; /* 12.8px — keeps captions/meta legible on phones */
+  --text-eyebrow: clamp(0.72rem, 0.8vw, 0.78rem);
 
   /* Rhythm */
   --space-section: clamp(7rem, 16vw, 14rem);
@@ -192,6 +192,7 @@ a {
   align-items: center;
   justify-content: center;
   gap: 0.6em;
+  min-height: 44px; /* comfortable tap target */
   padding: 1em 2.2em;
   border: 1px solid transparent;
   border-radius: 999px;
@@ -245,6 +246,7 @@ a {
 
 .link-underline {
   position: relative;
+  padding-block: 0.5em; /* extends small text links toward a 44px tap target */
   text-decoration: none;
   transition: color var(--dur) var(--ease);
 }
@@ -253,7 +255,7 @@ a {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -0.25em;
+  bottom: 0.2em;
   width: 100%;
   height: 1px;
   background: var(--cedar);

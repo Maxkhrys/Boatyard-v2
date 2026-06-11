@@ -1,10 +1,18 @@
 ---
-// Links are root-relative so the nav works from /journal pages too.
+// Anchor links need a leading slash everywhere except the homepage.
+const onHome = Astro.url.pathname === '/';
+const home = onHome ? '' : '/';
+
+const menuLinks = [
+  { label: 'Journal', href: '/journal' },
+  { label: 'Locations', href: `${home}#locations` },
+  { label: 'Book', href: `${home}#locations` },
+];
 ---
 
 <header class="site-nav" id="site-nav">
   <div class="site-nav__inner">
-    <a href="/" class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
+    <a href={onHome ? '#top' : '/'} class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
       <svg class="site-nav__mark" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M11.2 3v12h1.6V3z" fill="currentColor"></path>
         <path d="M10.6 4 5 14h5.6z" fill="currentColor"></path>
@@ -17,44 +25,87 @@
       </span>
     </a>
 
-    <a href="/#locations" class="btn btn--primary site-nav__cta">Book</a>
+    <a href={`${home}#locations`} class="btn btn--primary site-nav__cta">Book</a>
 
     <button
       class="site-nav__burger"
-      id="nav-burger"
+      id="site-nav-burger"
       type="button"
       aria-expanded="false"
-      aria-controls="nav-menu"
+      aria-controls="site-nav-menu"
       aria-label="Open menu"
     >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <line class="site-nav__burger-line site-nav__burger-line--top" x1="3" y1="7" x2="21" y2="7"></line>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+        <line class="site-nav__burger-line site-nav__burger-line--top" x1="3" y1="6" x2="21" y2="6"></line>
         <line class="site-nav__burger-line site-nav__burger-line--mid" x1="3" y1="12" x2="21" y2="12"></line>
-        <line class="site-nav__burger-line site-nav__burger-line--bot" x1="3" y1="17" x2="21" y2="17"></line>
+        <line class="site-nav__burger-line site-nav__burger-line--bot" x1="3" y1="18" x2="21" y2="18"></line>
       </svg>
     </button>
   </div>
 
-  <nav class="site-nav__menu" id="nav-menu" aria-label="Site menu" hidden>
-    <a class="site-nav__menu-link" href="/journal/">Journal</a>
-    <a class="site-nav__menu-link" href="/#locations">Locations</a>
-    <a class="site-nav__menu-link site-nav__menu-link--cta" href="/#locations">Book a Session</a>
+  <nav class="site-nav__menu" id="site-nav-menu" aria-label="Site menu">
+    {
+      menuLinks.map((link) => (
+        <a class="site-nav__menu-link" href={link.href}>
+          {link.label}
+        </a>
+      ))
+    }
   </nav>
 </header>
+
+<script>
+  const nav = document.getElementById('site-nav');
+  const burger = document.getElementById('site-nav-burger');
+  const menu = document.getElementById('site-nav-menu');
+
+  if (nav && burger && menu) {
+    const setOpen = (open: boolean) => {
+      nav.classList.toggle('is-open', open);
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    };
+
+    burger.addEventListener('click', () => {
+      setOpen(!nav.classList.contains('is-open'));
+    });
+
+    // Close on link tap — navigation (or smooth scroll) takes over.
+    menu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setOpen(false));
+    });
+
+    // Close on tap outside the header.
+    document.addEventListener('click', (event) => {
+      if (nav.classList.contains('is-open') && !nav.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    // Reset if the viewport grows past the breakpoint while open.
+    window.matchMedia('(min-width: 768px)').addEventListener('change', (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>
 
 <style>
   .site-nav {
     position: fixed;
     inset: 0 0 auto 0;
     z-index: 100;
+    height: var(--nav-height);
     border-bottom: 1px solid transparent;
     transition:
       background-color 0.7s var(--ease),
       border-color 0.7s var(--ease);
   }
 
-  /* Glassy blur once the page is scrolled (or the menu is open);
-     tint follows the warming --bg */
+  /* Glassy blur once the page is scrolled; tint follows the warming --bg */
   .site-nav.is-scrolled,
   .site-nav.is-open {
     background-color: color-mix(in srgb, var(--bg) 52%, transparent);
@@ -63,8 +114,12 @@
     border-bottom-color: var(--mist-10);
   }
 
+  .site-nav.is-open {
+    background-color: color-mix(in srgb, var(--bg) 85%, transparent);
+  }
+
   .site-nav__inner {
-    height: var(--nav-height);
+    height: 100%;
     max-width: var(--content-max);
     margin-inline: auto;
     padding-inline: var(--gutter);
@@ -124,39 +179,36 @@
     padding: 0.72em 1.8em;
   }
 
-  /* ----- Burger (mobile only) ----- */
+  /* ----- Burger (below 768px) ----- */
 
   .site-nav__burger {
     display: none;
-    width: 2.75rem;
-    height: 2.75rem;
-    margin-right: -0.5rem;
-    padding: 0.55rem;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px; /* optically align the icon with the gutter */
+    padding: 0;
     border: 0;
+    border-radius: 6px;
     background: transparent;
     color: var(--ink);
     cursor: pointer;
     touch-action: manipulation;
   }
 
-  .site-nav__burger svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-  }
-
   .site-nav__burger-line {
     stroke: currentColor;
     stroke-width: 1.6;
     stroke-linecap: round;
+    transform-origin: 12px 12px;
     transition:
       transform var(--dur) var(--ease),
       opacity var(--dur) var(--ease);
-    transform-origin: 12px 12px;
   }
 
   .site-nav.is-open .site-nav__burger-line--top {
-    transform: translateY(5px) rotate(45deg);
+    transform: translateY(6px) rotate(45deg);
   }
 
   .site-nav.is-open .site-nav__burger-line--mid {
@@ -164,47 +216,66 @@
   }
 
   .site-nav.is-open .site-nav__burger-line--bot {
-    transform: translateY(-5px) rotate(-45deg);
+    transform: translateY(-6px) rotate(-45deg);
   }
 
-  /* ----- Dropdown menu (mobile only) ----- */
+  /* ----- Dropdown menu (below 768px) ----- */
 
   .site-nav__menu {
     display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     flex-direction: column;
-    padding: 0.5rem var(--gutter) 1.75rem;
+    padding: 0.5rem var(--gutter) 1.25rem;
+    background-color: color-mix(in srgb, var(--bg) 85%, transparent);
+    -webkit-backdrop-filter: blur(18px) saturate(1.5) brightness(1.05);
+    backdrop-filter: blur(18px) saturate(1.5) brightness(1.05);
+    border-bottom: 1px solid var(--mist-10);
     opacity: 0;
-    transform: translateY(-12px);
+    transform: translateY(-0.5rem);
+    visibility: hidden;
+    pointer-events: none;
     transition:
       opacity var(--dur) var(--ease),
-      transform var(--dur) var(--ease);
+      transform var(--dur) var(--ease),
+      visibility 0s linear var(--dur);
   }
 
   .site-nav.is-open .site-nav__menu {
     opacity: 1;
     transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease),
+      visibility 0s;
   }
 
   .site-nav__menu-link {
-    padding: 0.9rem 0;
-    font-family: var(--font-display);
-    font-size: 1.5rem;
-    font-weight: 460;
-    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px solid var(--mist-10);
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
     text-decoration: none;
     color: var(--ink);
-    border-bottom: 1px solid var(--mist-10);
-    transition: color var(--dur) var(--ease), padding-left var(--dur) var(--ease);
+    transition: color var(--dur) var(--ease);
+  }
+
+  .site-nav__menu-link:last-child {
+    border-bottom: 0;
+    color: var(--cedar);
   }
 
   .site-nav__menu-link:hover {
     color: var(--cedar);
-    padding-left: 0.4rem;
-  }
-
-  .site-nav__menu-link--cta {
-    color: var(--cedar);
-    border-bottom: 0;
   }
 
   @media (max-width: 767.98px) {
@@ -213,15 +284,11 @@
     }
 
     .site-nav__burger {
-      display: block;
+      display: inline-flex;
     }
 
     .site-nav__menu {
       display: flex;
-    }
-
-    .site-nav__menu[hidden] {
-      display: none;
     }
   }
 
