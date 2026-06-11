@@ -358,7 +358,7 @@ if (mailingForm) {
       emailInput.readOnly = true;
       if (confirmNote) {
         confirmNote.textContent =
-          'You're in — sea temperatures and sauna news coming your way.';
+          "You're in — sea temperatures and sauna news coming your way.";
       }
     } catch (error) {
       mailingForm.classList.add('is-error');
