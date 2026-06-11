@@ -1,19 +1,24 @@
 ---
 import { Image } from 'astro:assets';
+import { getSiteSettings } from '../lib/sanity';
 import wicklowImage from '../assets/images/aerial-wicklow-harbour.jpg';
 import arklowImage from '../assets/images/sauna-gate-harbour.jpeg';
 
-// Addresses & hours are placeholders — confirm with the real details.
+const siteSettings = await getSiteSettings();
+
+const defaultHours = [
+  { days: 'Mon – Fri', times: '7:00 — 21:00' },
+  { days: 'Sat – Sun', times: '8:00 — 20:00' },
+];
+
 const locations = [
   {
     name: 'Wicklow Town',
     blurb:
       'On the East Pier beneath the lighthouse, looking back across the harbour. Sunrise sessions are something else.',
-    address: 'East Pier, Wicklow Harbour, Wicklow Town', // PLACEHOLDER
-    hours: [
-      { days: 'Mon – Fri', times: '7:00 — 21:00' }, // PLACEHOLDER
-      { days: 'Sat – Sun', times: '8:00 — 20:00' }, // PLACEHOLDER
-    ],
+    address: 'East Pier, Wicklow Harbour, Wicklow Town',
+    hours: siteSettings?.wicklowHours?.length ? siteSettings.wicklowHours : defaultHours,
+    hoursNote: siteSettings?.hoursNote ?? 'Subject to tides & weather',
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Wicklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
@@ -23,12 +28,10 @@ const locations = [
   {
     name: 'Arklow',
     blurb:
-      'Through the boat yard gate and straight onto the water’s edge. Moorings, masts, and steam rising off the slipway.',
-    address: 'North Quay, Arklow Harbour, Arklow', // PLACEHOLDER
-    hours: [
-      { days: 'Mon – Fri', times: '7:00 — 21:00' }, // PLACEHOLDER
-      { days: 'Sat – Sun', times: '8:00 — 20:00' }, // PLACEHOLDER
-    ],
+      "Through the boat yard gate and straight onto the water's edge. Moorings, masts, and steam rising off the slipway.",
+    address: 'North Quay, Arklow Harbour, Arklow',
+    hours: siteSettings?.arklowHours?.length ? siteSettings.arklowHours : defaultHours,
+    hoursNote: siteSettings?.hoursNote ?? 'Subject to tides & weather',
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Arklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_Boat_Yard_Sauna_Arklow',
@@ -41,7 +44,7 @@ const locations = [
 <section class="locations section" id="locations">
   <div class="container">
     <p class="eyebrow" data-reveal>Two harbours, one ritual</p>
-    <h2 class="locations__heading" data-reveal>Find us on the water’s edge.</h2>
+    <h2 class="locations__heading" data-reveal>Find us on the water's edge.</h2>
 
     <div class="locations__grid">
       {
@@ -88,7 +91,7 @@ const locations = [
                         <span>{slot.times}</span>
                       </span>
                     ))}
-                    <span class="locations__hours-note">Subject to tides &amp; weather</span>
+                    <span class="locations__hours-note">{location.hoursNote}</span>
                   </dd>
                 </div>
               </dl>
@@ -129,15 +132,19 @@ const locations = [
   }
 
   .locations__media {
+    position: relative;
     overflow: hidden;
     border-radius: 4px;
     aspect-ratio: 4 / 3;
   }
 
   .locations__media img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 40%;
     transition: transform 1.1s var(--ease);
   }
 
@@ -204,14 +211,12 @@ const locations = [
     margin-top: 2.1rem;
   }
 
-  /* Full-width booking button is easier to hit one-handed */
   @media (max-width: 640px) {
     .locations__book {
       width: 100%;
     }
   }
 
-  /* Keep the map link on its own tappable line on narrow screens */
   @media (max-width: 480px) {
     .locations__map {
       display: block;

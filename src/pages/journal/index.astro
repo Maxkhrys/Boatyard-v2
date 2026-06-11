@@ -4,6 +4,8 @@ import JournalCard from '../../components/JournalCard.astro';
 import { getAllPosts, formatDate } from '../../lib/sanity';
 
 const posts = await getAllPosts();
+const visiblePosts = posts.slice(0, 3);
+const hiddenPosts = posts.slice(3);
 ---
 
 <Base
@@ -17,13 +19,13 @@ const posts = await getAllPosts();
         <h1 class="archive__heading" data-reveal>Notes from the Harbour</h1>
         <p class="archive__intro" data-reveal>
           Sea temperatures, opening hours, swimmer stories — everything worth knowing from the
-          water’s edge.
+          water's edge.
         </p>
       </header>
 
       <div class="archive__grid">
         {
-          posts.map((post) => (
+          visiblePosts.map((post) => (
             <JournalCard
               title={post.title}
               excerpt={post.excerpt}
@@ -37,24 +39,87 @@ const posts = await getAllPosts();
           ))
         }
       </div>
+
+      {
+        hiddenPosts.length > 0 && (
+          <div class="archive__expand">
+            <button
+              class="archive__toggle"
+              id="js-show-more"
+              aria-expanded="false"
+              aria-controls="archive-hidden"
+            >
+              <span class="archive__toggle-label">
+                Show {hiddenPosts.length} more note{hiddenPosts.length > 1 ? 's' : ''}
+              </span>
+              <span class="archive__toggle-icon" aria-hidden="true">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 6l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div id="archive-hidden" class="archive__hidden" hidden>
+              <div class="archive__grid archive__grid--more">
+                {hiddenPosts.map((post) => (
+                  <JournalCard
+                    title={post.title}
+                    excerpt={post.excerpt}
+                    date={formatDate(post.publishedAt)}
+                    isoDate={post.publishedAt}
+                    tag={post.tag}
+                    url={`/journal/${post.slug}`}
+                    image={post.image}
+                    alt={post.alt}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        )
+      }
     </div>
   </section>
 </Base>
+
+<script>
+  const btn = document.getElementById('js-show-more') as HTMLButtonElement | null;
+  const panel = document.getElementById('archive-hidden') as HTMLElement | null;
+
+  if (btn && panel) {
+    btn.addEventListener('click', () => {
+      const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isExpanded));
+      panel.hidden = isExpanded;
+      btn.querySelector<HTMLElement>('.archive__toggle-icon')!.classList.toggle(
+        'is-open',
+        !isExpanded,
+      );
+    });
+  }
+</script>
 
 <style>
   .archive {
     padding-top: calc(var(--nav-height) + clamp(3.5rem, 8vw, 7rem));
   }
 
+  .archive__head {
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+    border-bottom: 1px solid var(--mist-10);
+  }
+
   .archive__heading {
     font-size: var(--text-h2);
     margin-top: 1.5rem;
+    max-width: 22ch;
   }
 
   .archive__intro {
     margin-top: 1.5rem;
-    max-width: 48ch;
+    max-width: 52ch;
     color: var(--ink-soft);
+    line-height: 1.75;
   }
 
   .archive__grid {
@@ -75,5 +140,55 @@ const posts = await getAllPosts();
       grid-template-columns: repeat(3, 1fr);
       row-gap: clamp(4rem, 7vw, 6rem);
     }
+  }
+
+  /* Expand / collapse */
+  .archive__expand {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .archive__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.9em 2em;
+    border: 1px solid var(--mist-10);
+    border-radius: 999px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition:
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+
+  .archive__toggle:hover {
+    border-color: var(--cedar);
+    color: var(--cedar);
+    transform: translateY(-2px);
+  }
+
+  .archive__toggle-icon {
+    display: flex;
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .archive__toggle-icon.is-open {
+    transform: rotate(180deg);
+  }
+
+  .archive__hidden {
+    overflow: hidden;
+  }
+
+  .archive__grid--more {
+    padding-top: clamp(2.5rem, 5vw, 3.5rem);
+    border-top: 1px solid var(--mist-10);
   }
 </style>
