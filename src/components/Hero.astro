@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import heroImage from '../assets/images/harbour-sailboats-morning.jpg';
+import heroImage from '../assets/images/aerial-coast-golden.jpg';
 
 // Placeholder copy — change here.
 const headline = 'Sea. Steam. Repeat.';
@@ -31,6 +31,8 @@ const words = headline.split(' ');
     <span class="hero__mist-layer hero__mist-layer--b"></span>
   </div>
 
+  <canvas class="hero__ripple" aria-hidden="true"></canvas>
+
   <div class="hero__content container">
     <h1 class="hero__title" aria-label={headline}>
       {
@@ -55,6 +57,79 @@ const words = headline.split(' ');
   </a>
 </section>
 
+<script>
+  // Water-ripple cursor effect — quiet expanding rings that fade like
+  // rings on still water. Skipped for touch devices and reduced motion.
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const canvas = document.querySelector<HTMLCanvasElement>('.hero__ripple');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+  if (hero && canvas && !reduceMotion && finePointer) {
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      interface Ripple {
+        x: number;
+        y: number;
+        r: number;
+        life: number;
+      }
+
+      let dpr = 1;
+      let ripples: Ripple[] = [];
+      let raf = 0;
+      let lastX = -100;
+      let lastY = -100;
+
+      const resize = () => {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = hero.clientWidth * dpr;
+        canvas.height = hero.clientHeight * dpr;
+      };
+      resize();
+      window.addEventListener('resize', resize);
+
+      const tick = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.save();
+        ctx.scale(dpr, dpr);
+        ripples = ripples.filter((ripple) => ripple.life > 0);
+        for (const ripple of ripples) {
+          ripple.r += 1.1 + ripple.r * 0.018;
+          ripple.life -= 0.014;
+          const alpha = Math.max(ripple.life, 0) ** 2 * 0.4;
+          ctx.lineWidth = 1.4 * ripple.life;
+          ctx.strokeStyle = `rgba(237, 242, 240, ${alpha})`;
+          ctx.beginPath();
+          ctx.arc(ripple.x, ripple.y, ripple.r, 0, Math.PI * 2);
+          ctx.stroke();
+          // Inner ring trails behind for a softer, watery read
+          ctx.strokeStyle = `rgba(237, 242, 240, ${alpha * 0.5})`;
+          ctx.beginPath();
+          ctx.arc(ripple.x, ripple.y, ripple.r * 0.55, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+        raf = ripples.length ? requestAnimationFrame(tick) : 0;
+      };
+
+      hero.addEventListener('pointermove', (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+        const dx = x - lastX;
+        const dy = y - lastY;
+        if (dx * dx + dy * dy < 1100) return; // one ring every ~33px of travel
+        lastX = x;
+        lastY = y;
+        ripples.push({ x, y, r: 3, life: 1 });
+        if (ripples.length > 28) ripples.shift();
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+    }
+  }
+</script>
+
 <style>
   .hero {
     position: relative;
@@ -75,7 +150,7 @@ const words = headline.split(' ');
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: center 60%;
+    object-position: center 35%;
     /* Slight head start so the ken-burns zoom never reveals edges */
     transform: scale(1.06);
     will-change: transform;
@@ -89,11 +164,11 @@ const words = headline.split(' ');
     background:
       linear-gradient(
         to bottom,
-        rgba(11, 29, 46, 0.55) 0%,
-        rgba(11, 29, 46, 0.16) 45%,
+        rgba(11, 29, 46, 0.5) 0%,
+        rgba(11, 29, 46, 0.14) 45%,
         rgba(11, 29, 46, 0.85) 100%
       ),
-      rgba(11, 29, 46, 0.2);
+      rgba(11, 29, 46, 0.18);
   }
 
   /* Drifting sea mist */
@@ -135,6 +210,16 @@ const words = headline.split(' ');
     to {
       transform: translate3d(6%, -3%, 0) scale(1.15);
     }
+  }
+
+  .hero__ripple {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    mix-blend-mode: screen;
   }
 
   .hero__content {
@@ -237,6 +322,21 @@ const words = headline.split(' ');
   @media (max-width: 640px) {
     .hero__scroll {
       display: none;
+    }
+
+    .hero__content {
+      padding-block: 5.5rem 4.5rem;
+    }
+
+    .hero__subline {
+      margin-top: 1.5rem;
+      max-width: 30ch;
+    }
+
+    .hero__cta {
+      margin-top: 2.25rem;
+      width: 100%;
+      max-width: 22rem;
     }
   }
 

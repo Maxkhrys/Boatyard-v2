@@ -2,6 +2,21 @@ import type { ImageMetadata } from 'astro';
 import waterImage from '../assets/images/wicklow-pier-lighthouse-day.jpeg';
 import hoursImage from '../assets/images/loyalty-cards.jpeg';
 import winterImage from '../assets/images/pier-lighthouse-moonrise.jpeg';
+import imgSailboats from '../assets/images/harbour-sailboats-morning.jpg';
+import imgCoastGolden from '../assets/images/aerial-coast-golden.jpg';
+import imgHarbourVista from '../assets/images/aerial-harbour-vista.jpg';
+import imgBaySwimmers from '../assets/images/aerial-bay-swimmers.jpg';
+import imgWicklowHarbour from '../assets/images/aerial-wicklow-harbour.jpg';
+import imgKayak from '../assets/images/aerial-kayak.jpg';
+import imgRowers from '../assets/images/aerial-rowers-emerald.jpg';
+import imgFishingBoat from '../assets/images/aerial-fishing-boat.jpg';
+import imgMooredFleet from '../assets/images/aerial-moored-fleet.jpg';
+import imgHarbourDusk from '../assets/images/harbour-dusk-boats.jpeg';
+import imgPierSunrise from '../assets/images/pier-lighthouse-sunrise.jpeg';
+import imgSeaSteps from '../assets/images/sea-steps-sunrise.jpeg';
+import imgSaunaGate from '../assets/images/sauna-gate-harbour.jpeg';
+import imgSaunaHats from '../assets/images/sauna-hats-cedar-door.jpeg';
+import imgRitualOils from '../assets/images/ritual-oils-incense.jpeg';
 
 /* ------------------------------------------------------------------
    Sanity content layer — fetched at build time via the public query
@@ -46,6 +61,52 @@ export interface Post {
 
 export const sanityConfigured = Boolean(projectId);
 
+/* House photo pool — keys mirror the `stockImage` options in
+   schemaTypes/post.ts. Posts without an uploaded image use one of
+   these; if none is chosen, one is picked deterministically. */
+const stockImages: Record<string, { image: ImageMetadata; alt: string }> = {
+  'harbour-sailboats': { image: imgSailboats, alt: 'Sailboats moored in the harbour at morning' },
+  'coast-golden': { image: imgCoastGolden, alt: 'The Wicklow coast at golden hour from above' },
+  'harbour-vista': { image: imgHarbourVista, alt: 'Harbour and town from above on a clear day' },
+  'bay-swimmers': { image: imgBaySwimmers, alt: 'Swimmers in the bay beside the pier' },
+  'wicklow-harbour': { image: imgWicklowHarbour, alt: 'Wicklow harbour from above' },
+  kayak: { image: imgKayak, alt: 'A kayak crossing emerald water' },
+  rowers: { image: imgRowers, alt: 'Rowers crossing emerald water' },
+  'fishing-boat': { image: imgFishingBoat, alt: 'A fishing boat seen from above' },
+  'moored-fleet': { image: imgMooredFleet, alt: 'The moored fleet seen from above' },
+  'harbour-dusk': { image: imgHarbourDusk, alt: 'Boats in the harbour at dusk' },
+  'pier-day': { image: waterImage, alt: 'The lighthouse pier at Wicklow harbour on a calm day' },
+  'pier-moonrise': { image: winterImage, alt: 'A full moon rising behind the pier lighthouse' },
+  'pier-sunrise': { image: imgPierSunrise, alt: 'Sunrise behind the pier lighthouse' },
+  'sea-steps': { image: imgSeaSteps, alt: 'Steps into the sea at sunrise' },
+  'sauna-gate': { image: imgSaunaGate, alt: 'The sauna gate at the harbour' },
+  'sauna-hats': { image: imgSaunaHats, alt: 'Sauna hats hanging on the cedar door' },
+  'ritual-oils': { image: imgRitualOils, alt: 'Ritual oils and incense on a wooden shelf' },
+  'loyalty-cards': { image: hoursImage, alt: 'Loyalty cards displayed on a wooden table' },
+};
+
+const stockImageKeys = Object.keys(stockImages);
+
+/** Stable pick from the pool so a post keeps the same photo between builds. */
+function pickStockImage(seed: string): { image: ImageMetadata; alt: string } {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) | 0;
+  }
+  const key = stockImageKeys[Math.abs(hash) % stockImageKeys.length];
+  return stockImages[key];
+}
+
+/** URL-safe slug derived from the post title — the only source of slugs. */
+export function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 async function sanityQuery<T>(query: string): Promise<T | null> {
   if (!projectId) return null;
   const url = `https://${projectId}.apicdn.sanity.io/${apiVersion}/data/query/${dataset}?query=${encodeURIComponent(query)}`;
@@ -71,42 +132,53 @@ export function sanityImageUrl(ref: string, width = 1600): string | null {
 // Tolerant of the two most common cover-image field names (coverImage / mainImage).
 const POST_PROJECTION = `{
   title,
-  "slug": slug.current,
   "excerpt": coalesce(excerpt, ""),
   "publishedAt": coalesce(publishedAt, _createdAt),
   "tag": coalesce(category->title, tag, "Journal"),
   "imageUrl": coalesce(coverImage.asset->url, mainImage.asset->url),
   "alt": coalesce(coverImage.alt, mainImage.alt, title),
+  stockImage,
   body
 }`;
 
 interface SanityPost {
   title: string;
-  slug: string;
   excerpt: string;
   publishedAt: string;
   tag: string;
   imageUrl?: string;
   alt: string;
+  stockImage?: string;
   body?: PortableTextBlock[];
 }
 
 function toPost(raw: SanityPost): Post {
+  // Uploaded image wins; otherwise the chosen house photo; otherwise a
+  // stable pick from the pool so every post always has a photo.
+  let image: ImageMetadata | string;
+  let alt = raw.alt;
+  if (raw.imageUrl) {
+    image = `${raw.imageUrl}?w=1600&auto=format`;
+  } else {
+    const stock = (raw.stockImage && stockImages[raw.stockImage]) || pickStockImage(raw.title);
+    image = stock.image;
+    alt = stock.alt;
+  }
   return {
     title: raw.title,
-    slug: raw.slug,
+    slug: slugify(raw.title),
     excerpt: raw.excerpt,
     publishedAt: raw.publishedAt,
     tag: raw.tag,
-    image: raw.imageUrl ? `${raw.imageUrl}?w=1600&auto=format` : waterImage,
-    alt: raw.alt,
+    image,
+    alt,
     body: raw.body ?? [],
   };
 }
 
 export async function getAllPosts(): Promise<Post[]> {
   const result = await sanityQuery<SanityPost[]>(
-    `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) ${POST_PROJECTION}`,
+    `*[_type == "post" && defined(title)] | order(publishedAt desc) ${POST_PROJECTION}`,
   );
   if (result && result.length > 0) return result.map(toPost);
   return useFallbackPosts ? fallbackPosts : [];

@@ -7,6 +7,14 @@ const locations = [
   { name: 'Arklow', address: 'North Quay, Arklow Harbour' },
 ];
 
+const explore = [
+  { label: 'The Experience', href: '/#experience' },
+  { label: 'Locations', href: '/#locations' },
+  { label: 'Sessions & Pricing', href: '/#sessions' },
+  { label: 'Journal', href: '/journal' },
+  { label: 'Newsletter', href: '/#mailing' },
+];
+
 const socials = [
   { name: 'Instagram', url: 'https://www.instagram.com/theboatyardsauna' },
   { name: 'Facebook', url: 'https://www.facebook.com/theboatyardsauna' },
@@ -30,44 +38,70 @@ const socials = [
         <span class="footer__logo-descriptor">Sauna</span>
       </p>
       <p class="footer__tag">Cold sea. Hot cedar. Clear head.</p>
+      <a href="/#locations" class="btn btn--ghost footer__cta">Book a Session</a>
     </div>
 
-    <div class="footer__locations">
-      {
-        locations.map((location) => (
-          <p class="footer__address">
-            <strong>{location.name}</strong>
-            {location.address}
-          </p>
-        ))
-      }
+    <nav class="footer__col" aria-label="Footer">
+      <p class="footer__heading">Explore</p>
+      <ul class="footer__list">
+        {
+          explore.map((link) => (
+            <li>
+              <a class="link-underline" href={link.href}>
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__col">
+      <p class="footer__heading">Find Us</p>
+      <div class="footer__locations">
+        {
+          locations.map((location) => (
+            <p class="footer__address">
+              <strong>{location.name}</strong>
+              {location.address}
+            </p>
+          ))
+        }
+      </div>
     </div>
 
-    <div class="footer__social">
-      {
-        socials.map((social) => (
-          <a
-            class="link-underline"
-            href={social.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {social.name}
-          </a>
-        ))
-      }
+    <div class="footer__col">
+      <p class="footer__heading">Follow</p>
+      <ul class="footer__list">
+        {
+          socials.map((social) => (
+            <li>
+              <a
+                class="link-underline"
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {social.name}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </div>
   </div>
 
   <div class="container footer__base">
     <p>© {year} The Boat Yard Sauna</p>
     <p class="footer__credit">Made on the Irish coast</p>
+    <a class="footer__top link-underline" href="#top">Back to top ↑</a>
   </div>
 </footer>
 
 <style>
   .footer {
     padding-block: clamp(3.5rem, 7vw, 5.5rem) 2.5rem;
+    background: linear-gradient(to bottom, transparent, rgba(8, 21, 34, 0.65));
   }
 
   .footer__wave {
@@ -80,19 +114,28 @@ const socials = [
 
   .footer__inner {
     display: grid;
-    gap: 2.5rem;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.75rem 2rem;
+  }
+
+  .footer__brand {
+    grid-column: 1 / -1;
   }
 
   @media (min-width: 800px) {
     .footer__inner {
-      grid-template-columns: 1.4fr 1.3fr 0.8fr;
+      grid-template-columns: 1.6fr 1fr 1.1fr 0.8fr;
       gap: 2rem;
+    }
+
+    .footer__brand {
+      grid-column: auto;
     }
   }
 
   .footer__logo {
     font-family: var(--font-display);
-    font-size: 1.35rem;
+    font-size: 1.55rem;
     font-weight: 480;
     letter-spacing: -0.01em;
   }
@@ -114,6 +157,33 @@ const socials = [
     color: var(--ink-mid);
   }
 
+  .footer__cta {
+    margin-top: 1.75rem;
+  }
+
+  .footer__heading {
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--cedar);
+    margin-bottom: 1.25rem;
+  }
+
+  .footer__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .footer__list a {
+    font-size: var(--text-small);
+    font-weight: 500;
+    color: var(--ink-soft);
+  }
+
   .footer__locations {
     display: grid;
     gap: 1.25rem;
@@ -132,36 +202,21 @@ const socials = [
     color: var(--ink);
   }
 
-  .footer__social {
-    display: flex;
-    flex-direction: row;
-    gap: 1.75rem;
-    align-items: start;
-  }
-
-  @media (min-width: 800px) {
-    .footer__social {
-      flex-direction: column;
-      gap: 0.9rem;
-      justify-self: end;
-    }
-  }
-
-  .footer__social a {
-    font-size: var(--text-small);
-    font-weight: 500;
-    padding-block: 0.6rem;
-  }
-
   .footer__base {
     margin-top: clamp(3rem, 6vw, 4.5rem);
     padding-top: 1.75rem;
     border-top: 1px solid var(--mist-10);
     display: flex;
+    align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: 0.75rem 1.5rem;
     font-size: var(--text-tiny);
     color: var(--ink-faint);
+  }
+
+  .footer__top {
+    color: var(--ink-soft);
+    font-weight: 500;
   }
 </style>

@@ -63,7 +63,14 @@ const posts = await getAllPosts();
     gap: clamp(2.5rem, 5vw, 3.5rem);
   }
 
-  @media (min-width: 800px) {
+  @media (min-width: 640px) {
+    .archive__grid {
+      grid-template-columns: repeat(2, 1fr);
+      row-gap: clamp(3.5rem, 6vw, 5rem);
+    }
+  }
+
+  @media (min-width: 1000px) {
     .archive__grid {
       grid-template-columns: repeat(3, 1fr);
       row-gap: clamp(4rem, 7vw, 6rem);

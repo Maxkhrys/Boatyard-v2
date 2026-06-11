@@ -9,16 +9,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'slug',
-      title: 'Slug',
-      type: 'slug',
-      options: {
-        source: 'title',
-        maxLength: 96,
-      },
+      description: 'The post URL is generated automatically from this title.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
@@ -26,17 +17,20 @@ export default defineType({
       title: 'Excerpt',
       type: 'text',
       rows: 3,
+      description: 'Short summary shown on the journal page.',
     }),
     defineField({
       name: 'publishedAt',
       title: 'Published At',
       type: 'datetime',
+      initialValue: () => new Date().toISOString(),
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'tag',
       title: 'Tag',
       type: 'string',
+      initialValue: 'Journal',
       options: {
         list: [
           { title: 'Journal', value: 'Journal' },
@@ -44,18 +38,15 @@ export default defineType({
           { title: 'News', value: 'News' },
           { title: 'Stories', value: 'Stories' },
         ],
+        layout: 'radio',
+        direction: 'horizontal',
       },
-    }),
-    defineField({
-      name: 'category',
-      title: 'Category',
-      type: 'reference',
-      to: [{ type: 'category' }],
     }),
     defineField({
       name: 'mainImage',
-      title: 'Main Image',
+      title: 'Your Own Image',
       type: 'image',
+      description: 'Optional — upload your own photo for this post.',
       options: {
         hotspot: true,
       },
@@ -68,19 +59,33 @@ export default defineType({
       ],
     }),
     defineField({
-      name: 'coverImage',
-      title: 'Cover Image',
-      type: 'image',
+      name: 'stockImage',
+      title: 'Or Pick a House Photo',
+      type: 'string',
+      description:
+        'Used when you don’t upload your own image. Leave both empty and one is picked for you.',
       options: {
-        hotspot: true,
+        list: [
+          { title: 'Harbour sailboats, morning', value: 'harbour-sailboats' },
+          { title: 'Golden coast from above', value: 'coast-golden' },
+          { title: 'Harbour vista from above', value: 'harbour-vista' },
+          { title: 'Swimmers in the bay', value: 'bay-swimmers' },
+          { title: 'Wicklow harbour from above', value: 'wicklow-harbour' },
+          { title: 'Kayak on emerald water', value: 'kayak' },
+          { title: 'Rowers on emerald water', value: 'rowers' },
+          { title: 'Fishing boat from above', value: 'fishing-boat' },
+          { title: 'Moored fleet from above', value: 'moored-fleet' },
+          { title: 'Harbour boats at dusk', value: 'harbour-dusk' },
+          { title: 'Pier lighthouse, daytime', value: 'pier-day' },
+          { title: 'Pier lighthouse, moonrise', value: 'pier-moonrise' },
+          { title: 'Pier lighthouse, sunrise', value: 'pier-sunrise' },
+          { title: 'Sea steps at sunrise', value: 'sea-steps' },
+          { title: 'Sauna gate at the harbour', value: 'sauna-gate' },
+          { title: 'Sauna hats on the cedar door', value: 'sauna-hats' },
+          { title: 'Ritual oils & incense', value: 'ritual-oils' },
+          { title: 'Loyalty cards', value: 'loyalty-cards' },
+        ],
       },
-      fields: [
-        defineField({
-          name: 'alt',
-          title: 'Alt Text',
-          type: 'string',
-        }),
-      ],
     }),
     defineField({
       name: 'body',
@@ -91,6 +96,7 @@ export default defineType({
   preview: {
     select: {
       title: 'title',
+      subtitle: 'tag',
       media: 'mainImage',
     },
   },
