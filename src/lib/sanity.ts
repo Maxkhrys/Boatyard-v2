@@ -13,6 +13,7 @@ import winterImage from '../assets/images/pier-lighthouse-moonrise.jpeg';
 const projectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID as string | undefined;
 const dataset = (import.meta.env.PUBLIC_SANITY_DATASET as string | undefined) ?? 'production';
 const apiVersion = 'v2024-01-01';
+const useFallbackPosts = import.meta.env.PUBLIC_USE_FALLBACK_POSTS !== 'false';
 
 export interface PortableTextSpan {
   _type: 'span';
@@ -108,7 +109,7 @@ export async function getAllPosts(): Promise<Post[]> {
     `*[_type == "post" && defined(slug.current)] | order(publishedAt desc) ${POST_PROJECTION}`,
   );
   if (result && result.length > 0) return result.map(toPost);
-  return fallbackPosts;
+  return useFallbackPosts ? fallbackPosts : [];
 }
 
 export async function getPost(slug: string): Promise<Post | undefined> {
