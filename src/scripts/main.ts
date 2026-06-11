@@ -329,27 +329,62 @@ gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((element) => {
 });
 
 /* ------------------------------------------------------------------
-   Mailing list — front-end only subscribe with a quiet thank-you
+   Mailing list — subscribes via /api/subscribe (Buttondown)
    ------------------------------------------------------------------ */
 
 const mailingForm = document.querySelector<HTMLFormElement>('#mailing-form');
 
 if (mailingForm) {
   const emailInput = mailingForm.querySelector<HTMLInputElement>('input[type="email"]');
+  const submitButton = mailingForm.querySelector<HTMLButtonElement>('button[type="submit"]');
   const confirmNote = mailingForm.querySelector<HTMLElement>('.mailing__confirm');
 
-  mailingForm.addEventListener('submit', (event) => {
+  mailingForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!emailInput) return;
+    if (!emailInput || mailingForm.classList.contains('is-pending')) return;
     if (!emailInput.checkValidity()) {
       emailInput.reportValidity();
       return;
     }
-    mailingForm.classList.add('is-subscribed');
-    emailInput.setAttribute('aria-disabled', 'true');
-    emailInput.readOnly = true;
-    if (confirmNote) {
-      confirmNote.textContent = 'Grand. One short note a week — first one is on its way.';
+
+    mailingForm.classList.add('is-pending');
+    mailingForm.classList.remove('is-error');
+    if (submitButton) submitButton.disabled = true;
+    if (confirmNote) confirmNote.textContent = '';
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput.value.trim() }),
+      });
+      const result = (await response.json().catch(() => ({}))) as {
+        ok?: boolean;
+        message?: string;
+      };
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.message || 'Subscription failed');
+      }
+
+      mailingForm.classList.add('is-subscribed');
+      emailInput.setAttribute('aria-disabled', 'true');
+      emailInput.readOnly = true;
+      if (confirmNote) {
+        confirmNote.textContent =
+          'You’re in — sea temperatures and sauna news coming your way.';
+      }
+    } catch (error) {
+      mailingForm.classList.add('is-error');
+      if (submitButton) submitButton.disabled = false;
+      if (confirmNote) {
+        confirmNote.textContent =
+          error instanceof Error && error.message !== 'Subscription failed'
+            ? error.message
+            : 'The tide took that one — give it another go in a moment.';
+      }
+    } finally {
+      mailingForm.classList.remove('is-pending');
     }
   });
 }

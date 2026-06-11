@@ -1,45 +1,10 @@
 ---
 import JournalCard from './JournalCard.astro';
-import waterImage from '../assets/images/wicklow-pier-lighthouse-day.jpeg';
-import hoursImage from '../assets/images/loyalty-cards.jpeg';
-import winterImage from '../assets/images/pier-lighthouse-moonrise.jpeg';
+import { getAllPosts, formatDate } from '../lib/sanity';
 
-// Placeholder posts — replace with a content collection / CMS feed later.
-const posts = [
-  {
-    title: 'Sea temperature: 11.4° and climbing',
-    excerpt:
-      'The spring warm-up is underway. What the next few weeks mean for plunge times, and why April cold is the best cold.',
-    date: '4 June 2026',
-    isoDate: '2026-06-04',
-    tag: 'Water',
-    url: '#',
-    image: waterImage,
-    alt: 'The lighthouse pier at Wicklow harbour on a calm day',
-  },
-  {
-    title: 'Summer hours & loyalty cards',
-    excerpt:
-      'We are open earlier and later from this month — and the new loyalty cards are in. Ten sessions, one on the house.',
-    date: '22 May 2026',
-    isoDate: '2026-05-22',
-    tag: 'News',
-    url: '#',
-    image: hoursImage,
-    alt: 'The Boat Yard Sauna loyalty cards displayed on a wooden table',
-  },
-  {
-    title: 'Swimming through winter',
-    excerpt:
-      'Notes from the regulars who never missed a morning — on dark-water nerves, moonrise dips, and what keeps them coming back.',
-    date: '9 March 2026',
-    isoDate: '2026-03-09',
-    tag: 'Stories',
-    url: '#',
-    image: winterImage,
-    alt: 'A full moon rising behind the pier lighthouse at night',
-  },
-];
+// Homepage preview — the three most recent posts, with the full
+// archive living at /journal.
+const posts = (await getAllPosts()).slice(0, 3);
 ---
 
 <section class="journal section" id="journal">
@@ -49,11 +14,24 @@ const posts = [
         <p class="eyebrow" data-reveal>Journal</p>
         <h2 class="journal__heading" data-reveal>Notes from the Harbour</h2>
       </div>
-      <a class="link-underline journal__all" href="#journal" data-reveal>All notes</a>
+      <a class="link-underline journal__all" href="/journal" data-reveal>Read all updates →</a>
     </div>
 
     <div class="journal__grid">
-      {posts.map((post) => <JournalCard {...post} />)}
+      {
+        posts.map((post) => (
+          <JournalCard
+            title={post.title}
+            excerpt={post.excerpt}
+            date={formatDate(post.publishedAt)}
+            isoDate={post.publishedAt}
+            tag={post.tag}
+            url={`/journal/${post.slug}`}
+            image={post.image}
+            alt={post.alt}
+          />
+        ))
+      }
     </div>
   </div>
 </section>
@@ -77,6 +55,7 @@ const posts = [
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    padding-block: 0.6em;
     margin-bottom: 0.5rem;
   }
 

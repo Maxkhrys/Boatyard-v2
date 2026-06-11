@@ -1,0 +1,221 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import { getAllPosts, formatDate } from '../../lib/sanity';
+import { portableTextToHtml } from '../../lib/portable-text';
+import type { Post } from '../../lib/sanity';
+
+export async function getStaticPaths() {
+  const posts = await getAllPosts();
+  return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+
+const { post } = Astro.props as { post: Post };
+const bodyHtml = portableTextToHtml(post.body);
+const isRemote = typeof post.image === 'string';
+---
+
+<Base title={`${post.title} — The Boat Yard Sauna Journal`} description={post.excerpt}>
+  <article class="entry">
+    <div class="entry__hero" data-media>
+      {
+        isRemote ? (
+          <img src={post.image as string} alt={post.alt} loading="eager" />
+        ) : (
+          <Image
+            src={post.image}
+            alt={post.alt}
+            width={2000}
+            widths={[768, 1280, 2000]}
+            sizes="100vw"
+            format="webp"
+            quality={70}
+            loading="eager"
+            fetchpriority="high"
+          />
+        )
+      }
+      <div class="entry__hero-wash" aria-hidden="true"></div>
+    </div>
+
+    <div class="container entry__container">
+      <a class="entry__back link-underline" href="/journal">← Back to the Journal</a>
+
+      <header class="entry__head">
+        <p class="entry__meta">
+          <span class="entry__tag">{post.tag}</span>
+          <time datetime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+        </p>
+        <h1 class="entry__title">{post.title}</h1>
+      </header>
+
+      <div class="entry__body" set:html={bodyHtml} />
+
+      <footer class="entry__footer">
+        <a class="entry__back link-underline" href="/journal">← Back to the Journal</a>
+      </footer>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .entry {
+    padding-bottom: var(--space-section);
+  }
+
+  /* Cover hero — full-bleed, washed for legibility against the nav */
+  .entry__hero {
+    position: relative;
+    height: clamp(16rem, 52vh, 30rem);
+    overflow: hidden;
+  }
+
+  .entry__hero :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .entry__hero-wash {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(11, 29, 46, 0.55) 0%,
+      rgba(11, 29, 46, 0.08) 45%,
+      rgba(11, 29, 46, 0.55) 100%
+    );
+  }
+
+  .entry__container {
+    max-width: 46rem;
+  }
+
+  .entry__back {
+    display: inline-block;
+    margin-top: clamp(2rem, 5vw, 3rem);
+    padding-block: 0.6em;
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .entry__head {
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .entry__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: var(--text-tiny);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  .entry__tag {
+    color: var(--cedar);
+    font-weight: 600;
+  }
+
+  .entry__title {
+    margin-top: 1.2rem;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+  }
+
+  /* Portable text prose */
+  .entry__body {
+    margin-top: clamp(2.5rem, 6vw, 3.5rem);
+  }
+
+  .entry__body :global(p) {
+    margin-top: 1.4em;
+    line-height: 1.75;
+    color: var(--ink-soft);
+  }
+
+  .entry__body :global(p:first-child) {
+    margin-top: 0;
+    font-size: clamp(1.1rem, 1.4vw, 1.25rem);
+    color: var(--ink);
+  }
+
+  .entry__body :global(h2),
+  .entry__body :global(h3),
+  .entry__body :global(h4) {
+    font-family: var(--font-display);
+    font-weight: 440;
+    letter-spacing: -0.02em;
+    line-height: 1.12;
+    margin-top: 2em;
+  }
+
+  .entry__body :global(h2) {
+    font-size: var(--text-h3);
+  }
+
+  .entry__body :global(h3),
+  .entry__body :global(h4) {
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+  }
+
+  .entry__body :global(blockquote) {
+    margin: 2em 0;
+    padding-left: 1.4em;
+    border-left: 2px solid var(--cedar);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  .entry__body :global(ul),
+  .entry__body :global(ol) {
+    margin-top: 1.4em;
+    padding-left: 1.4em;
+    color: var(--ink-soft);
+  }
+
+  .entry__body :global(li) {
+    margin-top: 0.5em;
+    line-height: 1.7;
+  }
+
+  .entry__body :global(li::marker) {
+    color: var(--cedar);
+  }
+
+  .entry__body :global(a) {
+    color: var(--cedar);
+    text-decoration-color: rgba(200, 149, 108, 0.4);
+    text-underline-offset: 0.2em;
+  }
+
+  .entry__body :global(figure) {
+    margin: 2.5em 0;
+  }
+
+  .entry__body :global(figure img) {
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  .entry__body :global(code) {
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    background: var(--mist-10);
+  }
+
+  .entry__footer {
+    margin-top: clamp(3rem, 7vw, 4.5rem);
+    padding-top: 2rem;
+    border-top: 1px solid var(--mist-10);
+  }
+
+  .entry__footer .entry__back {
+    margin-top: 0;
+  }
+</style>

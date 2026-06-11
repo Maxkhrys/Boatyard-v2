@@ -233,10 +233,10 @@ const words = headline.split(' ');
     }
   }
 
+  /* On phones the indicator collides with the CTA — drop it */
   @media (max-width: 640px) {
     .hero__scroll {
-      right: auto;
-      left: var(--gutter);
+      display: none;
     }
   }
 

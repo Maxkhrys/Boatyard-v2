@@ -171,11 +171,20 @@ import coastImage from '../assets/images/aerial-coast-golden.jpg';
     pointer-events: none;
   }
 
+  .mailing__form.is-pending .mailing__submit {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
   .mailing__confirm {
     width: 100%;
     min-height: 1.4em;
     font-size: var(--text-small);
     color: var(--ink-soft);
+  }
+
+  .mailing__form.is-error .mailing__confirm {
+    color: var(--amber);
   }
 
   @media (min-width: 640px) {
