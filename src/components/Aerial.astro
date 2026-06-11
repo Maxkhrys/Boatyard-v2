@@ -35,7 +35,7 @@ const shots = {
 
   <div class="container aerial__grid">
     <figure class="aerial__item aerial__item--fleet">
-      <div class="aerial__media" data-media data-parallax="4">
+      <div class="aerial__media" data-media data-parallax="3">
       <Image
         src={shots.fleet.image}
         alt={shots.fleet.alt}
@@ -51,7 +51,7 @@ const shots = {
     </figure>
 
     <figure class="aerial__item aerial__item--boat">
-      <div class="aerial__media" data-media data-parallax="7">
+      <div class="aerial__media" data-media data-parallax="5">
       <Image
         src={shots.boat.image}
         alt={shots.boat.alt}
@@ -67,7 +67,7 @@ const shots = {
     </figure>
 
     <figure class="aerial__item aerial__item--kayak">
-      <div class="aerial__media" data-media data-parallax="5">
+      <div class="aerial__media" data-media data-parallax="4">
       <Image
         src={shots.kayak.image}
         alt={shots.kayak.alt}
@@ -98,10 +98,10 @@ const shots = {
 
   /* Mobile-first: a clean stack, the two square shots side by side */
   .aerial__grid {
-    margin-top: clamp(3.5rem, 7vw, 6rem);
+    margin-top: clamp(4.5rem, 10vw, 9rem);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(1rem, 2.5vw, 1.75rem);
+    gap: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 3vw, 2.5rem);
   }
 
   .aerial__item {
@@ -163,7 +163,7 @@ const shots = {
 
     .aerial__item--kayak {
       grid-column: 5 / 10;
-      margin-top: clamp(-3rem, -4vw, -1.5rem);
+      margin-top: clamp(1.5rem, 3vw, 3rem);
     }
 
     .aerial__item--kayak :global(img) {

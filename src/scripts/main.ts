@@ -20,17 +20,69 @@ if (!reducedMotion) {
   gsap.ticker.lagSmoothing(0);
 }
 
-// Smooth in-page anchors (native scroll-behavior handles the reduced-motion case)
-document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) => {
+// Smooth in-page anchors — handles both "#id" and root-relative "/#id"
+// links when already on the homepage (reduced motion keeps native behaviour)
+document.querySelectorAll<HTMLAnchorElement>('a[href^="#"], a[href^="/#"]').forEach((anchor) => {
   anchor.addEventListener('click', (event) => {
     const href = anchor.getAttribute('href');
     if (!href || href === '#') return;
-    const target = document.querySelector(href);
+    if (href.startsWith('/#') && window.location.pathname !== '/') return;
+    const hash = href.replace(/^\//, '');
+    const target = document.querySelector(hash);
     if (!target || !lenis) return;
     event.preventDefault();
-    lenis.scrollTo(target as HTMLElement, { offset: href === '#top' ? 0 : -40 });
+    lenis.scrollTo(target as HTMLElement, { offset: hash === '#top' ? 0 : -40 });
   });
 });
+
+/* ------------------------------------------------------------------
+   Mobile menu — burger toggle with animated open/close.
+   `hidden` flips first so the opacity/translate transition can run.
+   ------------------------------------------------------------------ */
+
+const nav = document.querySelector<HTMLElement>('#site-nav');
+const burger = document.querySelector<HTMLButtonElement>('#nav-burger');
+const menu = document.querySelector<HTMLElement>('#nav-menu');
+
+if (nav && burger && menu) {
+  const openMenu = () => {
+    menu.hidden = false;
+    requestAnimationFrame(() => nav.classList.add('is-open'));
+    burger.setAttribute('aria-expanded', 'true');
+    burger.setAttribute('aria-label', 'Close menu');
+  };
+
+  const closeMenu = () => {
+    if (!nav.classList.contains('is-open')) return;
+    nav.classList.remove('is-open');
+    burger.setAttribute('aria-expanded', 'false');
+    burger.setAttribute('aria-label', 'Open menu');
+    const hide = (event: TransitionEvent) => {
+      if (event.target !== menu) return;
+      menu.hidden = true;
+      menu.removeEventListener('transitionend', hide);
+    };
+    menu.addEventListener('transitionend', hide);
+    // Fallback for reduced motion, where the transition never fires
+    window.setTimeout(() => {
+      if (!nav.classList.contains('is-open')) menu.hidden = true;
+    }, 600);
+  };
+
+  burger.addEventListener('click', () => {
+    nav.classList.contains('is-open') ? closeMenu() : openMenu();
+  });
+
+  menu.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeMenu));
+
+  document.addEventListener('click', (event) => {
+    if (nav.classList.contains('is-open') && !nav.contains(event.target as Node)) closeMenu();
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu();
+  });
+}
 
 /* ------------------------------------------------------------------
    Sticky nav — glassy blur once the hero is left behind
@@ -329,27 +381,64 @@ gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((element) => {
 });
 
 /* ------------------------------------------------------------------
-   Mailing list — front-end only subscribe with a quiet thank-you
+   Mailing list — subscribes via /api/subscribe (Buttondown behind it)
    ------------------------------------------------------------------ */
 
 const mailingForm = document.querySelector<HTMLFormElement>('#mailing-form');
 
 if (mailingForm) {
   const emailInput = mailingForm.querySelector<HTMLInputElement>('input[type="email"]');
+  const submitButton = mailingForm.querySelector<HTMLButtonElement>('button[type="submit"]');
   const confirmNote = mailingForm.querySelector<HTMLElement>('.mailing__confirm');
+  let busy = false;
 
-  mailingForm.addEventListener('submit', (event) => {
+  mailingForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    if (!emailInput) return;
+    if (busy || !emailInput) return;
     if (!emailInput.checkValidity()) {
       emailInput.reportValidity();
       return;
     }
-    mailingForm.classList.add('is-subscribed');
-    emailInput.setAttribute('aria-disabled', 'true');
-    emailInput.readOnly = true;
-    if (confirmNote) {
-      confirmNote.textContent = 'Grand. One short note a week — first one is on its way.';
+
+    busy = true;
+    mailingForm.classList.add('is-busy');
+    if (submitButton) submitButton.disabled = true;
+    if (confirmNote) confirmNote.textContent = '';
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailInput.value.trim() }),
+      });
+      const result = await response.json().catch(() => ({ ok: false }));
+
+      if (response.ok && result.ok) {
+        mailingForm.classList.add('is-subscribed');
+        emailInput.setAttribute('aria-disabled', 'true');
+        emailInput.readOnly = true;
+        if (confirmNote) {
+          confirmNote.textContent =
+            'You’re in — sea temperatures and sauna news coming your way.';
+        }
+        return; // keep the button disabled; the swap to "You're in" takes over
+      }
+
+      if (confirmNote) {
+        confirmNote.textContent =
+          'Hmm, that didn’t go through — give it another try in a moment.';
+      }
+    } catch {
+      if (confirmNote) {
+        confirmNote.textContent =
+          'Hmm, that didn’t go through — give it another try in a moment.';
+      }
+    } finally {
+      busy = false;
+      mailingForm.classList.remove('is-busy');
+      if (submitButton && !mailingForm.classList.contains('is-subscribed')) {
+        submitButton.disabled = false;
+      }
     }
   });
 }

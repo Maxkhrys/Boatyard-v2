@@ -1,0 +1,61 @@
+---
+import Base from '../../layouts/Base.astro';
+import JournalCard from '../../components/JournalCard.astro';
+import { getAllPosts } from '../../lib/journal';
+
+const posts = await getAllPosts();
+---
+
+<Base
+  title="Journal — Notes from the Harbour | The Boat Yard Sauna"
+  description="Water temperatures, opening hours, and stories from the sea — notes from The Boat Yard Sauna in Wicklow Town and Arklow."
+>
+  <section class="archive">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Journal</p>
+      <h1 class="archive__heading" data-reveal>Notes from the Harbour</h1>
+      <p class="archive__intro" data-reveal>
+        Water temperatures, opening hours, and stories from the people in the sea.
+      </p>
+
+      <div class="archive__grid">
+        {posts.map((post) => <JournalCard {...post} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .archive {
+    padding-block: calc(var(--nav-height) + clamp(3.5rem, 9vw, 7rem)) var(--space-section);
+  }
+
+  .archive__heading {
+    margin-top: 1.5rem;
+    font-size: var(--text-h2);
+  }
+
+  .archive__intro {
+    margin-top: 1.75rem;
+    max-width: 48ch;
+    color: var(--ink-soft);
+  }
+
+  .archive__grid {
+    margin-top: clamp(3rem, 7vw, 5.5rem);
+    display: grid;
+    gap: clamp(2.75rem, 5vw, 4rem);
+  }
+
+  @media (min-width: 640px) {
+    .archive__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .archive__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>
