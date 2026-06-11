@@ -3,9 +3,11 @@ import { Image } from 'astro:assets';
 import heroImage from '../assets/images/aerial-coast-golden.jpg';
 
 // Placeholder copy — change here.
-const headline = 'Sea. Steam. Repeat.';
-const subline = 'A wood-fired seaside sauna on the harbour’s edge — Wicklow Town & Arklow.';
+const headline = 'A wood-fired sauna on the harbour’s edge';
+const tagline = 'Cold sea. Hot cedar. Clear head.';
 
+// Words after this index render in italic — the headline's quiet flourish.
+const italicFrom = 5;
 const words = headline.split(' ');
 ---
 
@@ -32,36 +34,41 @@ const words = headline.split(' ');
   </div>
 
   <div class="hero__content container">
+    <p class="hero__eyebrow" data-hero-fade>
+      <span class="hero__eyebrow-line" aria-hidden="true"></span>
+      Wicklow Town&ensp;·&ensp;Arklow
+      <span class="hero__eyebrow-line" aria-hidden="true"></span>
+    </p>
+
     <h1 class="hero__title" aria-label={headline}>
       {
-        words.map((word) => (
-          <span class="hero__word" aria-hidden="true">
+        words.map((word, index) => (
+          <span class:list={['hero__word', { 'hero__word--accent': index >= italicFrom }]} aria-hidden="true">
             <span class="hero__word-inner">{word}</span>
           </span>
         ))
       }
     </h1>
-    <p class="hero__subline" data-hero-fade>{subline}</p>
-    <a
-      href="#locations"
-      class="btn btn--primary hero__cta"
-      data-hero-fade
-    >Book a Session</a>
+
+    <p class="hero__tagline" data-hero-fade>{tagline}</p>
+
+    <div class="hero__actions" data-hero-fade>
+      <a href="#locations" class="btn btn--primary">Book a Session</a>
+      <a href="#experience" class="link-underline hero__secondary">The Experience</a>
+    </div>
   </div>
 
   <a class="hero__scroll" href="#intro" data-hero-fade aria-label="Scroll to explore">
-    <span class="hero__scroll-label">Scroll</span>
     <span class="hero__scroll-line"><span></span></span>
   </a>
 </section>
-
 
 <style>
   .hero {
     position: relative;
     min-height: 100svh;
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     overflow: hidden;
     isolation: isolate;
   }
@@ -82,18 +89,23 @@ const words = headline.split(' ');
     will-change: transform;
   }
 
-  /* Layered wash: dark sky at top fades to transparent mid-page to show
-     the golden coast, then darkens again at the bottom for text legibility */
+  /* Wash: settles the photo into the navy palette and holds a soft
+     vignette behind the centred copy for legibility */
   .hero__wash {
     position: absolute;
     inset: 0;
     z-index: -2;
     background:
+      radial-gradient(
+        ellipse 70% 55% at 50% 52%,
+        rgba(8, 21, 34, 0.42) 0%,
+        transparent 75%
+      ),
       linear-gradient(
         to bottom,
-        rgba(11, 29, 46, 0.62) 0%,
-        rgba(11, 29, 46, 0.08) 40%,
-        rgba(11, 29, 46, 0.92) 100%
+        rgba(11, 29, 46, 0.6) 0%,
+        rgba(11, 29, 46, 0.22) 45%,
+        rgba(11, 29, 46, 0.88) 100%
       );
   }
 
@@ -140,26 +152,57 @@ const words = headline.split(' ');
 
   .hero__content {
     position: relative;
-    padding-block: clamp(6rem, 16vh, 9rem) clamp(6rem, 15vh, 9rem);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-block: clamp(7rem, 18vh, 10rem);
+  }
+
+  /* Eyebrow — locations held between two hairlines */
+  .hero__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    font-size: var(--text-eyebrow);
+    font-weight: 600;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .hero__eyebrow-line {
+    display: block;
+    width: clamp(2rem, 6vw, 4rem);
+    height: 1px;
+    background: rgba(200, 149, 108, 0.45);
   }
 
   .hero__title {
-    font-size: var(--text-hero);
-    font-weight: 420;
-    line-height: 0.94;
-    letter-spacing: -0.035em;
+    margin-top: clamp(1.75rem, 4vh, 2.5rem);
+    font-size: clamp(2.5rem, 6.2vw, 5.25rem);
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.025em;
     color: var(--mist);
-    max-width: 12ch;
+    max-width: 18ch;
+    text-wrap: balance;
   }
 
   .hero__word {
     display: inline-block;
     overflow: hidden;
     vertical-align: bottom;
-    padding-bottom: 0.1em;
-    margin-bottom: -0.1em;
-    padding-right: 0.18em;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+    padding-right: 0.22em;
     margin-right: -0.04em;
+  }
+
+  .hero__word--accent {
+    font-style: italic;
+    font-weight: 380;
+    color: var(--cedar);
   }
 
   html.js .hero__word-inner {
@@ -167,32 +210,38 @@ const words = headline.split(' ');
     transform: translateY(115%);
   }
 
-  .hero__subline {
-    margin-top: 2rem;
-    max-width: 36ch;
-    font-size: clamp(1rem, 1.4vw, 1.2rem);
-    line-height: 1.55;
+  .hero__tagline {
+    margin-top: clamp(1.5rem, 3.5vh, 2.25rem);
+    font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+    letter-spacing: 0.08em;
     color: var(--ink-soft);
   }
 
-  .hero__cta {
-    margin-top: 2.75rem;
+  .hero__actions {
+    margin-top: clamp(2.25rem, 5vh, 3.25rem);
+    display: flex;
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .hero__secondary {
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
   }
 
   html.js [data-hero-fade] {
     opacity: 0;
   }
 
-  /* Scroll indicator — quiet label + a line that breathes downward */
+  /* Scroll hint — a single line that breathes downward, bottom centre */
   .hero__scroll {
     position: absolute;
-    bottom: 2.25rem;
-    right: var(--gutter);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.9rem;
-    text-decoration: none;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
     color: var(--ink-soft);
     transition: color var(--dur) var(--ease);
   }
@@ -201,18 +250,10 @@ const words = headline.split(' ');
     color: var(--cedar);
   }
 
-  .hero__scroll-label {
-    font-size: var(--text-tiny);
-    font-weight: 500;
-    letter-spacing: 0.34em;
-    text-transform: uppercase;
-    writing-mode: vertical-rl;
-  }
-
   .hero__scroll-line {
     display: block;
     width: 1px;
-    height: 3.5rem;
+    height: 3.25rem;
     overflow: hidden;
     background: var(--mist-10);
   }
@@ -234,25 +275,28 @@ const words = headline.split(' ');
     }
   }
 
-  /* On phones the indicator collides with the CTA — drop it */
   @media (max-width: 640px) {
-    .hero__scroll {
-      display: none;
-    }
-
     .hero__content {
-      padding-block: 5.5rem 4.5rem;
+      padding-block: 6rem 5.5rem;
     }
 
-    .hero__subline {
-      margin-top: 1.5rem;
-      max-width: 30ch;
+    .hero__title {
+      font-size: clamp(2.2rem, 9.5vw, 2.9rem);
     }
 
-    .hero__cta {
-      margin-top: 2.25rem;
+    .hero__actions {
+      flex-direction: column;
+      gap: 1.4rem;
       width: 100%;
-      max-width: 22rem;
+    }
+
+    .hero__actions .btn {
+      width: 100%;
+      max-width: 20rem;
+    }
+
+    .hero__scroll {
+      bottom: 1.25rem;
     }
   }
 
