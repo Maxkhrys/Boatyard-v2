@@ -21,6 +21,18 @@ All motion respects `prefers-reduced-motion`: Lenis, the ken-burns zoom, mist
 drift and entrance animations are disabled; the scroll-driven colour warming is
 kept since it tracks scroll position directly and introduces no movement.
 
+## Environment variables
+
+Copy `.env.example` to `.env`:
+
+- `BUTTONDOWN_API_KEY` — powers the mailing-list signup (`/api/subscribe`)
+- `SANITY_PROJECT_ID` / `SANITY_DATASET` — journal content; when unset the
+  site builds with the placeholder posts in `src/lib/sanity.ts`
+
+The site is fully prerendered except `/api/subscribe`, which runs on the
+server (as a Vercel serverless function via `@astrojs/vercel`) so the
+Buttondown key stays secret.
+
 ## Commands
 
 | Command           | Action                       |

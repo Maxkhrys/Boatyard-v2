@@ -1,27 +1,34 @@
 import type { APIRoute } from 'astro';
 
-// Runs as a serverless function so BUTTONDOWN_API_KEY never reaches the client.
 export const prerender = false;
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const FRIENDLY_ERROR =
+  'The tide took that one — give it another go in a moment.';
+
+function json(body: Record<string, unknown>, status: number): Response {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}
 
 export const POST: APIRoute = async ({ request }) => {
-  const apiKey = import.meta.env.BUTTONDOWN_API_KEY;
-
-  if (!apiKey) {
-    console.error('[subscribe] BUTTONDOWN_API_KEY is not configured');
-    return json({ ok: false, error: 'not_configured' }, 503);
-  }
-
-  let email: unknown;
+  let email = '';
   try {
-    ({ email } = await request.json());
+    const data = (await request.json()) as { email?: string };
+    email = String(data.email ?? '').trim();
   } catch {
-    return json({ ok: false, error: 'invalid_request' }, 400);
+    // fall through to validation below
   }
 
-  if (typeof email !== 'string' || !EMAIL_PATTERN.test(email)) {
-    return json({ ok: false, error: 'invalid_email' }, 400);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return json({ ok: false, message: 'That email doesn’t look quite right — mind checking it?' }, 400);
+  }
+
+  const apiKey = import.meta.env.BUTTONDOWN_API_KEY;
+  if (!apiKey) {
+    console.error('BUTTONDOWN_API_KEY is not set');
+    return json({ ok: false, message: FRIENDLY_ERROR }, 500);
   }
 
   try {
@@ -31,31 +38,25 @@ export const POST: APIRoute = async ({ request }) => {
         Authorization: `Token ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email_address: email, tags: ['website'] }),
+      // `email_address` is the current field name; `email` keeps older
+      // API versions happy too.
+      body: JSON.stringify({ email_address: email, email }),
     });
 
     if (response.ok) {
-      return json({ ok: true });
+      return json({ ok: true }, 200);
     }
 
-    // Buttondown returns 400 with a detail message for duplicates — treat
-    // an already-subscribed address as success from the visitor's side.
+    // Already on the list — that's a success as far as the visitor cares.
     const detail = await response.text();
-    if (response.status === 400 && /already.*subscribed|exists/i.test(detail)) {
-      return json({ ok: true, alreadySubscribed: true });
+    if (response.status === 400 && /already|exists/i.test(detail)) {
+      return json({ ok: true }, 200);
     }
 
-    console.error('[subscribe] Buttondown error', response.status, detail);
-    return json({ ok: false, error: 'provider_error' }, 502);
+    console.error(`Buttondown responded ${response.status}: ${detail}`);
+    return json({ ok: false, message: FRIENDLY_ERROR }, 502);
   } catch (error) {
-    console.error('[subscribe] request failed', error);
-    return json({ ok: false, error: 'network_error' }, 502);
+    console.error('Buttondown request failed', error);
+    return json({ ok: false, message: FRIENDLY_ERROR }, 502);
   }
 };
-
-function json(body: Record<string, unknown>, status = 200) {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { 'Content-Type': 'application/json' },
-  });
-}

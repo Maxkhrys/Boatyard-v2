@@ -204,9 +204,19 @@ const locations = [
     margin-top: 2.1rem;
   }
 
+  /* Full-width booking button is easier to hit one-handed */
   @media (max-width: 640px) {
     .locations__book {
       width: 100%;
+    }
+  }
+
+  /* Keep the map link on its own tappable line on narrow screens */
+  @media (max-width: 480px) {
+    .locations__map {
+      display: block;
+      margin-left: 0;
+      width: fit-content;
     }
   }
 

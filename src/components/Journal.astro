@@ -1,9 +1,10 @@
 ---
 import JournalCard from './JournalCard.astro';
-import { getRecentPosts } from '../lib/journal';
+import { getAllPosts, formatDate } from '../lib/sanity';
 
-// Homepage preview — the three most recent notes; the full archive lives at /journal.
-const posts = await getRecentPosts(3);
+// Homepage preview — the three most recent posts, with the full
+// archive living at /journal.
+const posts = (await getAllPosts()).slice(0, 3);
 ---
 
 <section class="journal section" id="journal">
@@ -13,11 +14,24 @@ const posts = await getRecentPosts(3);
         <p class="eyebrow" data-reveal>Journal</p>
         <h2 class="journal__heading" data-reveal>Notes from the Harbour</h2>
       </div>
-      <a class="link-underline journal__all" href="/journal/" data-reveal>Read all updates →</a>
+      <a class="link-underline journal__all" href="/journal" data-reveal>Read all updates →</a>
     </div>
 
     <div class="journal__grid">
-      {posts.map((post) => <JournalCard {...post} />)}
+      {
+        posts.map((post) => (
+          <JournalCard
+            title={post.title}
+            excerpt={post.excerpt}
+            date={formatDate(post.publishedAt)}
+            isoDate={post.publishedAt}
+            tag={post.tag}
+            url={`/journal/${post.slug}`}
+            image={post.image}
+            alt={post.alt}
+          />
+        ))
+      }
     </div>
   </div>
 </section>
@@ -41,7 +55,8 @@ const posts = await getRecentPosts(3);
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding-block: 0.75rem;
+    padding-block: 0.6em;
+    margin-bottom: 0.5rem;
   }
 
   .journal__grid {
