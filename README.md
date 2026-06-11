@@ -30,8 +30,8 @@ Copy `.env.example` to `.env`:
   site builds with the placeholder posts in `src/lib/sanity.ts`
 
 The site is fully prerendered except `/api/subscribe`, which runs on the
-server (via `@astrojs/node`) so the Buttondown key stays secret. Run the
-production build with `node dist/server/entry.mjs`.
+server (as a Vercel serverless function via `@astrojs/vercel`) so the
+Buttondown key stays secret.
 
 ## Commands
 
