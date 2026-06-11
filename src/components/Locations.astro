@@ -1,15 +1,27 @@
 ---
 import { Image } from 'astro:assets';
-import { getSiteSettings } from '../lib/sanity';
+import { getSiteSettings, type HoursRow } from '../lib/sanity';
 import wicklowImage from '../assets/images/aerial-wicklow-harbour.jpg';
 import arklowImage from '../assets/images/sauna-gate-harbour.jpeg';
 
 const siteSettings = await getSiteSettings();
 
-const defaultHours = [
+const defaultHours: HoursRow[] = [
   { days: 'Mon – Fri', times: '7:00 — 21:00' },
   { days: 'Sat – Sun', times: '8:00 — 20:00' },
 ];
+
+const wicklowHours: HoursRow[] =
+  siteSettings?.wicklowHours && siteSettings.wicklowHours.length > 0
+    ? siteSettings.wicklowHours
+    : defaultHours;
+
+const arklowHours: HoursRow[] =
+  siteSettings?.arklowHours && siteSettings.arklowHours.length > 0
+    ? siteSettings.arklowHours
+    : defaultHours;
+
+const hoursNote = siteSettings?.hoursNote ?? 'Subject to tides & weather';
 
 const locations = [
   {
@@ -17,8 +29,8 @@ const locations = [
     blurb:
       'On the East Pier beneath the lighthouse, looking back across the harbour. Sunrise sessions are something else.',
     address: 'East Pier, Wicklow Harbour, Wicklow Town',
-    hours: siteSettings?.wicklowHours?.length ? siteSettings.wicklowHours : defaultHours,
-    hoursNote: siteSettings?.hoursNote ?? 'Subject to tides & weather',
+    hours: wicklowHours,
+    hoursNote,
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Wicklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
@@ -30,8 +42,8 @@ const locations = [
     blurb:
       "Through the boat yard gate and straight onto the water's edge. Moorings, masts, and steam rising off the slipway.",
     address: 'North Quay, Arklow Harbour, Arklow',
-    hours: siteSettings?.arklowHours?.length ? siteSettings.arklowHours : defaultHours,
-    hoursNote: siteSettings?.hoursNote ?? 'Subject to tides & weather',
+    hours: arklowHours,
+    hoursNote,
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Arklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_Boat_Yard_Sauna_Arklow',
