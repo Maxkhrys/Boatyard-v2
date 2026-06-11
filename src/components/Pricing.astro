@@ -1,29 +1,4 @@
 ---
-// PLACEHOLDER prices — replace with the real rates.
-const sessions = [
-  {
-    name: 'Sauna Session',
-    price: '€20',
-    unit: 'per person · 50 min',
-    description: 'A shared session in the barrel — heat, plunge and the harbour view. Towels and sauna hats provided.',
-    featured: false,
-  },
-  {
-    name: 'Contrast Therapy',
-    price: '€35',
-    unit: 'per person · 75 min',
-    description: 'Guided rounds of heat and cold with breathing work in between. Our favourite way to do it properly.',
-    featured: true,
-  },
-  {
-    name: 'Private Hire',
-    price: '€120',
-    unit: 'up to 6 people · 60 min',
-    description: 'The whole sauna to yourselves — birthdays, swim clubs, or a quiet hour with people you like.',
-    featured: false,
-  },
-];
-
 const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you think', 'Sandals for the pier'];
 ---
 
@@ -32,20 +7,18 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
     <p class="eyebrow" data-reveal>Sessions &amp; pricing</p>
     <h2 class="pricing__heading" data-reveal>Simple as the sea.</h2>
 
-    <div class="pricing__grid">
-      {
-        sessions.map((session) => (
-          <article class:list={['pricing__card', { 'pricing__card--featured': session.featured }]} data-reveal>
-            {session.featured && <p class="pricing__badge">Most loved</p>}
-            <h3 class="pricing__name">{session.name}</h3>
-            <p class="pricing__price">
-              {session.price}
-              <span class="pricing__unit">{session.unit}</span>
-            </p>
-            <p class="pricing__description">{session.description}</p>
-          </article>
-        ))
-      }
+    <div class="pricing__stage">
+      <article class="pricing__card" data-reveal>
+        <h3 class="pricing__name">Sauna Session</h3>
+        <p class="pricing__price">
+          €12
+          <span class="pricing__unit">per person · open session</span>
+        </p>
+        <p class="pricing__description">
+          Heat, plunge and the harbour view. Towels and sauna hats provided — just bring yourself
+          and your swimmers.
+        </p>
+      </article>
     </div>
 
     <aside class="pricing__bring" data-reveal>
@@ -63,55 +36,28 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
     margin-top: 1.5rem;
   }
 
-  .pricing__grid {
+  /* One option, centred, room to breathe */
+  .pricing__stage {
     margin-top: clamp(3.5rem, 7vw, 5.5rem);
-    display: grid;
-    gap: 1.25rem;
-  }
-
-  @media (min-width: 800px) {
-    .pricing__grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+    display: flex;
+    justify-content: center;
   }
 
   .pricing__card {
-    position: relative;
-    padding: clamp(1.75rem, 3vw, 2.5rem);
-    border: 1px solid var(--mist-10);
+    width: min(30rem, 100%);
+    padding: clamp(2.25rem, 6vw, 3.5rem);
+    border: 1px solid rgba(200, 149, 108, 0.45);
     border-radius: 6px;
+    background: rgba(200, 149, 108, 0.06);
+    text-align: center;
     transition:
       border-color var(--dur) var(--ease),
-      transform var(--dur) var(--ease),
-      background-color var(--dur) var(--ease);
+      transform var(--dur) var(--ease);
   }
 
   .pricing__card:hover {
-    border-color: var(--mist-25);
-    transform: translateY(-4px);
-  }
-
-  .pricing__card--featured {
-    border-color: rgba(200, 149, 108, 0.45);
-    background: rgba(200, 149, 108, 0.06);
-  }
-
-  .pricing__card--featured:hover {
     border-color: var(--cedar);
-  }
-
-  .pricing__badge {
-    position: absolute;
-    top: -0.7rem;
-    left: clamp(1.75rem, 3vw, 2.5rem);
-    padding: 0.25em 0.9em;
-    border-radius: 999px;
-    background: var(--cedar);
-    color: var(--navy-deep);
-    font-size: var(--text-tiny);
-    font-weight: 600;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
+    transform: translateY(-4px);
   }
 
   .pricing__name {
@@ -119,9 +65,9 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
   }
 
   .pricing__price {
-    margin-top: 1.4rem;
+    margin-top: 1.6rem;
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 4vw, 3rem);
+    font-size: clamp(3rem, 8vw, 4.5rem);
     font-weight: 440;
     letter-spacing: -0.02em;
     line-height: 1;
@@ -129,7 +75,7 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
 
   .pricing__unit {
     display: block;
-    margin-top: 0.55rem;
+    margin-top: 0.8rem;
     font-family: var(--font-body);
     font-size: var(--text-tiny);
     font-weight: 500;
@@ -139,14 +85,16 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
   }
 
   .pricing__description {
-    margin-top: 1.3rem;
+    margin-top: 1.6rem;
+    max-width: 34ch;
+    margin-inline: auto;
     font-size: var(--text-small);
     line-height: 1.7;
     color: var(--ink-soft);
   }
 
   .pricing__bring {
-    margin-top: clamp(3rem, 6vw, 4.5rem);
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
     padding-top: 2.25rem;
     border-top: 1px solid var(--mist-10);
     display: grid;

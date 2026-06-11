@@ -1,8 +1,8 @@
 ---
 import { Image } from 'astro:assets';
-import heatImage from '../assets/images/sauna-hats-cedar-door.jpeg';
-import plungeImage from '../assets/images/sea-steps-sunrise.jpeg';
-import repeatImage from '../assets/images/sauna-gate-harbour.jpeg';
+import heatImage from '../assets/images/aerial-harbour-vista.jpg';
+import plungeImage from '../assets/images/aerial-rowers-emerald.jpg';
+import repeatImage from '../assets/images/aerial-bay-swimmers.jpg';
 
 // Placeholder copy — refine in a later pass.
 const beats = [
@@ -11,21 +11,21 @@ const beats = [
     title: 'Heat',
     text: 'The stove is lit before sunrise. Wood-fired cedar at ninety degrees, eucalyptus on the stones, the harbour framed in the window.',
     image: heatImage,
-    alt: 'Grey felt sauna hats hanging on the cedar door of a barrel sauna',
+    alt: 'Aerial view over Wicklow town and harbour, the blue sea stretching to the horizon',
   },
   {
     number: '02',
     title: 'Plunge',
     text: 'Out the door, down the steps, into the Irish Sea. Ten seconds of cold that rearranges the whole day.',
     image: plungeImage,
-    alt: 'Stone steps with handrails leading into a calm sea at sunrise',
+    alt: 'Aerial view straight down on a rowing crew crossing emerald sea water',
   },
   {
     number: '03',
     title: 'Repeat',
     text: 'Back to the heat. Three rounds, maybe four. Stay until the line between you and the weather goes quiet.',
     image: repeatImage,
-    alt: 'The Boat Yard Sauna gateway framing a harbour full of moored boats',
+    alt: 'Aerial view of the bay sweeping toward the pier, swimmers dotting the shoreline',
   },
 ];
 ---
@@ -39,7 +39,8 @@ const beats = [
             <Image
               src={beat.image}
               alt={beat.alt}
-              widths={[480, 740]}
+              width={1920}
+              widths={[640, 1280, 1920]}
               sizes="(min-width: 800px) 100vw, 92vw"
               format="webp"
               quality={70}
@@ -78,11 +79,12 @@ const beats = [
     border-radius: 4px;
   }
 
+  /* Wide drone shots — keep them landscape in the stacked layout */
   .experience__media img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 16 / 10;
   }
 
   .experience__copy {

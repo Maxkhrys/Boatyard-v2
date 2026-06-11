@@ -39,8 +39,8 @@
   --text-h3: clamp(1.4rem, 2.6vw, 2rem);
   --text-body: clamp(1rem, 1.1vw, 1.125rem);
   --text-small: 0.875rem;
-  --text-tiny: 0.75rem;
-  --text-eyebrow: clamp(0.68rem, 0.8vw, 0.78rem);
+  --text-tiny: 0.8rem; /* 12.8px — keeps captions/meta legible on phones */
+  --text-eyebrow: clamp(0.72rem, 0.8vw, 0.78rem);
 
   /* Rhythm */
   --space-section: clamp(7rem, 16vw, 14rem);
