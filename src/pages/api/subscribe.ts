@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return json({ ok: false, message: 'That email doesn't look quite right — mind checking it?' }, 400);
+    return json({ ok: false, message: 'That email doesn\'t look quite right — mind checking it?' }, 400);
   }
 
   const apiKey = import.meta.env.BUTTONDOWN_API_KEY;
@@ -47,7 +47,7 @@ export const POST: APIRoute = async ({ request }) => {
       return json({ ok: true }, 200);
     }
 
-    // Already on the list — that's a success as far as the visitor cares.
+    // Already on the list — that\'s a success as far as the visitor cares.
     const detail = await response.text();
     if (response.status === 400 && /already|exists/i.test(detail)) {
       return json({ ok: true }, 200);

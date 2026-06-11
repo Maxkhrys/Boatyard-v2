@@ -21,7 +21,7 @@ import imgRitualOils from '../assets/images/ritual-oils-incense.jpeg';
 /* ------------------------------------------------------------------
    Sanity content layer — fetched at build time via the public query
    API (no client dependency). Falls back to the placeholder posts
-   below when SANITY_PROJECT_ID isn't configured or the fetch fails,
+   below when SANITY_PROJECT_ID isn\'t configured or the fetch fails,
    so the site always builds.
    ------------------------------------------------------------------ */
 
@@ -271,7 +271,7 @@ const fallbackPosts: Post[] = [
     body: paragraphs(
       'The buoy off the East Pier read 11.4° this morning — up almost a full degree on last week. The spring warm-up is properly underway, and you can feel it in the water: the first ten seconds still bite, but the bite lets go sooner.',
       'What does that mean in practice? Plunge times stretch. Swimmers who were managing thirty seconds in March are doing two and three minutes now, and the walk back up the steps feels like a stroll rather than an escape.',
-      'Our advice: don't wait for "warm". The water between now and midsummer is the sweet spot — cold enough to do its work, kind enough to let you stay in it. April cold is the best cold; June cold is a close second.',
+      'Our advice: don\'t wait for "warm". The water between now and midsummer is the sweet spot — cold enough to do its work, kind enough to let you stay in it. April cold is the best cold; June cold is a close second.',
     ),
   },
   {
@@ -285,7 +285,7 @@ const fallbackPosts: Post[] = [
     alt: 'The Boat Yard Sauna loyalty cards displayed on a wooden table',
     body: paragraphs(
       'Two pieces of news from the yard. First: summer hours. From this month we light the stove earlier and keep it going later — first sessions from 7:00 on weekdays, and evening slots running until the light goes.',
-      'Second: the loyalty cards are in, and they came out lovely. Ten sessions stamped, one on the house. Pick one up at either harbour next time you're down — no app, no account, just card and stamp the way it should be.',
+      'Second: the loyalty cards are in, and they came out lovely. Ten sessions stamped, one on the house. Pick one up at either harbour next time you\'re down — no app, no account, just card and stamp the way it should be.',
       'Both locations, Wicklow Town and Arklow, run the same hours and honour the same cards. See you on the water.',
     ),
   },
@@ -300,8 +300,8 @@ const fallbackPosts: Post[] = [
     alt: 'A full moon rising behind the pier lighthouse at night',
     body: paragraphs(
       'There is a small group who never missed a morning this winter. Not one. Storm warnings, sleet sideways off the sea, the kind of darkness at 7am that makes the harbour lights feel like the only thing awake — they came anyway.',
-      'We asked a few of them what keeps them coming back. The answers were all different and somehow all the same: the nerves before the dark water never fully go away, and that's the point. You do the hard thing, then you sit in the heat and watch the day arrive.',
-      'One swimmer told us about a January morning when the moon set behind the lighthouse just as the sun came up across the water — both at once, gold one side, silver the other. You don't get that from bed.',
+      'We asked a few of them what keeps them coming back. The answers were all different and somehow all the same: the nerves before the dark water never fully go away, and that\'s the point. You do the hard thing, then you sit in the heat and watch the day arrive.',
+      'One swimmer told us about a January morning when the moon set behind the lighthouse just as the sun came up across the water — both at once, gold one side, silver the other. You don\'t get that from bed.',
     ),
   },
   {
