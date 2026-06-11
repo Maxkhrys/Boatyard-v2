@@ -1,9 +1,10 @@
 ---
+// Links are root-relative so the nav works from /journal pages too.
 ---
 
 <header class="site-nav" id="site-nav">
   <div class="site-nav__inner">
-    <a href="#top" class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
+    <a href="/" class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
       <svg class="site-nav__mark" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M11.2 3v12h1.6V3z" fill="currentColor"></path>
         <path d="M10.6 4 5 14h5.6z" fill="currentColor"></path>
@@ -15,8 +16,30 @@
         <span class="site-nav__descriptor">Sauna</span>
       </span>
     </a>
-    <a href="#locations" class="btn btn--primary site-nav__cta">Book</a>
+
+    <a href="/#locations" class="btn btn--primary site-nav__cta">Book</a>
+
+    <button
+      class="site-nav__burger"
+      id="nav-burger"
+      type="button"
+      aria-expanded="false"
+      aria-controls="nav-menu"
+      aria-label="Open menu"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <line class="site-nav__burger-line site-nav__burger-line--top" x1="3" y1="7" x2="21" y2="7"></line>
+        <line class="site-nav__burger-line site-nav__burger-line--mid" x1="3" y1="12" x2="21" y2="12"></line>
+        <line class="site-nav__burger-line site-nav__burger-line--bot" x1="3" y1="17" x2="21" y2="17"></line>
+      </svg>
+    </button>
   </div>
+
+  <nav class="site-nav__menu" id="nav-menu" aria-label="Site menu" hidden>
+    <a class="site-nav__menu-link" href="/journal/">Journal</a>
+    <a class="site-nav__menu-link" href="/#locations">Locations</a>
+    <a class="site-nav__menu-link site-nav__menu-link--cta" href="/#locations">Book a Session</a>
+  </nav>
 </header>
 
 <style>
@@ -24,15 +47,16 @@
     position: fixed;
     inset: 0 0 auto 0;
     z-index: 100;
-    height: var(--nav-height);
     border-bottom: 1px solid transparent;
     transition:
       background-color 0.7s var(--ease),
       border-color 0.7s var(--ease);
   }
 
-  /* Glassy blur once the page is scrolled; tint follows the warming --bg */
-  .site-nav.is-scrolled {
+  /* Glassy blur once the page is scrolled (or the menu is open);
+     tint follows the warming --bg */
+  .site-nav.is-scrolled,
+  .site-nav.is-open {
     background-color: color-mix(in srgb, var(--bg) 52%, transparent);
     -webkit-backdrop-filter: blur(18px) saturate(1.5) brightness(1.05);
     backdrop-filter: blur(18px) saturate(1.5) brightness(1.05);
@@ -40,7 +64,7 @@
   }
 
   .site-nav__inner {
-    height: 100%;
+    height: var(--nav-height);
     max-width: var(--content-max);
     margin-inline: auto;
     padding-inline: var(--gutter);
@@ -100,6 +124,107 @@
     padding: 0.72em 1.8em;
   }
 
+  /* ----- Burger (mobile only) ----- */
+
+  .site-nav__burger {
+    display: none;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-right: -0.5rem;
+    padding: 0.55rem;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .site-nav__burger svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .site-nav__burger-line {
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    transition:
+      transform var(--dur) var(--ease),
+      opacity var(--dur) var(--ease);
+    transform-origin: 12px 12px;
+  }
+
+  .site-nav.is-open .site-nav__burger-line--top {
+    transform: translateY(5px) rotate(45deg);
+  }
+
+  .site-nav.is-open .site-nav__burger-line--mid {
+    opacity: 0;
+  }
+
+  .site-nav.is-open .site-nav__burger-line--bot {
+    transform: translateY(-5px) rotate(-45deg);
+  }
+
+  /* ----- Dropdown menu (mobile only) ----- */
+
+  .site-nav__menu {
+    display: none;
+    flex-direction: column;
+    padding: 0.5rem var(--gutter) 1.75rem;
+    opacity: 0;
+    transform: translateY(-12px);
+    transition:
+      opacity var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+
+  .site-nav.is-open .site-nav__menu {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .site-nav__menu-link {
+    padding: 0.9rem 0;
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 460;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    color: var(--ink);
+    border-bottom: 1px solid var(--mist-10);
+    transition: color var(--dur) var(--ease), padding-left var(--dur) var(--ease);
+  }
+
+  .site-nav__menu-link:hover {
+    color: var(--cedar);
+    padding-left: 0.4rem;
+  }
+
+  .site-nav__menu-link--cta {
+    color: var(--cedar);
+    border-bottom: 0;
+  }
+
+  @media (max-width: 767.98px) {
+    .site-nav__cta {
+      display: none;
+    }
+
+    .site-nav__burger {
+      display: block;
+    }
+
+    .site-nav__menu {
+      display: flex;
+    }
+
+    .site-nav__menu[hidden] {
+      display: none;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .site-nav__logo:hover .site-nav__mark {
       transform: none;
@@ -107,6 +232,10 @@
 
     .site-nav__logo:hover .site-nav__descriptor {
       letter-spacing: 0.42em;
+    }
+
+    .site-nav__menu {
+      transform: none;
     }
   }
 </style>
