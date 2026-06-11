@@ -202,6 +202,7 @@ a {
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+  touch-action: manipulation;
   transition:
     transform var(--dur) var(--ease),
     background-color var(--dur) var(--ease),
@@ -298,6 +299,36 @@ a {
 
 html.js [data-reveal] {
   opacity: 0;
+}
+
+/* Media reveals — image unclips upward while the photo settles into place.
+   The clip lives on the figure, the scale on the img, so the two never fight. */
+
+html.js [data-media] {
+  clip-path: inset(0 0 100% 0);
+  overflow: hidden;
+}
+
+/* While GSAP drives the reveal, CSS transitions must stay out of the way */
+html.js [data-media]:not(.is-revealed) img {
+  transition: none !important;
+}
+
+/* Parallax images rest oversized so the drift never exposes an edge */
+[data-parallax] img {
+  transform: scale(1.14);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js [data-media] {
+    clip-path: none;
+  }
+
+  [data-parallax] img {
+    transform: none;
+    will-change: auto;
+  }
 }
 
 /* ---------- Reduced motion ---------- */

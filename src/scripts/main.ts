@@ -243,6 +243,70 @@ ScrollTrigger.create({
 });
 
 /* ------------------------------------------------------------------
+   Media reveals — images unclip upward while the photo settles.
+   One shared pattern so every photo on the site enters the same way.
+   ------------------------------------------------------------------ */
+
+gsap.utils.toArray<HTMLElement>('[data-media]').forEach((figure) => {
+  const image = figure.querySelector('img');
+
+  if (reducedMotion) {
+    gsap.set(figure, { clipPath: 'none' });
+    figure.classList.add('is-revealed');
+    return;
+  }
+
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger: figure, start: 'top 82%', once: true },
+    onComplete: () => {
+      figure.classList.add('is-revealed');
+      // Non-parallax images hand the transform back to CSS so hover
+      // zooms keep working
+      if (image && !figure.hasAttribute('data-parallax')) {
+        gsap.set(image, { clearProps: 'transform' });
+      }
+    },
+  });
+
+  tl.to(figure, {
+    clipPath: 'inset(0% 0% 0% 0%)',
+    duration: 1.3,
+    ease: 'power3.inOut',
+  });
+
+  if (image) {
+    tl.from(image, { scale: '+=0.14', duration: 1.5, ease: 'power3.out' }, 0);
+  }
+});
+
+/* ------------------------------------------------------------------
+   Depth parallax — images drift at their own pace as you scroll past.
+   data-parallax holds the drift amplitude in percent.
+   ------------------------------------------------------------------ */
+
+gsap.utils.toArray<HTMLElement>('[data-parallax]').forEach((element) => {
+  if (reducedMotion) return;
+
+  const target = element.querySelector('img') ?? element;
+  const amount = parseFloat(element.dataset.parallax ?? '5');
+
+  gsap.fromTo(
+    target,
+    { yPercent: -amount },
+    {
+      yPercent: amount,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: element,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.4,
+      },
+    },
+  );
+});
+
+/* ------------------------------------------------------------------
    Section reveals — calm entrances everywhere else
    ------------------------------------------------------------------ */
 
