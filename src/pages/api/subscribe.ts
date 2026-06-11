@@ -22,7 +22,7 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return json({ ok: false, message: 'That email doesn’t look quite right — mind checking it?' }, 400);
+    return json({ ok: false, message: 'That email doesn't look quite right — mind checking it?' }, 400);
   }
 
   const apiKey = import.meta.env.BUTTONDOWN_API_KEY;
