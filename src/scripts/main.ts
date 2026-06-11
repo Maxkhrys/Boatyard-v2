@@ -43,36 +43,21 @@ ScrollTrigger.create({
 });
 
 /* ------------------------------------------------------------------
-   Hero — word-by-word headline reveal, CTA fade, ken-burns zoom
+   Hero — fade in content, ken-burns zoom
    ------------------------------------------------------------------ */
 
-const heroWords = gsap.utils.toArray<HTMLElement>('.hero__word-inner');
 const heroFades = gsap.utils.toArray<HTMLElement>('[data-hero-fade]');
 const heroImage = document.querySelector<HTMLElement>('.hero__media img');
 
 if (reducedMotion) {
-  gsap.set([...heroWords, ...heroFades], { clearProps: 'all' });
+  gsap.set(heroFades, { clearProps: 'all' });
 } else {
   gsap
-    .timeline({ delay: 0.4 })
-    .fromTo(
-      heroWords,
-      { yPercent: 115, rotate: 2.5 },
-      {
-        yPercent: 0,
-        rotate: 0,
-        duration: 1.6,
-        stagger: 0.13,
-        ease: 'expo.out',
-        transformOrigin: 'left bottom',
-        overwrite: 'auto',
-      },
-    )
+    .timeline({ delay: 0.3 })
     .fromTo(
       heroFades,
       { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 1.1, stagger: 0.12, ease: 'power2.out' },
-      '-=0.9',
+      { opacity: 1, y: 0, duration: 1.1, stagger: 0.14, ease: 'power2.out' },
     );
 
   if (heroImage) {

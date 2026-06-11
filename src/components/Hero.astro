@@ -2,13 +2,7 @@
 import { Image } from 'astro:assets';
 import heroImage from '../assets/images/aerial-coast-golden.jpg';
 
-// Placeholder copy — change here.
-const headline = 'A wood-fired sauna on the harbour’s edge';
-const tagline = 'Cold sea. Hot cedar. Clear head.';
-
-// Words after this index render in italic — the headline's quiet flourish.
-const italicFrom = 5;
-const words = headline.split(' ');
+const tagline = ‘Cold sea. Hot cedar. Clear head.’;
 ---
 
 <section class="hero" id="top">
@@ -40,14 +34,8 @@ const words = headline.split(' ');
       <span class="hero__eyebrow-line" aria-hidden="true"></span>
     </p>
 
-    <h1 class="hero__title" aria-label={headline}>
-      {
-        words.map((word, index) => (
-          <span class:list={['hero__word', { 'hero__word--accent': index >= italicFrom }]} aria-hidden="true">
-            <span class="hero__word-inner">{word}</span>
-          </span>
-        ))
-      }
+    <h1 class="hero__title" data-hero-fade>
+      A wood-fired sauna on the <em>harbour's edge</em>
     </h1>
 
     <p class="hero__tagline" data-hero-fade>{tagline}</p>
@@ -189,25 +177,10 @@ const words = headline.split(' ');
     text-wrap: balance;
   }
 
-  .hero__word {
-    display: inline-block;
-    overflow: hidden;
-    vertical-align: bottom;
-    padding-bottom: 0.12em;
-    margin-bottom: -0.12em;
-    padding-right: 0.22em;
-    margin-right: -0.04em;
-  }
-
-  .hero__word--accent {
+  .hero__title em {
     font-style: italic;
     font-weight: 380;
     color: var(--cedar);
-  }
-
-  html.js .hero__word-inner {
-    display: inline-block;
-    transform: translateY(115%);
   }
 
   .hero__tagline {
@@ -301,10 +274,6 @@ const words = headline.split(' ');
   }
 
   @media (prefers-reduced-motion: reduce) {
-    html.js .hero__word-inner {
-      transform: none;
-    }
-
     html.js [data-hero-fade] {
       opacity: 1;
     }
