@@ -1,4 +1,4 @@
-import { randomInt } from 'node:crypto';
+import { randomInt, createHash } from 'node:crypto';
 
 /* ------------------------------------------------------------------
    Gift voucher catalogue + helpers.
@@ -75,9 +75,20 @@ export function resolveSelection(input: SelectionInput): ResolvedSelection | nul
   return null;
 }
 
-/** Human-friendly, unambiguous voucher code: BOAT-XXXX-XXXX. */
-export function generateVoucherCode(): string {
+/**
+ * Generates a human-friendly BOAT-XXXX-XXXX voucher code.
+ * Pass a seed (Stripe payment intent ID) for deterministic, guaranteed-unique codes.
+ * The same seed always produces the same code, so webhook retries are idempotent.
+ * Falls back to crypto random only if no seed is provided.
+ */
+export function generateVoucherCode(seed?: string): string {
   const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I
+  if (seed) {
+    const hash = createHash('sha256').update(seed).digest();
+    const block = (offset: number) =>
+      Array.from({ length: 4 }, (_, i) => alphabet[hash[offset + i] % alphabet.length]).join('');
+    return `BOAT-${block(0)}-${block(4)}`;
+  }
   const block = () =>
     Array.from({ length: 4 }, () => alphabet[randomInt(alphabet.length)]).join('');
   return `BOAT-${block()}-${block()}`;
@@ -115,6 +126,14 @@ export function buildVoucherEmail(input: VoucherEmailInput): {
 <html>
   <body style="margin:0;background:#0b1d2e;font-family:Helvetica,Arial,sans-serif;">
     <div style="max-width:560px;margin:0 auto;padding:40px 24px;">
+      <div style="margin-bottom:20px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" style="display:block;">
+          <path d="M11.2 3v12h1.6V3z" fill="#c8956c"/>
+          <path d="M10.6 4 5 14h5.6z" fill="#c8956c"/>
+          <path d="M13.4 4v9.4H19z" fill="#c8956c"/>
+          <path d="M4 16.6h16l-2.2 3.8H6.2z" fill="#c8956c"/>
+        </svg>
+      </div>
       <p style="margin:0 0 6px;letter-spacing:0.3em;text-transform:uppercase;font-size:11px;color:#c8956c;">The Boat Yard Sauna</p>
       <h1 style="margin:0 0 24px;font-size:26px;color:#edf2f0;font-weight:600;">A gift of heat, cold &amp; calm.</h1>
 

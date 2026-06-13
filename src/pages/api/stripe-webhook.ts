@@ -41,7 +41,9 @@ export const POST: APIRoute = async ({ request }) => {
   const session = event.data.object as Stripe.Checkout.Session;
   const meta = session.metadata ?? {};
   const amount = Number(meta.voucher_amount ?? session.amount_total ?? 0);
-  const code = generateVoucherCode();
+  // Derive code from the payment intent ID — unique per payment, idempotent on retries.
+  const seed = typeof session.payment_intent === 'string' ? session.payment_intent : session.id;
+  const code = generateVoucherCode(seed);
 
   const buyerEmail = session.customer_details?.email ?? undefined;
   const recipientEmail = meta.recipient_email || undefined;
