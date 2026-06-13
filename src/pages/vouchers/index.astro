@@ -1,0 +1,580 @@
+---
+import Base from '../../layouts/Base.astro';
+import { Image } from 'astro:assets';
+import {
+  SESSION_PACKAGES,
+  GIFT_PRESETS,
+  formatEuro,
+  CUSTOM_MIN,
+  CUSTOM_MAX,
+} from '../../lib/vouchers';
+import asideImage from '../../assets/images/logo-sign.jpg';
+
+const minEuro = CUSTOM_MIN / 100;
+const maxEuro = CUSTOM_MAX / 100;
+---
+
+<Base
+  title="Gift Vouchers — The Boat Yard Sauna"
+  description="Give the gift of heat, cold, calm, and a proper reset. Buy a Boat Yard Sauna gift voucher online — delivered by email, redeemable in Wicklow or Arklow."
+>
+  <section class="voucher section">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Gift Vouchers</p>
+      <h1 class="voucher__title" data-reveal>Give heat, cold &amp; calm.</h1>
+      <p class="voucher__lead" data-reveal>
+        A Boat Yard Sauna voucher is perfect for birthdays, Christmas, thank-yous, team rewards,
+        or anyone who could use an hour by the coast to switch off and feel better. Bought online,
+        delivered by email, redeemable at either harbour.
+      </p>
+
+      <div class="voucher__layout">
+        <form class="voucher__form" id="voucher-form" novalidate data-reveal>
+          <fieldset class="voucher__group">
+            <legend class="voucher__legend">1 · Choose a voucher</legend>
+
+            <p class="voucher__sublabel">Session packs</p>
+            <div class="voucher__options">
+              {
+                SESSION_PACKAGES.map((pkg, index) => (
+                  <label class="voucher__option">
+                    <input
+                      type="radio"
+                      name="voucher"
+                      value={pkg.id}
+                      data-type="package"
+                      data-package-id={pkg.id}
+                      checked={index === 0}
+                    />
+                    <span class="voucher__option-body">
+                      <span class="voucher__option-top">
+                        <span class="voucher__option-name">{pkg.label}</span>
+                        <span class="voucher__option-price">{formatEuro(pkg.amount)}</span>
+                      </span>
+                      <span class="voucher__option-blurb">{pkg.blurb}</span>
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+
+            <p class="voucher__sublabel">Or a gift amount</p>
+            <div class="voucher__amounts">
+              {
+                GIFT_PRESETS.map((amount) => (
+                  <label class="voucher__chip">
+                    <input
+                      type="radio"
+                      name="voucher"
+                      value={`amount-${amount}`}
+                      data-type="amount"
+                      data-amount={amount}
+                    />
+                    <span>{formatEuro(amount)}</span>
+                  </label>
+                ))
+              }
+              <label class="voucher__chip voucher__chip--custom">
+                <input type="radio" name="voucher" value="custom" data-type="custom" />
+                <span>Custom</span>
+              </label>
+            </div>
+
+            <div class="voucher__custom" id="voucher-custom" hidden>
+              <label class="voucher__custom-label" for="voucher-custom-amount">
+                Amount in euro (€{minEuro}–€{maxEuro})
+              </label>
+              <div class="voucher__custom-field">
+                <span aria-hidden="true">€</span>
+                <input
+                  class="field"
+                  id="voucher-custom-amount"
+                  type="number"
+                  inputmode="numeric"
+                  min={minEuro}
+                  max={maxEuro}
+                  step="1"
+                  placeholder="50"
+                />
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="voucher__group">
+            <legend class="voucher__legend">2 · Who is it for?</legend>
+            <label class="voucher__gift-toggle">
+              <input type="checkbox" id="voucher-is-gift" />
+              <span>Send it to someone as a gift</span>
+            </label>
+
+            <div class="voucher__gift-fields" id="voucher-gift-fields" hidden>
+              <div class="voucher__field-row">
+                <label class="voucher__field">
+                  <span>Their name</span>
+                  <input class="field" id="voucher-recipient-name" type="text" autocomplete="name" />
+                </label>
+                <label class="voucher__field">
+                  <span>Their email</span>
+                  <input
+                    class="field"
+                    id="voucher-recipient-email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="them@example.com"
+                  />
+                </label>
+              </div>
+              <label class="voucher__field">
+                <span>A short message (optional)</span>
+                <textarea
+                  class="field voucher__textarea"
+                  id="voucher-message"
+                  rows="3"
+                  maxlength="300"
+                ></textarea>
+              </label>
+              <label class="voucher__field">
+                <span>Your name (so they know who it is from)</span>
+                <input class="field" id="voucher-buyer-name" type="text" autocomplete="name" />
+              </label>
+            </div>
+          </fieldset>
+
+          <button class="btn btn--primary voucher__submit" type="submit" id="voucher-submit">
+            Continue to payment
+          </button>
+          <p class="voucher__confirm" id="voucher-confirm" role="status" aria-live="polite"></p>
+          <p class="voucher__trust">
+            Secure checkout by Stripe · Apple Pay, Google Pay &amp; card · Voucher delivered by email
+          </p>
+        </form>
+
+        <aside class="voucher__aside" data-reveal>
+          <figure class="voucher__aside-media">
+            <Image
+              src={asideImage}
+              alt="The Boat Yard Sauna sign lit by festoon lights"
+              width={760}
+              widths={[480, 760]}
+              sizes="(min-width: 900px) 32vw, 92vw"
+              format="webp"
+              quality={72}
+              loading="lazy"
+            />
+          </figure>
+          <div class="voucher__aside-body">
+            <h2 class="voucher__aside-title">How it works</h2>
+            <ol class="voucher__aside-steps">
+              <li>Choose a pack or a gift amount.</li>
+              <li>Pay securely with Apple Pay or card.</li>
+              <li>The voucher and its code arrive by email.</li>
+              <li>Show the code to staff at check-in — Wicklow or Arklow.</li>
+            </ol>
+            <p class="voucher__aside-note">
+              Vouchers can also be bought in person at either location. Questions?
+              <a class="link-underline" href="mailto:theboatyardsauna@gmail.com">Email us</a>.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById('voucher-form') as HTMLFormElement | null;
+  if (form) {
+    const customWrap = document.getElementById('voucher-custom') as HTMLElement;
+    const customInput = document.getElementById('voucher-custom-amount') as HTMLInputElement;
+    const giftToggle = document.getElementById('voucher-is-gift') as HTMLInputElement;
+    const giftFields = document.getElementById('voucher-gift-fields') as HTMLElement;
+    const submit = document.getElementById('voucher-submit') as HTMLButtonElement;
+    const confirm = document.getElementById('voucher-confirm') as HTMLElement;
+
+    const setMessage = (text: string, error = false) => {
+      confirm.textContent = text;
+      confirm.classList.toggle('is-error', error);
+    };
+
+    // Reveal the custom amount field only when "Custom" is selected.
+    form.querySelectorAll<HTMLInputElement>('input[name="voucher"]').forEach((radio) => {
+      radio.addEventListener('change', () => {
+        const isCustom = radio.dataset.type === 'custom' && radio.checked;
+        customWrap.hidden = !isCustom;
+        if (isCustom) customInput.focus();
+      });
+    });
+
+    giftToggle.addEventListener('change', () => {
+      giftFields.hidden = !giftToggle.checked;
+    });
+
+    // Gentle note if the buyer came back from a cancelled checkout.
+    if (new URLSearchParams(window.location.search).get('status') === 'cancelled') {
+      setMessage('No worries — your checkout was cancelled and you were not charged.');
+    }
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (form.classList.contains('is-pending')) return;
+
+      const selected = form.querySelector<HTMLInputElement>('input[name="voucher"]:checked');
+      if (!selected) {
+        setMessage('Please choose a voucher option.', true);
+        return;
+      }
+
+      const payload: Record<string, unknown> = { type: selected.dataset.type };
+
+      if (selected.dataset.type === 'package') {
+        payload.packageId = selected.dataset.packageId;
+      } else if (selected.dataset.type === 'amount') {
+        payload.amount = Number(selected.dataset.amount);
+      } else if (selected.dataset.type === 'custom') {
+        const euros = Number(customInput.value);
+        if (!Number.isFinite(euros) || euros < Number(customInput.min) || euros > Number(customInput.max)) {
+          setMessage(`Please enter an amount between €${customInput.min} and €${customInput.max}.`, true);
+          customInput.focus();
+          return;
+        }
+        payload.type = 'amount';
+        payload.amount = Math.round(euros * 100);
+      }
+
+      if (giftToggle.checked) {
+        const recipientEmail = (document.getElementById('voucher-recipient-email') as HTMLInputElement).value.trim();
+        if (recipientEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(recipientEmail)) {
+          setMessage('That recipient email does not look quite right.', true);
+          return;
+        }
+        payload.recipientName = (document.getElementById('voucher-recipient-name') as HTMLInputElement).value.trim();
+        payload.recipientEmail = recipientEmail;
+        payload.giftMessage = (document.getElementById('voucher-message') as HTMLTextAreaElement).value.trim();
+        payload.buyerName = (document.getElementById('voucher-buyer-name') as HTMLInputElement).value.trim();
+      }
+
+      form.classList.add('is-pending');
+      submit.disabled = true;
+      setMessage('Taking you to secure checkout…');
+
+      try {
+        const response = await fetch('/api/create-voucher-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const result = (await response.json().catch(() => ({}))) as { ok?: boolean; url?: string; message?: string };
+
+        if (!response.ok || !result.ok || !result.url) {
+          throw new Error(result.message || 'Could not start checkout.');
+        }
+        window.location.href = result.url;
+      } catch (error) {
+        setMessage(error instanceof Error ? error.message : 'Something went wrong — please try again.', true);
+        form.classList.remove('is-pending');
+        submit.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .voucher {
+    padding-top: clamp(7rem, 14vw, 10rem);
+  }
+
+  .voucher__title {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+  }
+
+  .voucher__lead {
+    margin-top: 1.75rem;
+    max-width: 60ch;
+    color: var(--ink-soft);
+  }
+
+  .voucher__layout {
+    margin-top: clamp(3rem, 6vw, 5rem);
+    display: grid;
+    gap: clamp(2.5rem, 5vw, 4rem);
+    align-items: start;
+  }
+
+  @media (min-width: 900px) {
+    .voucher__layout {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+
+  .voucher__group {
+    border: 0;
+    padding: 0;
+    margin: 0 0 2.5rem;
+  }
+
+  .voucher__legend {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    font-weight: 460;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    padding: 0;
+  }
+
+  .voucher__sublabel {
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--cedar);
+    margin: 1.75rem 0 0.9rem;
+  }
+
+  .voucher__sublabel:first-of-type {
+    margin-top: 0;
+  }
+
+  .voucher__options {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  /* Radio cards */
+  .voucher__option {
+    display: block;
+    cursor: pointer;
+  }
+
+  .voucher__option input,
+  .voucher__chip input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .voucher__option-body {
+    display: block;
+    padding: 1.2rem 1.4rem;
+    border: 1px solid var(--mist-10);
+    border-radius: 8px;
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+
+  .voucher__option input:checked + .voucher__option-body {
+    border-color: var(--cedar);
+    background: rgba(200, 149, 108, 0.08);
+  }
+
+  .voucher__option input:focus-visible + .voucher__option-body {
+    outline: 2px solid var(--cedar);
+    outline-offset: 2px;
+  }
+
+  .voucher__option-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+  }
+
+  .voucher__option-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .voucher__option-price {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 460;
+    color: var(--cedar);
+  }
+
+  .voucher__option-blurb {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  /* Amount chips */
+  .voucher__amounts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .voucher__chip {
+    cursor: pointer;
+  }
+
+  .voucher__chip span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.5rem;
+    min-height: 44px;
+    padding: 0.5em 1.1em;
+    border: 1px solid var(--mist-10);
+    border-radius: 999px;
+    font-weight: 600;
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+
+  .voucher__chip input:checked + span {
+    border-color: var(--cedar);
+    background: var(--cedar);
+    color: var(--navy-deep);
+  }
+
+  .voucher__chip input:focus-visible + span {
+    outline: 2px solid var(--cedar);
+    outline-offset: 2px;
+  }
+
+  .voucher__custom {
+    margin-top: 1.1rem;
+  }
+
+  .voucher__custom-label {
+    display: block;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+    margin-bottom: 0.2rem;
+  }
+
+  .voucher__custom-field {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    max-width: 12rem;
+  }
+
+  .voucher__custom-field span {
+    font-size: 1.2rem;
+    color: var(--ink-soft);
+  }
+
+  .voucher__gift-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  .voucher__gift-toggle input {
+    width: 1.1rem;
+    height: 1.1rem;
+    accent-color: var(--cedar);
+  }
+
+  .voucher__gift-fields {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .voucher__field-row {
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  @media (min-width: 560px) {
+    .voucher__field-row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .voucher__field {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  .voucher__field > span {
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  .voucher__textarea {
+    resize: vertical;
+    line-height: 1.6;
+  }
+
+  .voucher__submit {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  @media (min-width: 560px) {
+    .voucher__submit {
+      width: auto;
+      min-width: 16rem;
+    }
+  }
+
+  .voucher__confirm {
+    margin-top: 1.1rem;
+    min-height: 1.4em;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  .voucher__confirm.is-error {
+    color: var(--amber);
+  }
+
+  .voucher__trust {
+    margin-top: 0.75rem;
+    font-size: var(--text-tiny);
+    color: var(--ink-faint);
+  }
+
+  .voucher__form.is-pending .voucher__submit {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  /* Aside */
+  .voucher__aside {
+    border: 1px solid var(--mist-10);
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(237, 242, 240, 0.02);
+  }
+
+  .voucher__aside-media {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+  }
+
+  .voucher__aside-media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .voucher__aside-body {
+    padding: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  .voucher__aside-title {
+    font-size: var(--text-h3);
+  }
+
+  .voucher__aside-steps {
+    margin: 1.25rem 0 0;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.7rem;
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+  }
+
+  .voucher__aside-note {
+    margin-top: 1.5rem;
+    font-size: var(--text-small);
+    color: var(--ink-mid);
+  }
+</style>

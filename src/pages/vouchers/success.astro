@@ -1,0 +1,78 @@
+---
+import Base from '../../layouts/Base.astro';
+---
+
+<Base
+  title="Thank you — The Boat Yard Sauna"
+  description="Your Boat Yard Sauna gift voucher is on its way."
+>
+  <section class="thanks section">
+    <div class="container thanks__inner">
+      <span class="thanks__mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48" fill="none">
+          <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5"></circle>
+          <path d="M15 24.5l6 6 12-13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      <p class="eyebrow">Payment received</p>
+      <h1 class="thanks__title">Your voucher is on its way.</h1>
+      <p class="thanks__text">
+        Thank you. We have sent the voucher and its code by email — it should arrive within a few
+        minutes. If you sent it as a gift, it has gone straight to the recipient, with a copy to you.
+      </p>
+      <p class="thanks__text thanks__text--muted">
+        Can&rsquo;t find it? Check your spam folder, or email
+        <a class="link-underline" href="mailto:theboatyardsauna@gmail.com">theboatyardsauna@gmail.com</a>
+        and we&rsquo;ll sort it.
+      </p>
+      <div class="thanks__actions">
+        <a class="btn btn--primary" href="/">Back to home</a>
+        <a class="btn btn--ghost" href="/#locations">Book a session</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thanks {
+    padding-top: clamp(8rem, 16vw, 12rem);
+    min-height: 70vh;
+  }
+
+  .thanks__inner {
+    max-width: 44rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .thanks__mark {
+    color: var(--cedar);
+    margin-bottom: 1.75rem;
+  }
+
+  .thanks__title {
+    font-size: var(--text-h2);
+    margin-top: 1.25rem;
+  }
+
+  .thanks__text {
+    margin-top: 1.5rem;
+    max-width: 52ch;
+    color: var(--ink-soft);
+  }
+
+  .thanks__text--muted {
+    font-size: var(--text-small);
+    color: var(--ink-mid);
+  }
+
+  .thanks__actions {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+</style>

@@ -50,6 +50,10 @@ const plans = [
       }
     </div>
 
+    <div class="pricing__cta" data-reveal>
+      <a class="btn btn--primary" href="/vouchers">Buy a gift voucher</a>
+    </div>
+
     <p class="pricing__note" data-reveal>
       All sessions should be booked online in advance where possible. Walk-ins may be available
       depending on the day, but booking ahead is the best way to secure your spot.
@@ -155,8 +159,12 @@ const plans = [
     color: var(--ink-soft);
   }
 
-  .pricing__note {
+  .pricing__cta {
     margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  }
+
+  .pricing__note {
+    margin-top: 1.75rem;
     max-width: 60ch;
     font-size: var(--text-small);
     line-height: 1.7;
