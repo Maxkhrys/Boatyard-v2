@@ -17,24 +17,29 @@ export interface SessionPackage {
 export const SESSION_PACKAGES: SessionPackage[] = [
   {
     id: 'single',
-    label: 'Single Session',
+    label: '1 Session',
     amount: 1200,
-    blurb: 'One 45-minute session of heat, cold plunge, and sea air.',
+    blurb: 'One session of heat, cold plunge, and sea air.',
+  },
+  {
+    id: 'pack3',
+    label: '3 Sessions',
+    amount: 3600,
+    blurb: 'Three sessions to feel the difference.',
+  },
+  {
+    id: 'pack5',
+    label: '5 Sessions',
+    amount: 6000,
+    blurb: 'Five sessions — a proper run at making it a habit.',
   },
   {
     id: 'pack10',
-    label: '10-Session Pack',
+    label: '10 Sessions',
     amount: 11000,
-    blurb: 'Ten sessions to build sauna into the week — save €10.',
+    blurb: 'Ten sessions — save €10 and build sauna into the week.',
   },
 ];
-
-/** Preset open-value gift amounts (cents). */
-export const GIFT_PRESETS = [2500, 5000, 10000];
-
-/** Bounds for a custom gift amount (cents). */
-export const CUSTOM_MIN = 1000; // €10
-export const CUSTOM_MAX = 50000; // €500
 
 export function formatEuro(cents: number): string {
   const euros = cents / 100;
