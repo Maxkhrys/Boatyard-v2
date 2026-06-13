@@ -131,7 +131,7 @@ export function buildVoucherEmail(input: VoucherEmailInput): {
 
       <div style="padding:24px 4px;color:#9fb0b8;font-size:13px;line-height:1.7;">
         <p style="margin:0 0 10px;">Redeeming is easy: bring this code with you and show it to staff when you check in, at either harbour — Wicklow Town or Arklow.</p>
-        <p style="margin:0 0 10px;">Book ahead at <a href="https://www.theboatyardsauna.com" style="color:#c8956c;">theboatyardsauna.com</a>. Questions? Just reply, or email <a href="mailto:theboatyardsauna@gmail.com" style="color:#c8956c;">theboatyardsauna@gmail.com</a>.</p>
+        <p style="margin:0 0 10px;">Questions? Just reply to this email, or contact us at <a href="mailto:theboatyardsauna@gmail.com" style="color:#c8956c;">theboatyardsauna@gmail.com</a>.</p>
         <p style="margin:18px 0 0;color:#5b6b73;">Cold sea. Hot cedar. Clear head.</p>
       </div>
     </div>
