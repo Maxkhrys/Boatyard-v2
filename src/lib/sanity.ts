@@ -17,6 +17,18 @@ import imgSeaSteps from '../assets/images/sea-steps-sunrise.jpeg';
 import imgSaunaGate from '../assets/images/sauna-gate-harbour.jpeg';
 import imgSaunaHats from '../assets/images/sauna-hats-cedar-door.jpeg';
 import imgRitualOils from '../assets/images/ritual-oils-incense.jpeg';
+import imgWicklowDusk from '../assets/images/wicklow-aerial-dusk.jpg';
+import imgArklowQuay from '../assets/images/arklow-aerial-quay.jpg';
+import imgCourtyardNight from '../assets/images/sauna-courtyard-night.jpg';
+import imgBeachSunset from '../assets/images/beach-sunset.jpg';
+import imgCourtyardPlunge from '../assets/images/courtyard-dusk-plunge.jpg';
+import imgIceBaths from '../assets/images/ice-baths.jpg';
+import imgBoatYardGate from '../assets/images/boat-yard-gate.jpg';
+import imgLogoSign from '../assets/images/logo-sign.jpg';
+import imgSaunaRest from '../assets/images/sauna-interior-rest.jpg';
+import imgSaunaHat from '../assets/images/sauna-hat-profile.jpg';
+import imgColdTap from '../assets/images/cold-tap.jpg';
+import imgDaraBoat from '../assets/images/dara-boat-planter.jpg';
 
 /* ------------------------------------------------------------------
    Sanity content layer — fetched at build time via the public query
@@ -83,6 +95,18 @@ const stockImages: Record<string, { image: ImageMetadata; alt: string }> = {
   'sauna-hats': { image: imgSaunaHats, alt: 'Sauna hats hanging on the cedar door' },
   'ritual-oils': { image: imgRitualOils, alt: 'Ritual oils and incense on a wooden shelf' },
   'loyalty-cards': { image: hoursImage, alt: 'Loyalty cards displayed on a wooden table' },
+  'wicklow-dusk': { image: imgWicklowDusk, alt: 'The Boat Yard Sauna at dusk in Wicklow, festoon lights glowing beside the sea' },
+  'arklow-quay': { image: imgArklowQuay, alt: 'Arklow North Quay from above, the river and quayside road' },
+  'courtyard-night': { image: imgCourtyardNight, alt: 'The sauna courtyard at night, lit cabin and hot tubs from above' },
+  'beach-sunset': { image: imgBeachSunset, alt: 'Sunset over the cobble beach with the sauna building on the shore' },
+  'courtyard-plunge': { image: imgCourtyardPlunge, alt: 'The sauna courtyard at dusk, festoon lights over the cold plunge' },
+  'ice-baths': { image: imgIceBaths, alt: 'A row of galvanised cold-plunge ice baths under festoon lights' },
+  'boat-yard-gate': { image: imgBoatYardGate, alt: 'The Boat Yard Sauna entrance gate and barrel sauna' },
+  'logo-sign': { image: imgLogoSign, alt: 'The Boat Yard Sauna sign lit by festoon lights' },
+  'sauna-rest': { image: imgSaunaRest, alt: 'A man resting on the cedar bench inside the barrel sauna' },
+  'sauna-hat': { image: imgSaunaHat, alt: 'A bather in a wool sauna hat inside the barrel sauna' },
+  'cold-tap': { image: imgColdTap, alt: 'Cold water running from a brass tap beside the ivy' },
+  'dara-boat': { image: imgDaraBoat, alt: 'A vintage blue boat named Dara, planted with flowers against a dark wall' },
 };
 
 const stockImageKeys = Object.keys(stockImages);
@@ -229,6 +253,51 @@ function paragraphs(...texts: string[]): PortableTextBlock[] {
 }
 
 const fallbackPosts: Post[] = [
+  {
+    title: 'How The Boat Yard started',
+    slug: 'how-the-boat-yard-started',
+    excerpt:
+      `A simple idea: a space by the coast where people could slow down, warm up, recover, and leave feeling better than they arrived.`,
+    publishedAt: '2026-06-12',
+    tag: 'Story',
+    image: imgBeachSunset,
+    alt: 'Sunset over the cobble beach with the sauna building on the shore',
+    body: paragraphs(
+      `The Boat Yard Sauna started from a simple idea: create a space by the coast where people could slow down, warm up, recover, and feel better leaving than they did arriving.`,
+      `The experience is built around the contrast of heat and cold — a hot sauna, cold water, fresh air, and a calm, welcoming atmosphere. But what really makes The Boatyard special is the feeling around it: the people, the setting, the ritual, and the small details that make every session feel looked after.`,
+      `From the beginning, the aim has been to make sauna culture feel social, accessible, premium, and rooted in the local coast. Some people come for recovery after training. Some come for a sea dip and a reset. Some come with friends. Some come for quiet time. Everyone is welcome.`,
+    ),
+  },
+  {
+    title: 'More than heat',
+    slug: 'more-than-heat',
+    excerpt:
+      `The sauna is the start of it. What keeps people coming back is the routine, the community, and the feeling of being looked after.`,
+    publishedAt: '2026-06-11',
+    tag: 'Story',
+    image: imgCourtyardPlunge,
+    alt: 'The sauna courtyard at dusk, festoon lights glowing over the cold plunge',
+    body: paragraphs(
+      `The Boat Yard is about more than heat. It is about routine, community, recovery, and creating a place people are proud to be part of.`,
+      `We are not just a place to book a sauna. We are building a coastal wellness community — a place for rituals, resets, recovery, connection, and good people.`,
+      `Some come for recovery after training. Some come for a sea dip and a reset. Some come with friends, some come for quiet time. Whatever brings you down to the water, the welcome is the same: clean spaces, a hot sauna, fresh ice baths, calm music, and friendly faces.`,
+    ),
+  },
+  {
+    title: 'Two harbours, one standard',
+    slug: 'two-harbours-one-standard',
+    excerpt:
+      `Wicklow and Arklow, the same focus: clean spaces, hot saunas, fresh ice baths, and a high standard every single session.`,
+    publishedAt: '2026-06-10',
+    tag: 'Story',
+    image: imgIceBaths,
+    alt: 'A row of galvanised cold-plunge ice baths under festoon lights',
+    body: paragraphs(
+      `Our Wicklow sauna is the original benchmark for The Boatyard experience — calm, coastal, clean, and designed for proper reset time. It is built around atmosphere and consistency: a hot sauna, cold plunge options, tidy changing areas, warm lighting, and a peaceful coastal feel.`,
+      `Our Arklow location brings the same experience to a growing local community, with the same focus on heat, cold, atmosphere, and friendly service. It is a great spot for local groups, sports teams, wellness clubs, sea swimmers, friends, and first-time sauna users.`,
+      `Across both harbours our focus is simple: clean spaces, hot saunas, fresh ice baths, calm music, friendly staff, and a high standard every session. Come for a morning reset, a post-training recovery session, a Sunday wind-down, or a social sauna with friends.`,
+    ),
+  },
   {
     title: 'Morning at the gate',
     slug: 'morning-at-the-gate',

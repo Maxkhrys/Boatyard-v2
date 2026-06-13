@@ -1,5 +1,32 @@
 ---
-const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you think', 'Sandals for the pier'];
+const bring = ['Swimwear', 'A towel', 'Water bottle', 'Flip-flops, sliders, or sea shoes'];
+
+const plans = [
+  {
+    name: 'Single Session',
+    price: '€12',
+    unit: 'per person',
+    description:
+      'One 45-minute session of heat, cold plunge, and sea air. The same standard at both harbours — Wicklow and Arklow.',
+    featured: false,
+  },
+  {
+    name: '10-Session Pack',
+    price: '€110',
+    unit: 'bundle · save €10',
+    description:
+      'Ten sessions to build sauna into your week — recovery, reset, or a regular ritual by the coast. Works at either location.',
+    featured: true,
+  },
+  {
+    name: 'Gift Voucher',
+    price: 'Gift',
+    unit: 'online or in person',
+    description:
+      'Give the gift of heat, cold, calm, and a proper reset. Buy online through Wunderbook, or pick up a physical voucher at either location.',
+    featured: false,
+  },
+];
 ---
 
 <section class="pricing section" id="sessions">
@@ -8,18 +35,25 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
     <h2 class="pricing__heading" data-reveal>Simple as the sea.</h2>
 
     <div class="pricing__stage">
-      <article class="pricing__card" data-reveal>
-        <h3 class="pricing__name">Sauna Session</h3>
-        <p class="pricing__price">
-          €12
-          <span class="pricing__unit">per person · open session</span>
-        </p>
-        <p class="pricing__description">
-          Heat, plunge and the harbour view. Towels and sauna hats provided — just bring yourself
-          and your swimmers.
-        </p>
-      </article>
+      {
+        plans.map((plan) => (
+          <article class:list={['pricing__card', plan.featured && 'pricing__card--featured']} data-reveal>
+            {plan.featured && <span class="pricing__flag">Best value</span>}
+            <h3 class="pricing__name">{plan.name}</h3>
+            <p class="pricing__price">
+              {plan.price}
+              <span class="pricing__unit">{plan.unit}</span>
+            </p>
+            <p class="pricing__description">{plan.description}</p>
+          </article>
+        ))
+      }
     </div>
+
+    <p class="pricing__note" data-reveal>
+      All sessions should be booked online in advance where possible. Walk-ins may be available
+      depending on the day, but booking ahead is the best way to secure your spot.
+    </p>
 
     <aside class="pricing__bring" data-reveal>
       <h3 class="pricing__bring-title">What to bring</h3>
@@ -36,23 +70,35 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
     margin-top: 1.5rem;
   }
 
-  /* One option, centred, room to breathe */
+  /* Three plans, side by side from tablet up */
   .pricing__stage {
     margin-top: clamp(3.5rem, 7vw, 5.5rem);
-    display: flex;
-    justify-content: center;
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2rem);
+  }
+
+  @media (min-width: 760px) {
+    .pricing__stage {
+      grid-template-columns: repeat(3, 1fr);
+      align-items: stretch;
+    }
   }
 
   .pricing__card {
-    width: min(30rem, 100%);
-    padding: clamp(2.25rem, 6vw, 3.5rem);
-    border: 1px solid rgba(200, 149, 108, 0.45);
+    position: relative;
+    padding: clamp(2.25rem, 4vw, 3rem) clamp(1.75rem, 3vw, 2.5rem);
+    border: 1px solid var(--mist-10);
     border-radius: 6px;
-    background: rgba(200, 149, 108, 0.06);
+    background: rgba(237, 242, 240, 0.02);
     text-align: center;
     transition:
       border-color var(--dur) var(--ease),
       transform var(--dur) var(--ease);
+  }
+
+  .pricing__card--featured {
+    border-color: rgba(200, 149, 108, 0.55);
+    background: rgba(200, 149, 108, 0.07);
   }
 
   .pricing__card:hover {
@@ -60,14 +106,30 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
     transform: translateY(-4px);
   }
 
+  .pricing__flag {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0.4em 1em;
+    border-radius: 999px;
+    background: var(--cedar);
+    color: var(--navy-deep);
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
   .pricing__name {
     font-size: var(--text-h3);
   }
 
   .pricing__price {
-    margin-top: 1.6rem;
+    margin-top: 1.4rem;
     font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 4.5rem);
+    font-size: clamp(2.6rem, 6vw, 3.6rem);
     font-weight: 440;
     letter-spacing: -0.02em;
     line-height: 1;
@@ -85,12 +147,20 @@ const bring = ['A towel (two is better)', 'Swimwear', 'Water — more than you t
   }
 
   .pricing__description {
-    margin-top: 1.6rem;
+    margin-top: 1.4rem;
     max-width: 34ch;
     margin-inline: auto;
     font-size: var(--text-small);
     line-height: 1.7;
     color: var(--ink-soft);
+  }
+
+  .pricing__note {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    max-width: 60ch;
+    font-size: var(--text-small);
+    line-height: 1.7;
+    color: var(--ink-mid);
   }
 
   .pricing__bring {

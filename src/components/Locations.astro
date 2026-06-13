@@ -1,46 +1,58 @@
 ---
 import { Image } from 'astro:assets';
 import { getSiteSettings, type HoursRow } from '../lib/sanity';
-import wicklowImage from '../assets/images/aerial-wicklow-harbour.jpg';
-import arklowImage from '../assets/images/sauna-gate-harbour.jpeg';
+import wicklowImage from '../assets/images/wicklow-aerial-dusk.jpg';
+import arklowImage from '../assets/images/arklow-aerial-quay.jpg';
 
 const siteSettings = await getSiteSettings();
 
-const defaultHours: HoursRow[] = [
-  { days: 'Mon – Fri', times: '7:00 — 21:00' },
-  { days: 'Sat – Sun', times: '8:00 — 20:00' },
+const wicklowDefaultHours: HoursRow[] = [
+  { days: 'Mon – Thu', times: '4 – 10pm' },
+  { days: 'Friday', times: '10am – 10pm' },
+  { days: 'Sat – Sun', times: '8am – 10pm' },
+];
+
+const arklowDefaultHours: HoursRow[] = [
+  { days: 'Mon – Wed', times: 'Closed' },
+  { days: 'Thursday', times: '4 – 10pm' },
+  { days: 'Friday', times: '10am – 10pm' },
+  { days: 'Sat – Sun', times: '8am – 10pm' },
 ];
 
 const wicklowHours: HoursRow[] =
   siteSettings?.wicklowHours && siteSettings.wicklowHours.length > 0
     ? siteSettings.wicklowHours
-    : defaultHours;
+    : wicklowDefaultHours;
 
 const arklowHours: HoursRow[] =
   siteSettings?.arklowHours && siteSettings.arklowHours.length > 0
     ? siteSettings.arklowHours
-    : defaultHours;
+    : arklowDefaultHours;
 
-const hoursNote = siteSettings?.hoursNote ?? 'Subject to tides & weather';
+const hoursNote = siteSettings?.hoursNote ?? 'Book online in advance — walk-ins subject to availability';
 
 const locations = [
   {
     name: 'Wicklow Town',
     blurb:
-      'On the East Pier beneath the lighthouse, looking back across the harbour. Sunrise sessions are something else.',
-    address: 'East Pier, Wicklow Harbour, Wicklow Town',
+      'The original benchmark for The Boatyard experience — calm, coastal, and built for proper reset time. A hot sauna, cold plunge options, tidy changing areas, warm lighting, and a peaceful coastal feel.',
+    bestFor:
+      'Morning resets, sea dips, recovery sessions, regular routines, small groups, and weekend wellness.',
+    address: 'Wicklow Harbour, Wicklow Town',
     hours: wicklowHours,
     hoursNote,
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Wicklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
     image: wicklowImage,
-    alt: 'Aerial view of Wicklow harbour, the pier road and headland in golden evening light',
+    alt: 'Aerial view at dusk of The Boat Yard Sauna in Wicklow, festoon lights glowing beside the slipway and sea',
   },
   {
     name: 'Arklow',
     blurb:
-      "Through the boat yard gate and straight onto the water's edge. Moorings, masts, and steam rising off the slipway.",
+      'The Boatyard experience brought to a growing local community, with the same focus on heat, cold, atmosphere, and friendly service. A warm welcome, a clean setup, hot sauna sessions, and cold plunge options throughout.',
+    bestFor:
+      'Local community sessions, sports recovery, group bookings, weekly routines, first-time visitors, and social sauna sessions.',
     address: 'North Quay, Arklow Harbour, Arklow',
     hours: arklowHours,
     hoursNote,
@@ -48,7 +60,7 @@ const locations = [
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_Boat_Yard_Sauna_Arklow',
     image: arklowImage,
-    alt: 'The Boat Yard Sauna gateway framing a harbour full of moored boats',
+    alt: 'Aerial view of Arklow North Quay along the river, the road and quayside from above',
   },
 ];
 ---
@@ -105,6 +117,10 @@ const locations = [
                     ))}
                     <span class="locations__hours-note">{location.hoursNote}</span>
                   </dd>
+                </div>
+                <div class="locations__detail">
+                  <dt>Best for</dt>
+                  <dd>{location.bestFor}</dd>
                 </div>
               </dl>
 

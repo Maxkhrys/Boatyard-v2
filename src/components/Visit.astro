@@ -1,0 +1,391 @@
+---
+// Tabbed "good to know" panel. Content comes straight from the
+// brand copy: how it works, what to bring, rules, vouchers, groups, FAQ.
+const tabs = [
+  {
+    id: 'how',
+    label: 'How it works',
+    kind: 'steps',
+    intro:
+      'Most sessions give you enough time to move between sauna and cold water without rushing. Staff let you know when your session is coming to an end so the space can be cleaned and reset for the next group.',
+    steps: [
+      'Book your session online.',
+      'Arrive 5–10 minutes before your slot.',
+      'Check in with staff.',
+      'Use the sauna, ice baths, and cold water at your own pace.',
+      'Move between heat and cold slowly, and listen to your body.',
+      'Dry off, warm up, and enjoy the reset.',
+    ],
+  },
+  {
+    id: 'bring',
+    label: 'What to bring',
+    kind: 'list',
+    intro:
+      'We recommend arriving ready to sauna where possible, especially during busy sessions.',
+    items: [
+      'Swimwear',
+      'A towel',
+      'Water bottle',
+      'Flip-flops, sliders, or sea shoes',
+    ],
+  },
+  {
+    id: 'rules',
+    label: 'Booking rules',
+    kind: 'list',
+    intro: 'Please read before booking:',
+    items: [
+      'Arrive 5 minutes early — late arrivals may lose time from their session.',
+      'Bring your own towel and swimwear.',
+      'Respect other guests and keep the atmosphere calm.',
+      'Alcohol is not permitted before or during sauna use.',
+      'Under-18s must follow the site age policy and be accompanied where required.',
+      'If you are pregnant, have a heart or medical condition, or are unsure whether sauna or cold exposure suits you, please seek medical advice and avoid the sauna.',
+      'Use of the sauna, ice baths, and sea is at your own responsibility.',
+      'Cancellations, rescheduling, and credits follow the booking system policy.',
+    ],
+  },
+  {
+    id: 'vouchers',
+    label: 'Gift vouchers',
+    kind: 'prose',
+    intro: 'Give someone the gift of heat, cold, calm, and a proper reset.',
+    body: [
+      'The Boatyard gift vouchers are perfect for birthdays, Christmas, thank-yous, team rewards, or anyone who could use an hour by the coast to switch off and feel better.',
+      'Vouchers can be purchased online through Wunderbook, or physical vouchers can be bought in either location.',
+    ],
+  },
+  {
+    id: 'groups',
+    label: 'Groups & events',
+    kind: 'prose',
+    intro:
+      'The Boatyard is available for group sessions, club visits, sports teams, wellness groups, recovery evenings, community events, and private bookings.',
+    body: [
+      'We also run and support recurring wellness rituals — sauna and dip sessions, recovery nights, guided sauna experiences, Sunday resets, sunrise sessions, and collaborations with local businesses and wellness practitioners.',
+      'For group bookings or collaborations, contact us directly at theboatyardsauna@gmail.com.',
+    ],
+  },
+  {
+    id: 'faq',
+    label: 'FAQ',
+    kind: 'faq',
+    intro: '',
+    qa: [
+      {
+        q: 'Do I need to book in advance?',
+        a: 'Booking online is recommended — it guarantees your space. Walk-ins are always welcome subject to availability.',
+      },
+      {
+        q: 'How long is a session?',
+        a: 'Session length depends on the booking type. Standard sessions are 45 minutes. Check the booking page for exact times.',
+      },
+      {
+        q: 'Can beginners come?',
+        a: 'Yes. First-timers are very welcome — no experience needed. Take it slowly, listen to your body, and ask staff if you are unsure about anything.',
+      },
+      {
+        q: 'Do I have to use the ice baths or the sea?',
+        a: 'No. You can use the sauna only if you prefer. Cold exposure is completely optional.',
+      },
+      {
+        q: 'What should I wear?',
+        a: 'Wear swimwear in the sauna and bring a towel for sitting on and drying off afterwards.',
+      },
+      {
+        q: 'Are there changing areas?',
+        a: 'Yes. Please keep your belongings tidy and take everything with you when you leave.',
+      },
+      {
+        q: 'Can I bring my own group?',
+        a: 'Yes. Group bookings are ideal for friends, clubs, teams, recovery sessions, birthdays, and wellness events. Contact us for larger group options.',
+      },
+      {
+        q: 'Do you offer private bookings?',
+        a: 'Private bookings may be available depending on location, day, and time. Check the booking page or contact us directly.',
+      },
+      {
+        q: 'Is the sauna good for recovery?',
+        a: 'Many customers use sauna and cold water as part of a recovery routine, often associating it with relaxation, muscle recovery, circulation, stress reduction, and better sleep. We do not give medical advice — anyone with health concerns should speak to a doctor first.',
+      },
+      {
+        q: 'What happens if I am late?',
+        a: 'Please arrive early. If you arrive late, your session may still finish at the original end time so we can clean and reset for the next booking.',
+      },
+      {
+        q: 'Can I cancel or move my booking?',
+        a: 'Cancellations and changes are handled through the booking system. Check the cancellation policy when booking.',
+      },
+      {
+        q: 'Lost property?',
+        a: 'Forgotten items are kept on site for 48 hours. Due to limited storage, items are then disposed of.',
+      },
+    ],
+  },
+];
+---
+
+<section class="visit section" id="visit">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Good to know</p>
+    <h2 class="visit__heading" data-reveal>Everything for your visit.</h2>
+
+    <div class="visit__panel" data-reveal>
+      <div class="visit__tablist" role="tablist" aria-label="Visitor information">
+        {
+          tabs.map((tab, index) => (
+            <button
+              class="visit__tab"
+              role="tab"
+              type="button"
+              id={`tab-${tab.id}`}
+              aria-controls={`panel-${tab.id}`}
+              aria-selected={index === 0 ? 'true' : 'false'}
+              tabindex={index === 0 ? '0' : '-1'}
+            >
+              {tab.label}
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        tabs.map((tab, index) => (
+          <div
+            class="visit__tabpanel"
+            role="tabpanel"
+            id={`panel-${tab.id}`}
+            aria-labelledby={`tab-${tab.id}`}
+            hidden={index !== 0}
+          >
+            {tab.intro && <p class="visit__intro">{tab.intro}</p>}
+
+            {tab.kind === 'steps' && (
+              <ol class="visit__steps">
+                {tab.steps!.map((step) => (
+                  <li>{step}</li>
+                ))}
+              </ol>
+            )}
+
+            {tab.kind === 'list' && (
+              <ul class="visit__checklist">
+                {tab.items!.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+
+            {tab.kind === 'prose' &&
+              tab.body!.map((p) => <p class="visit__prose">{p}</p>)}
+
+            {tab.kind === 'faq' && (
+              <dl class="visit__faq">
+                {tab.qa!.map((item) => (
+                  <div class="visit__faq-item">
+                    <dt>{item.q}</dt>
+                    <dd>{item.a}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.visit__panel').forEach((panel) => {
+    const tabs = Array.from(panel.querySelectorAll<HTMLButtonElement>('.visit__tab'));
+    const panels = Array.from(panel.querySelectorAll<HTMLElement>('.visit__tabpanel'));
+
+    const select = (index: number, focus = true) => {
+      tabs.forEach((tab, i) => {
+        const selected = i === index;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.setAttribute('tabindex', selected ? '0' : '-1');
+        panels[i].hidden = !selected;
+      });
+      if (focus) tabs[index].focus();
+    };
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => select(index, false));
+      tab.addEventListener('keydown', (event) => {
+        let next = index;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index - 1 + tabs.length) % tabs.length;
+        else if (event.key === 'Home') next = 0;
+        else if (event.key === 'End') next = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        select(next);
+      });
+    });
+  });
+</script>
+
+<style>
+  .visit__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+  }
+
+  .visit__panel {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+
+  .visit__tablist {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--mist-10);
+  }
+
+  .visit__tab {
+    padding: 0.7em 1.3em;
+    border: 1px solid var(--mist-10);
+    border-radius: 999px;
+    background: transparent;
+    font-family: var(--font-body);
+    font-size: var(--text-small);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    cursor: pointer;
+    touch-action: manipulation;
+    transition:
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      background-color var(--dur) var(--ease);
+  }
+
+  .visit__tab:hover {
+    border-color: var(--cedar);
+    color: var(--ink);
+  }
+
+  .visit__tab[aria-selected='true'] {
+    background: var(--cedar);
+    border-color: var(--cedar);
+    color: var(--navy-deep);
+  }
+
+  .visit__tabpanel {
+    padding-top: clamp(2rem, 4vw, 3rem);
+    max-width: 70ch;
+  }
+
+  .visit__tabpanel[hidden] {
+    display: none;
+  }
+
+  .visit__intro {
+    color: var(--ink-soft);
+    margin-bottom: 1.75rem;
+  }
+
+  /* Numbered steps */
+  .visit__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .visit__steps li {
+    counter-increment: step;
+    position: relative;
+    padding-left: 3rem;
+    color: var(--ink-soft);
+    min-height: 2rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .visit__steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(200, 149, 108, 0.45);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--cedar);
+  }
+
+  /* Checklist */
+  .visit__checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .visit__checklist li {
+    position: relative;
+    padding-left: 1.9rem;
+    color: var(--ink-soft);
+  }
+
+  .visit__checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 999px;
+    background: var(--cedar);
+  }
+
+  .visit__prose {
+    color: var(--ink-soft);
+  }
+
+  .visit__prose + .visit__prose {
+    margin-top: 1.25rem;
+  }
+
+  /* FAQ */
+  .visit__faq {
+    margin: 0;
+    display: grid;
+    gap: 0;
+  }
+
+  .visit__faq-item {
+    padding: 1.4rem 0;
+    border-bottom: 1px solid var(--mist-10);
+  }
+
+  .visit__faq-item:first-child {
+    padding-top: 0;
+  }
+
+  .visit__faq dt {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    font-weight: 480;
+    color: var(--ink);
+  }
+
+  .visit__faq dd {
+    margin: 0.6rem 0 0;
+    color: var(--ink-soft);
+    font-size: var(--text-small);
+    line-height: 1.7;
+  }
+</style>

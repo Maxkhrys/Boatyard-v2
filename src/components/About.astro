@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import gateImage from '../assets/images/boat-yard-gate.jpg';
+
+const paragraphs = [
+  'The Boat Yard Sauna started from a simple idea: create a space by the coast where people could slow down, warm up, recover, and feel better leaving than they did arriving.',
+  'The experience is built around the contrast of heat and cold — a hot sauna, cold water, fresh air, and a calm, welcoming atmosphere. But what really makes The Boatyard special is the feeling around it: the people, the setting, the ritual, and the small details that make every session feel looked after.',
+  'Some people come for recovery after training. Some come for a sea dip and a reset. Some come with friends. Some come for quiet time. Everyone is welcome.',
+];
+---
+
+<section class="about section" id="about">
+  <div class="container about__grid">
+    <div class="about__copy">
+      <p class="eyebrow" data-reveal>About The Boat Yard</p>
+      <h2 class="about__heading" data-reveal>More than a place to book a sauna.</h2>
+      {paragraphs.map((text) => <p class="about__text" data-reveal>{text}</p>)}
+      <p class="about__text about__text--lead" data-reveal>
+        We are building a coastal wellness community — a place for rituals, resets, recovery,
+        connection, and good people.
+      </p>
+    </div>
+
+    <figure class="about__media" data-media data-parallax="4">
+      <Image
+        src={gateImage}
+        alt="The Boat Yard Sauna entrance gate, a barrel sauna and blue boat planter beyond"
+        width={1012}
+        widths={[480, 760, 1012]}
+        sizes="(min-width: 900px) 40vw, 92vw"
+        format="webp"
+        quality={72}
+        loading="lazy"
+      />
+    </figure>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: clamp(2.5rem, 6vw, 4.5rem);
+    align-items: center;
+  }
+
+  @media (min-width: 900px) {
+    .about__grid {
+      grid-template-columns: 1.2fr 0.8fr;
+    }
+  }
+
+  .about__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+    max-width: 18ch;
+  }
+
+  .about__text {
+    margin-top: 1.6rem;
+    max-width: 56ch;
+    color: var(--ink-soft);
+  }
+
+  .about__text--lead {
+    color: var(--ink);
+    font-size: clamp(1.1rem, 1.6vw, 1.3rem);
+    font-family: var(--font-display);
+    font-weight: 420;
+    line-height: 1.4;
+  }
+
+  .about__media {
+    margin: 0;
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+  }
+
+  .about__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+</style>

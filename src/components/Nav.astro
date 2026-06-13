@@ -4,6 +4,9 @@ const onHome = Astro.url.pathname === '/';
 const home = onHome ? '' : '/';
 
 const menuLinks = [
+  { label: 'About', href: `${home}#about` },
+  { label: 'Sessions', href: `${home}#sessions` },
+  { label: 'Good to Know', href: `${home}#visit` },
   { label: 'Journal', href: '/journal' },
   { label: 'Locations', href: `${home}#locations` },
   { label: 'Book', href: `${home}#locations` },
