@@ -1,173 +1,154 @@
 ---
 import { Image } from 'astro:assets';
-import fleetImage from '../assets/images/aerial-moored-fleet.jpg';
-import boatImage from '../assets/images/aerial-fishing-boat.jpg';
-import kayakImage from '../assets/images/aerial-kayak.jpg';
-
-const shots = {
-  fleet: {
-    image: fleetImage,
-    alt: 'Aerial view straight down on sailboats moored across teal harbour water',
-    caption: 'The fleet at rest — Wicklow harbour',
-  },
-  boat: {
-    image: boatImage,
-    alt: 'Aerial view of a small fishing boat alone on emerald sea',
-    caption: 'First out, before the heat',
-  },
-  kayak: {
-    image: kayakImage,
-    alt: 'Aerial view of an orange kayak crossing dark green water',
-    caption: 'Crossing the dark water',
-  },
-};
+import img1 from '../assets/images/sauna-courtyard-night.jpg';
+import img2 from '../assets/images/sauna-hat-profile.jpg';
+import img3 from '../assets/images/aerial-bay-swimmers.jpg';
+import img4 from '../assets/images/sea-steps-sunrise.jpeg';
+import img5 from '../assets/images/harbour-dusk-boats.jpeg';
+import img6 from '../assets/images/pier-lighthouse-sunrise.jpeg';
+import img7 from '../assets/images/sauna-hats-cedar-door.jpeg';
+import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
+import img9 from '../assets/images/ritual-oils-incense.jpeg';
 ---
 
-<section class="aerial section" id="aerial">
+<section class="gallery section" id="gallery" aria-label="Photo gallery">
   <div class="container">
-    <p class="eyebrow" data-reveal>The harbour from above</p>
-    <h2 class="aerial__heading" data-reveal>Same water,<br />a different angle.</h2>
-    <p class="aerial__intro" data-reveal>
-      Everything we do happens on this stretch of sea — the boats, the swimmers, the steam.
-      Seen from above, it makes a kind of sense.
-    </p>
+    <p class="eyebrow" data-reveal>Life at the water</p>
   </div>
 
-  <div class="container aerial__grid">
-    <figure class="aerial__item aerial__item--fleet">
-      <div class="aerial__media" data-media data-parallax="3">
-      <Image
-        src={shots.fleet.image}
-        alt={shots.fleet.alt}
-        width={1700}
-        widths={[640, 1100, 1700]}
-        sizes="(min-width: 900px) 62vw, 92vw"
-        format="webp"
-        quality={68}
-        loading="lazy"
-      />
+  <div class="gallery__grid container">
+    <!-- Row 1: wide + portrait -->
+    <figure class="gallery__item gallery__item--a">
+      <div class="gallery__media" data-media data-parallax="3">
+        <Image src={img1} alt="Sauna courtyard lit at night with people relaxing outside"
+          width={1200} widths={[640,1200]} sizes="(min-width:900px) 55vw, 92vw"
+          format="webp" quality={72} loading="lazy" />
       </div>
-      <figcaption class="aerial__caption">{shots.fleet.caption}</figcaption>
     </figure>
 
-    <figure class="aerial__item aerial__item--boat">
-      <div class="aerial__media" data-media data-parallax="5">
-      <Image
-        src={shots.boat.image}
-        alt={shots.boat.alt}
-        width={860}
-        widths={[480, 860]}
-        sizes="(min-width: 900px) 30vw, 46vw"
-        format="webp"
-        quality={68}
-        loading="lazy"
-      />
+    <figure class="gallery__item gallery__item--b">
+      <div class="gallery__media" data-media data-parallax="5">
+        <Image src={img2} alt="Close-up portrait of a person in a sauna hat, relaxed"
+          width={760} widths={[480,760]} sizes="(min-width:900px) 28vw, 44vw"
+          format="webp" quality={72} loading="lazy" />
       </div>
-      <figcaption class="aerial__caption">{shots.boat.caption}</figcaption>
     </figure>
 
-    <figure class="aerial__item aerial__item--kayak">
-      <div class="aerial__media" data-media data-parallax="4">
-      <Image
-        src={shots.kayak.image}
-        alt={shots.kayak.alt}
-        width={860}
-        widths={[480, 860]}
-        sizes="(min-width: 900px) 34vw, 46vw"
-        format="webp"
-        quality={68}
-        loading="lazy"
-      />
+    <!-- Row 2: three equal -->
+    <figure class="gallery__item gallery__item--c">
+      <div class="gallery__media" data-media data-parallax="4">
+        <Image src={img3} alt="Aerial view of swimmers crossing a turquoise bay"
+          width={760} widths={[480,760]} sizes="(min-width:900px) 28vw, 44vw"
+          format="webp" quality={72} loading="lazy" />
       </div>
-      <figcaption class="aerial__caption">{shots.kayak.caption}</figcaption>
+    </figure>
+
+    <figure class="gallery__item gallery__item--d">
+      <div class="gallery__media" data-media data-parallax="3">
+        <Image src={img4} alt="Stone steps leading into the sea at sunrise"
+          width={760} widths={[480,760]} sizes="(min-width:900px) 28vw, 44vw"
+          format="webp" quality={72} loading="lazy" />
+      </div>
+    </figure>
+
+    <figure class="gallery__item gallery__item--e">
+      <div class="gallery__media" data-media data-parallax="5">
+        <Image src={img9} alt="Ritual oils and incense on cedar wood"
+          width={760} widths={[480,760]} sizes="(min-width:900px) 28vw, 44vw"
+          format="webp" quality={72} loading="lazy" />
+      </div>
+    </figure>
+
+    <!-- Row 3: two side by side -->
+    <figure class="gallery__item gallery__item--f">
+      <div class="gallery__media" data-media data-parallax="4">
+        <Image src={img5} alt="Harbour at dusk with boats moored along the quay"
+          width={1000} widths={[640,1000]} sizes="(min-width:900px) 45vw, 92vw"
+          format="webp" quality={68} loading="lazy" />
+      </div>
+    </figure>
+
+    <figure class="gallery__item gallery__item--g">
+      <div class="gallery__media" data-media data-parallax="3">
+        <Image src={img6} alt="Pier and lighthouse at sunrise, Wicklow"
+          width={760} widths={[480,760]} sizes="(min-width:900px) 38vw, 92vw"
+          format="webp" quality={68} loading="lazy" />
+      </div>
+    </figure>
+
+    <!-- Row 4: full-width banner -->
+    <figure class="gallery__item gallery__item--h">
+      <div class="gallery__media" data-media data-parallax="2">
+        <Image src={img8} alt="Aerial view of Wicklow harbour on a clear day"
+          width={1800} widths={[960,1400,1800]} sizes="92vw"
+          format="webp" quality={68} loading="lazy" />
+      </div>
     </figure>
   </div>
 </section>
 
 <style>
-  .aerial__heading {
-    font-size: var(--text-h2);
-    margin-top: 1.5rem;
+  .gallery {
+    padding-bottom: clamp(4rem, 8vw, 7rem);
   }
 
-  .aerial__intro {
-    margin-top: 2rem;
-    max-width: 48ch;
-    color: var(--ink-soft);
-  }
-
-  /* Mobile-first: a clean stack, the two square shots side by side */
-  .aerial__grid {
-    margin-top: clamp(4.5rem, 10vw, 9rem);
+  .gallery__grid {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: clamp(2.5rem, 5vw, 4.5rem) clamp(1.25rem, 3vw, 2.5rem);
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1rem, 2vw, 1.75rem);
   }
 
-  .aerial__item {
+  .gallery__item {
     margin: 0;
-    position: relative;
-  }
-
-  .aerial__item--fleet {
-    grid-column: 1 / -1;
-  }
-
-  /* The actual image box — clipped for the reveal, oversized inner image
-     so the parallax drift never shows an edge. Captions live outside it. */
-  .aerial__media {
-    border-radius: 4px;
     overflow: hidden;
+    border-radius: 4px;
   }
 
-  .aerial__item :global(img) {
+  .gallery__media {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+
+  .gallery__item :global(img) {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: block;
   }
 
-  .aerial__item--fleet :global(img) {
-    aspect-ratio: 16 / 10;
-  }
+  /* Mobile: simple 2-col stack */
+  .gallery__item--a { aspect-ratio: 4/3; }
+  .gallery__item--b { aspect-ratio: 3/4; }
+  .gallery__item--c { aspect-ratio: 1/1; }
+  .gallery__item--d { aspect-ratio: 1/1; }
+  .gallery__item--e { grid-column: 1 / -1; aspect-ratio: 16/7; }
+  .gallery__item--f { aspect-ratio: 4/3; }
+  .gallery__item--g { aspect-ratio: 4/3; }
+  .gallery__item--h { grid-column: 1 / -1; aspect-ratio: 21/9; }
 
-  .aerial__item--boat :global(img),
-  .aerial__item--kayak :global(img) {
-    aspect-ratio: 1 / 1;
-  }
-
-  .aerial__caption {
-    margin-top: 0.9rem;
-    font-size: var(--text-tiny);
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--ink-mid);
-  }
-
-  /* Editorial asymmetry from tablet up */
   @media (min-width: 900px) {
-    .aerial__grid {
+    .gallery__grid {
       grid-template-columns: repeat(12, 1fr);
-      align-items: start;
+      grid-template-rows: auto auto auto auto;
     }
 
-    .aerial__item--fleet {
-      grid-column: 1 / 9;
-    }
+    /* Row 1 */
+    .gallery__item--a { grid-column: 1 / 8; aspect-ratio: 3/2; }
+    .gallery__item--b { grid-column: 8 / 13; aspect-ratio: 3/4; }
 
-    .aerial__item--boat {
-      grid-column: 9 / 13;
-      margin-top: clamp(4rem, 9vw, 8rem);
-    }
+    /* Row 2 */
+    .gallery__item--c { grid-column: 1 / 5; grid-row: 2; aspect-ratio: 1/1; }
+    .gallery__item--d { grid-column: 5 / 9; grid-row: 2; aspect-ratio: 1/1; }
+    .gallery__item--e { grid-column: 9 / 13; grid-row: 2; aspect-ratio: 1/1; }
 
-    .aerial__item--kayak {
-      grid-column: 5 / 10;
-      margin-top: clamp(1.5rem, 3vw, 3rem);
-    }
+    /* Row 3 */
+    .gallery__item--f { grid-column: 1 / 7; grid-row: 3; aspect-ratio: 4/3; }
+    .gallery__item--g { grid-column: 7 / 13; grid-row: 3; aspect-ratio: 4/3; }
 
-    .aerial__item--kayak :global(img) {
-      aspect-ratio: 4 / 3;
-    }
+    /* Row 4 */
+    .gallery__item--h { grid-column: 1 / -1; grid-row: 4; aspect-ratio: 21/8; }
   }
 </style>
