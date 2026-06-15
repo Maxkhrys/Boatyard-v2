@@ -22,14 +22,16 @@ const menuLinks = [
 <header class="site-nav" id="site-nav">
   <div class="site-nav__inner">
     <a href={onHome ? '#top' : '/'} class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
-      <Image
-        src={logoImg}
-        alt="The Boat Yard Sauna"
-        width={56}
-        height={56}
-        class="site-nav__mark-img"
-        loading="eager"
-      />
+      <span class="site-nav__logo-clip" aria-hidden="true">
+        <Image
+          src={logoImg}
+          alt=""
+          width={80}
+          height={80}
+          class="site-nav__mark-img"
+          loading="eager"
+        />
+      </span>
     </a>
 
     <a href={`${home}#locations`} class="btn btn--primary site-nav__cta">Book</a>
@@ -144,18 +146,28 @@ const menuLinks = [
     transition: color var(--dur) var(--ease);
   }
 
-  .site-nav__mark-img {
-    width: 56px;
-    height: 56px;
-    flex-shrink: 0;
+  .site-nav__logo-clip {
+    display: block;
+    width: 52px;
+    height: 52px;
     border-radius: 50%;
-    object-fit: cover;
+    overflow: hidden;
+    flex-shrink: 0;
     transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
   }
 
-  .site-nav__logo:hover .site-nav__mark-img {
+  .site-nav__logo:hover .site-nav__logo-clip {
     transform: translateY(-2px);
     opacity: 0.88;
+  }
+
+  .site-nav__mark-img {
+    /* Scale up to crop the white padding around the circle in the source image */
+    width: 130%;
+    height: 130%;
+    margin: -15%;
+    object-fit: cover;
+    display: block;
   }
 
   .site-nav__cta {
