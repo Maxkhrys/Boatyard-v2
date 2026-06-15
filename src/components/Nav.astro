@@ -1,32 +1,35 @@
 ---
+import { Image } from 'astro:assets';
+import logoImg from '../assets/images/logo-boat-yard-sauna.jpeg';
+
 // Anchor links need a leading slash everywhere except the homepage.
 const onHome = Astro.url.pathname === '/';
 const home = onHome ? '' : '/';
+
+const BOOK_URL = 'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna';
 
 const menuLinks = [
   { label: 'About', href: `${home}#about` },
   { label: 'Sessions', href: `${home}#sessions` },
   { label: 'Good to Know', href: `${home}#visit` },
-  { label: 'Vouchers', href: '/vouchers' },
+  { label: 'Vouchers', href: BOOK_URL },
   { label: 'Journal', href: '/journal' },
   { label: 'Locations', href: `${home}#locations` },
-  { label: 'Book', href: `${home}#locations` },
+  { label: 'Book', href: BOOK_URL },
 ];
 ---
 
 <header class="site-nav" id="site-nav">
   <div class="site-nav__inner">
     <a href={onHome ? '#top' : '/'} class="site-nav__logo" aria-label="The Boat Yard Sauna — home">
-      <svg class="site-nav__mark" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M11.2 3v12h1.6V3z" fill="currentColor"></path>
-        <path d="M10.6 4 5 14h5.6z" fill="currentColor"></path>
-        <path d="M13.4 4v9.4H19z" fill="currentColor"></path>
-        <path d="M4 16.6h16l-2.2 3.8H6.2z" fill="currentColor"></path>
-      </svg>
-      <span class="site-nav__lockup">
-        <span class="site-nav__name">The Boat Yard</span>
-        <span class="site-nav__descriptor">Sauna</span>
-      </span>
+      <Image
+        src={logoImg}
+        alt="The Boat Yard Sauna"
+        width={44}
+        height={44}
+        class="site-nav__mark-img"
+        loading="eager"
+      />
     </a>
 
     <a href={`${home}#locations`} class="btn btn--primary site-nav__cta">Book</a>
@@ -141,42 +144,18 @@ const menuLinks = [
     transition: color var(--dur) var(--ease);
   }
 
-  .site-nav__mark {
-    width: 1.6rem;
-    height: 1.6rem;
+  .site-nav__mark-img {
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
-    color: var(--cedar);
-    transition: transform var(--dur) var(--ease);
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
   }
 
-  .site-nav__logo:hover .site-nav__mark {
+  .site-nav__logo:hover .site-nav__mark-img {
     transform: translateY(-2px);
-  }
-
-  .site-nav__lockup {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.1;
-  }
-
-  .site-nav__name {
-    font-family: var(--font-display);
-    font-size: clamp(1.05rem, 2.4vw, 1.2rem);
-    font-weight: 520;
-    letter-spacing: -0.01em;
-  }
-
-  .site-nav__descriptor {
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.42em;
-    text-transform: uppercase;
-    color: var(--cedar);
-    transition: letter-spacing var(--dur) var(--ease);
-  }
-
-  .site-nav__logo:hover .site-nav__descriptor {
-    letter-spacing: 0.5em;
+    opacity: 0.88;
   }
 
   .site-nav__cta {
@@ -297,12 +276,8 @@ const menuLinks = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .site-nav__logo:hover .site-nav__mark {
+    .site-nav__logo:hover .site-nav__mark-img {
       transform: none;
-    }
-
-    .site-nav__logo:hover .site-nav__descriptor {
-      letter-spacing: 0.42em;
     }
 
     .site-nav__menu {
