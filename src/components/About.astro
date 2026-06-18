@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import gateImage from '../assets/images/boat-yard-gate.jpg';
+import splashImage from '../assets/images/plunge-tank-splash.jpg';
 
 const paragraphs = [
   'The Boat Yard Sauna started from a simple idea: create a space by the coast where people could slow down, warm up, recover, and feel better leaving than they did arriving.',
@@ -21,18 +22,33 @@ const paragraphs = [
       </p>
     </div>
 
-    <figure class="about__media" data-media data-parallax="4">
-      <Image
-        src={gateImage}
-        alt="The Boat Yard Sauna entrance gate, a barrel sauna and blue boat planter beyond"
-        width={1012}
-        widths={[480, 760, 1012]}
-        sizes="(min-width: 900px) 40vw, 92vw"
-        format="webp"
-        quality={72}
-        loading="lazy"
-      />
-    </figure>
+    <div class="about__media-pair">
+      <figure class="about__media" data-media data-parallax="4">
+        <Image
+          src={gateImage}
+          alt="The Boat Yard Sauna entrance gate, a barrel sauna and blue boat planter beyond"
+          width={1012}
+          widths={[480, 760, 1012]}
+          sizes="(min-width: 900px) 20vw, 46vw"
+          format="webp"
+          quality={72}
+          loading="lazy"
+        />
+      </figure>
+
+      <figure class="about__media" data-media data-parallax="4">
+        <Image
+          src={splashImage}
+          alt="A woman in a pink swim cap splashing in the cold-plunge tank"
+          width={1012}
+          widths={[480, 760, 1012]}
+          sizes="(min-width: 900px) 20vw, 46vw"
+          format="webp"
+          quality={78}
+          loading="lazy"
+        />
+      </figure>
+    </div>
   </div>
 </section>
 
@@ -67,6 +83,12 @@ const paragraphs = [
     font-family: var(--font-display);
     font-weight: 420;
     line-height: 1.4;
+  }
+
+  .about__media-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(0.85rem, 2vw, 1.5rem);
   }
 
   .about__media {
