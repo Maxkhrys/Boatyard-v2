@@ -26,6 +26,9 @@ if (projectId) {
 }
 
 export default defineConfig({
+  // NOTE: Placeholder production domain — confirm/replace with the real one
+  // before launch. Used for canonical URLs, the sitemap, and Open Graph tags.
+  site: 'https://theboatyardsauna.ie',
   output: 'static',
   adapter: vercel(),
   integrations,
