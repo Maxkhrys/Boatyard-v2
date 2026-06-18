@@ -1,0 +1,121 @@
+---
+// JSON-LD LocalBusiness schema for The Boat Yard Sauna.
+//
+// All values are real, sourced from the site content:
+//   - Addresses & opening hours mirror src/components/Locations.astro
+//     (the defaults shown when Sanity siteSettings are unset — these are
+//     the real published hours). Keep in sync if the Locations data changes.
+//   - Price range from src/components/Pricing.astro (€12 single session →
+//     €110 ten-session pack).
+//   - Email & social links from src/components/Footer.astro.
+//
+// FLAGGED — no phone number exists anywhere in the codebase or Sanity, so
+// `telephone` is intentionally omitted rather than invented. Add it here
+// (per location) once a real number is available.
+
+const site = Astro.site?.href.replace(/\/$/, '') ?? 'https://theboatyardsauna.ie';
+
+const sameAs = [
+  'https://www.instagram.com/theboatyardsauna',
+  'https://www.facebook.com/theboatyardsauna',
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${site}/#organization`,
+      name: 'The Boat Yard Sauna',
+      url: `${site}/`,
+      email: 'theboatyardsauna@gmail.com',
+      sameAs,
+      logo: `${site}/favicon.svg`,
+    },
+    {
+      '@type': 'HealthAndBeautyBusiness',
+      '@id': `${site}/#wicklow`,
+      name: 'The Boat Yard Sauna — Wicklow Town',
+      parentOrganization: { '@id': `${site}/#organization` },
+      url: `${site}/`,
+      email: 'theboatyardsauna@gmail.com',
+      description:
+        'Wood-fired seaside sauna and cold plunge at Wicklow Harbour, Wicklow Town.',
+      priceRange: '€12–€110',
+      currenciesAccepted: 'EUR',
+      sameAs,
+      hasMap: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Wicklow',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Wicklow Harbour',
+        addressLocality: 'Wicklow Town',
+        addressRegion: 'County Wicklow',
+        addressCountry: 'IE',
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday'],
+          opens: '16:00',
+          closes: '22:00',
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: 'Friday',
+          opens: '10:00',
+          closes: '22:00',
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Saturday', 'Sunday'],
+          opens: '08:00',
+          closes: '22:00',
+        },
+      ],
+    },
+    {
+      '@type': 'HealthAndBeautyBusiness',
+      '@id': `${site}/#arklow`,
+      name: 'The Boat Yard Sauna — Arklow',
+      parentOrganization: { '@id': `${site}/#organization` },
+      url: `${site}/`,
+      email: 'theboatyardsauna@gmail.com',
+      description:
+        'Wood-fired seaside sauna and cold plunge at North Quay, Arklow Harbour, Arklow.',
+      priceRange: '€12–€110',
+      currenciesAccepted: 'EUR',
+      sameAs,
+      hasMap: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Arklow',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'North Quay, Arklow Harbour',
+        addressLocality: 'Arklow',
+        addressRegion: 'County Wicklow',
+        addressCountry: 'IE',
+      },
+      openingHoursSpecification: [
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: 'Thursday',
+          opens: '16:00',
+          closes: '22:00',
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: 'Friday',
+          opens: '10:00',
+          closes: '22:00',
+        },
+        {
+          '@type': 'OpeningHoursSpecification',
+          dayOfWeek: ['Saturday', 'Sunday'],
+          opens: '08:00',
+          closes: '22:00',
+        },
+      ],
+    },
+  ],
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} is:inline />

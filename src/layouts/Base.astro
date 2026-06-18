@@ -38,6 +38,7 @@ const canonicalURL = Astro.site
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <slot name="head" />
     <script>
       // Marks JS as available so animation pre-hiding never strands no-JS visitors.
       document.documentElement.classList.add('js');
