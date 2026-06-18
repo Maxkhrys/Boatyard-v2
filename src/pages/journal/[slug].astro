@@ -15,7 +15,11 @@ const bodyHtml = portableTextToHtml(post.body);
 const isRemote = typeof post.image === 'string';
 ---
 
-<Base title={`${post.title} — The Boat Yard Sauna Journal`} description={post.excerpt}>
+<Base
+  title={`${post.title} — The Boat Yard Sauna Journal`}
+  description={post.excerpt}
+  ogImage={post.image}
+>
   <article class="entry">
     <div class="entry__hero" data-media>
       {
