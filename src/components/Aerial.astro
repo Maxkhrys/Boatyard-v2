@@ -21,15 +21,15 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
       <div class="gallery__media" data-media data-parallax="3">
         <Image src={img1} alt="Sauna courtyard lit at night with people relaxing outside"
           width={1400} widths={[640,1000,1400]} sizes="(min-width:900px) 62vw, 92vw"
-          format="webp" quality={80} loading="lazy" />
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
     <figure class="gallery__item gallery__item--b">
       <div class="gallery__media" data-media data-parallax="5">
         <Image src={img2} alt="Pink carnations and lavender in a planter beside the barrel sauna"
-          width={900} widths={[480,700,900]} sizes="(min-width:900px) 30vw, 44vw"
-          format="webp" quality={80} loading="lazy" />
+          width={900} widths={[480,700,900]} sizes="(min-width:900px) 30vw, 92vw"
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
@@ -37,24 +37,24 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
     <figure class="gallery__item gallery__item--c">
       <div class="gallery__media" data-media data-parallax="4">
         <Image src={imgFuchsia} alt="Fuchsia flowers and bamboo against weathered stone"
-          width={800} widths={[480,800]} sizes="(min-width:900px) 28vw, 44vw"
-          format="webp" quality={80} loading="lazy" />
+          width={800} widths={[480,800]} sizes="(min-width:900px) 28vw, 92vw"
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
     <figure class="gallery__item gallery__item--i">
       <div class="gallery__media" data-media data-parallax="3">
         <Image src={imgTideClock} alt="A handmade tide clock mounted on the cedar wall"
-          width={800} widths={[480,800]} sizes="(min-width:900px) 28vw, 44vw"
-          format="webp" quality={80} loading="lazy" />
+          width={800} widths={[480,800]} sizes="(min-width:900px) 28vw, 92vw"
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
     <figure class="gallery__item gallery__item--d">
       <div class="gallery__media" data-media data-parallax="5">
         <Image src={imgChimney} alt="Smoke rising from the wood-fired sauna's chimney at dusk"
-          width={800} widths={[480,800]} sizes="(min-width:900px) 28vw, 44vw"
-          format="webp" quality={80} loading="lazy" />
+          width={800} widths={[480,800,1000]} sizes="(min-width:900px) 28vw, 92vw"
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
@@ -63,7 +63,7 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
       <div class="gallery__media" data-media data-parallax="3">
         <Image src={imgLifeRing} alt="A red life ring glimpsed through dried reeds at night"
           width={760} widths={[480,760]} sizes="(min-width:900px) 36vw, 92vw"
-          format="webp" quality={80} loading="lazy" />
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
@@ -71,7 +71,7 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
       <div class="gallery__media" data-media data-parallax="5">
         <Image src={img9} alt="Ritual oils and incense on cedar wood"
           width={1100} widths={[640,900,1100]} sizes="(min-width:900px) 50vw, 92vw"
-          format="webp" quality={80} loading="lazy" />
+          format="webp" quality={80} loading="lazy" data-lightbox />
       </div>
     </figure>
 
@@ -80,7 +80,7 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
       <div class="gallery__media" data-media data-parallax="2">
         <Image src={img8} alt="Aerial view of Wicklow harbour on a clear day"
           width={1800} widths={[960,1400,1800]} sizes="92vw"
-          format="webp" quality={76} loading="lazy" />
+          format="webp" quality={76} loading="lazy" data-lightbox />
       </div>
     </figure>
   </div>
@@ -94,8 +94,8 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
   .gallery__grid {
     margin-top: clamp(2.5rem, 5vw, 4rem);
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(0.85rem, 1.6vw, 1.5rem);
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
   }
 
   .gallery__item {
@@ -125,15 +125,15 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
     }
   }
 
-  /* Mobile: simple 2-col stack */
-  .gallery__item--a { grid-column: 1 / -1; aspect-ratio: 4/3; }
+  /* Mobile: single-column stack, each tile sized to its photo's native orientation */
+  .gallery__item--a { aspect-ratio: 16/9; }
   .gallery__item--b { aspect-ratio: 3/4; }
-  .gallery__item--c { aspect-ratio: 1/1; }
-  .gallery__item--i { aspect-ratio: 1/1; }
-  .gallery__item--d { grid-column: 1 / -1; aspect-ratio: 16/7; }
-  .gallery__item--j { aspect-ratio: 3/4; }
+  .gallery__item--c { aspect-ratio: 2/3; }
+  .gallery__item--i { aspect-ratio: 2/3; }
+  .gallery__item--d { aspect-ratio: 2/3; }
+  .gallery__item--j { aspect-ratio: 2/3; }
   .gallery__item--e { aspect-ratio: 3/4; }
-  .gallery__item--h { grid-column: 1 / -1; aspect-ratio: 21/9; }
+  .gallery__item--h { aspect-ratio: 4/3; }
 
   @media (min-width: 900px) {
     .gallery__grid {

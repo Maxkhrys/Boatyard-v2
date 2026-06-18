@@ -315,6 +315,56 @@ gsap.utils.toArray<HTMLElement>('[data-reveal]').forEach((element) => {
 });
 
 /* ------------------------------------------------------------------
+   Lightbox — click any [data-lightbox] image to view it full-screen.
+   Reads the already-rendered img's currentSrc so no extra request fires.
+   ------------------------------------------------------------------ */
+
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+const lightboxClose = document.getElementById('lightbox-close');
+
+if (lightbox && lightboxImg && lightboxClose) {
+  const openLightbox = (img: HTMLImageElement) => {
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt;
+    lightbox.hidden = false;
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => lightbox.classList.add('is-open'));
+  };
+
+  const closeLightbox = () => {
+    lightbox.classList.remove('is-open');
+    document.body.style.overflow = '';
+    window.setTimeout(() => {
+      lightbox.hidden = true;
+      lightboxImg.src = '';
+    }, reducedMotion ? 0 : 550);
+  };
+
+  document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach((img) => {
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('role', 'button');
+    img.setAttribute('aria-label', img.alt ? `Expand image: ${img.alt}` : 'Expand image');
+
+    img.addEventListener('click', () => openLightbox(img));
+    img.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openLightbox(img);
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (event) => {
+    if (event.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && lightbox.classList.contains('is-open')) closeLightbox();
+  });
+}
+
+/* ------------------------------------------------------------------
    Mailing list — subscribes via /api/subscribe (Buttondown)
    ------------------------------------------------------------------ */
 

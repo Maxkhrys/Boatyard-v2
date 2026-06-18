@@ -33,6 +33,7 @@ const paragraphs = [
           format="webp"
           quality={72}
           loading="lazy"
+          data-lightbox
         />
       </figure>
 
@@ -46,6 +47,7 @@ const paragraphs = [
           format="webp"
           quality={78}
           loading="lazy"
+          data-lightbox
         />
       </figure>
     </div>
@@ -87,8 +89,15 @@ const paragraphs = [
 
   .about__media-pair {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(0.85rem, 2vw, 1.5rem);
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  @media (min-width: 600px) {
+    .about__media-pair {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(0.85rem, 2vw, 1.5rem);
+    }
   }
 
   .about__media {

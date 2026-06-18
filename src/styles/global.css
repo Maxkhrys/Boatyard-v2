@@ -333,6 +333,85 @@ html.js [data-media]:not(.is-revealed) img {
   }
 }
 
+/* ---------- Lightbox ---------- */
+
+[data-lightbox] {
+  cursor: zoom-in;
+}
+
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: rgba(8, 21, 34, 0.92);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--dur) var(--ease),
+    visibility 0s linear var(--dur);
+}
+
+.lightbox.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition:
+    opacity var(--dur) var(--ease),
+    visibility 0s;
+}
+
+.lightbox[hidden] {
+  display: flex;
+}
+
+.lightbox__img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transform: scale(0.96);
+  transition: transform var(--dur) var(--ease);
+}
+
+.lightbox.is-open .lightbox__img {
+  transform: scale(1);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: clamp(1rem, 3vw, 2rem);
+  right: clamp(1rem, 3vw, 2rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--mist-25);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+
+.lightbox__close:hover {
+  border-color: var(--cedar);
+  color: var(--cedar);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbox,
+  .lightbox__img {
+    transition: none;
+  }
+}
+
 /* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
