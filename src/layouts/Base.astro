@@ -10,12 +10,14 @@ import Footer from '../components/Footer.astro';
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const {
   title = 'The Boat Yard Sauna — Seaside Sauna in Wicklow & Arklow',
   description =
     'A wood-fired seaside sauna on Ireland\'s east coast. Swap hot cedar heat for the cold sea, then a calm reset — book a session in Wicklow Town or Arklow.',
+  noindex = false,
 } = Astro.props;
 
 // Canonical URL for this page, derived from the configured `site` in
@@ -34,6 +36,7 @@ const canonicalURL = Astro.site
     <title>{title}</title>
     <meta name="description" content={description} />
     {canonicalURL && <link rel="canonical" href={canonicalURL} />}
+    {noindex && <meta name="robots" content="noindex, follow" />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />

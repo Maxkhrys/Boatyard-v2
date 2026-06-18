@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sanity from '@sanity/astro';
+import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
 const projectId = process.env.PUBLIC_SANITY_PROJECT_ID;
@@ -11,7 +12,14 @@ const apiToken = process.env.SANITY_API_TOKEN;
 // Static site with on-demand API routes (e.g. /api/subscribe) and
 // Sanity Studio at /admin (when SANITY_PROJECT_ID is set) running as
 // Vercel serverless functions.
-const integrations = [react()];
+const integrations = [
+  react(),
+  sitemap({
+    // Keep the transactional voucher thank-you page out of the sitemap —
+    // it's noindex and shouldn't be surfaced in search.
+    filter: (page) => !page.includes('/vouchers/success'),
+  }),
+];
 
 if (projectId) {
   integrations.push(
