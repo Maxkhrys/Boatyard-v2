@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import gateImage from '../assets/images/boat-yard-gate.jpg';
 import splashImage from '../assets/images/plunge-tank-splash.jpg';
+import swimImage from '../assets/images/sea-swim-friends.jpg';
 
 const paragraphs = [
   'The Boat Yard Sauna started from a simple idea: create a space by the coast where people could slow down, warm up, recover, and feel better leaving than they did arriving.',
@@ -44,6 +45,20 @@ const paragraphs = [
           width={1012}
           widths={[480, 760, 1012]}
           sizes="(min-width: 900px) 20vw, 46vw"
+          format="webp"
+          quality={78}
+          loading="lazy"
+          data-lightbox
+        />
+      </figure>
+
+      <figure class="about__media about__media--full" data-media data-parallax="4">
+        <Image
+          src={swimImage}
+          alt="Three friends sea-swimming together by the harbour wall and lighthouse"
+          width={1012}
+          widths={[480, 760, 1012]}
+          sizes="(min-width: 900px) 32vw, 92vw"
           format="webp"
           quality={78}
           loading="lazy"
@@ -105,6 +120,13 @@ const paragraphs = [
     border-radius: 4px;
     overflow: hidden;
     aspect-ratio: 4 / 5;
+  }
+
+  @media (min-width: 600px) {
+    .about__media--full {
+      grid-column: 1 / -1;
+      aspect-ratio: 16 / 9;
+    }
   }
 
   .about__media :global(img) {

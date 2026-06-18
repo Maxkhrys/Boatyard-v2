@@ -12,7 +12,6 @@ import imgRowers from '../assets/images/aerial-rowers-emerald.jpg';
 import imgFishingBoat from '../assets/images/aerial-fishing-boat.jpg';
 import imgMooredFleet from '../assets/images/aerial-moored-fleet.jpg';
 import imgHarbourDusk from '../assets/images/harbour-dusk-boats.jpeg';
-import imgPierSunrise from '../assets/images/pier-lighthouse-sunrise.jpeg';
 import imgSeaSteps from '../assets/images/sea-steps-sunrise.jpeg';
 import imgSaunaGate from '../assets/images/sauna-gate-harbour.jpeg';
 import imgSaunaHats from '../assets/images/sauna-hats-cedar-door.jpeg';
@@ -29,6 +28,13 @@ import imgSaunaRest from '../assets/images/sauna-interior-rest.jpg';
 import imgSaunaHat from '../assets/images/sauna-hat-profile.jpg';
 import imgColdTap from '../assets/images/cold-tap.jpg';
 import imgDaraBoat from '../assets/images/dara-boat-planter.jpg';
+import imgChimneySmoke from '../assets/images/sauna-chimney-smoke.jpg';
+import imgTideClock from '../assets/images/tide-clock-cedar.jpg';
+import imgLifeRing from '../assets/images/life-ring-reeds.jpg';
+import imgFuchsia from '../assets/images/fuchsia-bamboo-stone.jpg';
+import imgFlowerPlanter from '../assets/images/sauna-flower-planter.jpg';
+import imgPlungeSplash from '../assets/images/plunge-tank-splash.jpg';
+import imgSeaSwimFriends from '../assets/images/sea-swim-friends.jpg';
 
 /* ------------------------------------------------------------------
    Sanity content layer — fetched at build time via the public query
@@ -89,7 +95,6 @@ const stockImages: Record<string, { image: ImageMetadata; alt: string }> = {
   'harbour-dusk': { image: imgHarbourDusk, alt: 'Boats in the harbour at dusk' },
   'pier-day': { image: waterImage, alt: 'The lighthouse pier at Wicklow harbour on a calm day' },
   'pier-moonrise': { image: winterImage, alt: 'A full moon rising behind the pier lighthouse' },
-  'pier-sunrise': { image: imgPierSunrise, alt: 'Sunrise behind the pier lighthouse' },
   'sea-steps': { image: imgSeaSteps, alt: 'Steps into the sea at sunrise' },
   'sauna-gate': { image: imgSaunaGate, alt: 'The sauna gate at the harbour' },
   'sauna-hats': { image: imgSaunaHats, alt: 'Sauna hats hanging on the cedar door' },
@@ -107,6 +112,13 @@ const stockImages: Record<string, { image: ImageMetadata; alt: string }> = {
   'sauna-hat': { image: imgSaunaHat, alt: 'A bather in a wool sauna hat inside the barrel sauna' },
   'cold-tap': { image: imgColdTap, alt: 'Cold water running from a brass tap beside the ivy' },
   'dara-boat': { image: imgDaraBoat, alt: 'A vintage blue boat named Dara, planted with flowers against a dark wall' },
+  'chimney-smoke': { image: imgChimneySmoke, alt: "Smoke rising from the wood-fired sauna's chimney at dusk" },
+  'tide-clock': { image: imgTideClock, alt: 'A handmade tide clock mounted on the cedar wall' },
+  'life-ring': { image: imgLifeRing, alt: 'A red life ring glimpsed through dried reeds at night' },
+  fuchsia: { image: imgFuchsia, alt: 'Fuchsia flowers and bamboo against weathered stone' },
+  'flower-planter': { image: imgFlowerPlanter, alt: 'Pink carnations and lavender in a planter beside the barrel sauna' },
+  'plunge-splash': { image: imgPlungeSplash, alt: 'A woman splashing in the cold-plunge tank' },
+  'sea-swim-friends': { image: imgSeaSwimFriends, alt: 'Three friends sea-swimming together by the harbour wall and lighthouse' },
 };
 
 const stockImageKeys = Object.keys(stockImages);
@@ -386,6 +398,51 @@ const fallbackPosts: Post[] = [
       'We have been watching the numbers quietly. Over the winter, forty different people used the sauna at least once a week, every week. Ages ranged from nineteen to seventy-three. Some came alone, some in pairs, a handful in groups that had clearly been swimming together for years before we built the thing.',
       'What unites them is harder to pin down than a demographic. They are not especially competitive. They are not chasing fitness metrics. What they share is a tolerance for discomfort that spills over into a general ease with being cold, wet, and outside when no reasonable person would be.',
       'We asked a few of them why the bay instead of a pool, a gym, a sensible indoor activity. The answers were variations on the same thing: the bay does not care what you look like or how fast you swim. It just asks you to show up.',
+    ),
+  },
+  {
+    title: 'Welcome to The Boat Yard Journal',
+    slug: 'welcome-to-the-boat-yard-journal',
+    excerpt:
+      'A place for news, sea temperatures, and stories from the sauna. New here? Start with what to expect on your first visit.',
+    publishedAt: '2026-06-18',
+    tag: 'News',
+    image: imgFlowerPlanter,
+    alt: 'Pink carnations and lavender in a planter beside the barrel sauna',
+    body: paragraphs(
+      "This is the Boat Yard Journal — a simple place for updates, sea conditions, and stories from around the sauna.",
+      "We'll post here whenever there's something worth sharing: opening hours, new sessions, water temperatures, and the odd story from a regular or a first-timer.",
+      'Have a look around, and check back when you can. See you down at the water.',
+    ),
+  },
+  {
+    title: 'What to expect on your first visit',
+    slug: 'what-to-expect-on-your-first-visit',
+    excerpt:
+      'New to The Boat Yard? Here is what a typical session looks like, from arrival to your last round of heat.',
+    publishedAt: '2026-06-17',
+    tag: 'Stories',
+    image: imgChimneySmoke,
+    alt: "Smoke rising from the wood-fired sauna's chimney at dusk",
+    body: paragraphs(
+      "First time down? Here's the short version. Arrive a few minutes early, grab a towel and a sauna hat if you'd like one, and change in the area by the gate.",
+      'Inside, the sauna runs in rounds — heat, then a cold dip or a plunge, then a rest, repeat as many times as feels right. There is no set number of rounds and no one watching the clock. Go at your own pace.',
+      "Bring swimwear, a towel, and flip-flops. We provide everything else. If you're unsure about anything when you arrive, just ask whoever is on — that's what we're there for.",
+    ),
+  },
+  {
+    title: 'Why heat and cold, together',
+    slug: 'why-heat-and-cold-together',
+    excerpt:
+      'A quick look at why the sauna and cold plunge work better as a pair than either does alone.',
+    publishedAt: '2026-06-16',
+    tag: 'Water',
+    image: imgSeaSwimFriends,
+    alt: 'Three friends sea-swimming together by the harbour wall and lighthouse',
+    body: paragraphs(
+      'The sauna and the cold water are not really two separate things — they are one experience in two parts. The heat opens you up; the cold snaps you back. Most people say the best feeling comes right after the plunge, not during the heat itself.',
+      'You do not need to be an experienced cold-water swimmer to get something out of it. A short, brisk dip is enough to feel the contrast. Build up the time in the cold gradually as you get used to it.',
+      'Whether you come alone for some quiet time or bring a group of friends, the routine is the same: warm up, cool down, repeat, and leave feeling better than when you arrived.',
     ),
   },
 ];
