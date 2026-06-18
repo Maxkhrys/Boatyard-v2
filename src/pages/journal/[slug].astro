@@ -20,7 +20,7 @@ const isRemote = typeof post.image === 'string';
     <div class="entry__hero" data-media>
       {
         isRemote ? (
-          <img src={post.image as string} alt={post.alt} loading="eager" />
+          <img src={post.image as string} alt={post.alt} loading="eager" decoding="async" fetchpriority="high" />
         ) : (
           <Image
             src={post.image}
