@@ -8,7 +8,6 @@ import imgTideClock from '../assets/images/tide-clock-cedar.jpg';
 import imgLifeRing from '../assets/images/life-ring-reeds.jpg';
 import img9 from '../assets/images/ritual-oils-incense.jpeg';
 import img5 from '../assets/images/harbour-dusk-boats.jpeg';
-import img6 from '../assets/images/pier-lighthouse-sunrise.jpeg';
 import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
 ---
 
@@ -77,19 +76,11 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
       </div>
     </figure>
 
-    <!-- Row 4: two side by side -->
+    <!-- Row 4: wide landscape -->
     <figure class="gallery__item gallery__item--f">
       <div class="gallery__media" data-media data-parallax="4">
         <Image src={img5} alt="Harbour at dusk with boats moored along the quay"
-          width={1000} widths={[640,1000]} sizes="(min-width:900px) 45vw, 92vw"
-          format="webp" quality={78} loading="lazy" />
-      </div>
-    </figure>
-
-    <figure class="gallery__item gallery__item--g">
-      <div class="gallery__media" data-media data-parallax="3">
-        <Image src={img6} alt="Pier and lighthouse at sunrise, Wicklow"
-          width={760} widths={[480,760]} sizes="(min-width:900px) 38vw, 92vw"
+          width={1400} widths={[760,1100,1400]} sizes="92vw"
           format="webp" quality={78} loading="lazy" />
       </div>
     </figure>
@@ -153,7 +144,6 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
   .gallery__item--j { aspect-ratio: 3/4; }
   .gallery__item--e { aspect-ratio: 3/4; }
   .gallery__item--f { grid-column: 1 / -1; aspect-ratio: 4/3; }
-  .gallery__item--g { grid-column: 1 / -1; aspect-ratio: 4/3; }
   .gallery__item--h { grid-column: 1 / -1; aspect-ratio: 21/9; }
 
   @media (min-width: 900px) {
@@ -175,9 +165,8 @@ import img8 from '../assets/images/aerial-wicklow-harbour.jpg';
     .gallery__item--j { grid-column: 1 / 6; grid-row: 3; aspect-ratio: 3/4; }
     .gallery__item--e { grid-column: 6 / 13; grid-row: 3; aspect-ratio: 16/9; }
 
-    /* Row 4 */
-    .gallery__item--f { grid-column: 1 / 7; grid-row: 4; aspect-ratio: 4/3; }
-    .gallery__item--g { grid-column: 7 / 13; grid-row: 4; aspect-ratio: 4/3; }
+    /* Row 4: wide landscape */
+    .gallery__item--f { grid-column: 1 / -1; grid-row: 4; aspect-ratio: 21/9; }
 
     /* Row 5: full-width banner */
     .gallery__item--h { grid-column: 1 / -1; grid-row: 5; aspect-ratio: 21/8; }
