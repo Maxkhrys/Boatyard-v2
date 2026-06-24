@@ -15,7 +15,7 @@ const menuLinks = [
   { label: 'Vouchers', href: BOOK_URL },
   { label: 'Journal', href: '/journal' },
   { label: 'Locations', href: `${home}#locations` },
-  { label: 'Book', href: BOOK_URL },
+  { label: 'Book', href: `${home}#book` },
 ];
 ---
 
@@ -28,6 +28,8 @@ const menuLinks = [
         width={192}
         height={192}
         densities={[1, 2, 3]}
+        format="webp"
+        quality={92}
         class="site-nav__mark-img"
         loading="eager"
         aria-hidden="true"
@@ -38,7 +40,7 @@ const menuLinks = [
       </span>
     </a>
 
-    <a href={`${home}#locations`} class="btn btn--primary site-nav__cta">Book</a>
+    <a href={`${home}#book`} class="btn btn--primary site-nav__cta">Book</a>
 
     <button
       class="site-nav__burger"
