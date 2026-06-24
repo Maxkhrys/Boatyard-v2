@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logoImg from '../assets/images/logo-boat-yard-sauna.jpeg';
+import logoImg from '../assets/images/logo-nav.png';
 
 // Anchor links need a leading slash everywhere except the homepage.
 const onHome = Astro.url.pathname === '/';
@@ -29,7 +29,7 @@ const menuLinks = [
         height={192}
         densities={[1, 2, 3]}
         format="webp"
-        quality={92}
+        quality={95}
         class="site-nav__mark-img"
         loading="eager"
         aria-hidden="true"
@@ -153,19 +153,19 @@ const menuLinks = [
   }
 
   .site-nav__mark-img {
-    width: 64px;
-    height: 64px;
+    width: 58px;
+    height: 58px;
     flex-shrink: 0;
-    border-radius: 50%;
-    object-fit: cover;
     display: block;
     transition: transform var(--dur) var(--ease);
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
   }
 
   @media (max-width: 767.98px) {
     .site-nav__mark-img {
-      width: 54px;
-      height: 54px;
+      width: 48px;
+      height: 48px;
     }
   }
 

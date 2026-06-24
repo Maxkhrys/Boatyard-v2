@@ -18,45 +18,49 @@ const isRemote = typeof post.image === 'string';
 <Base title={`${post.title} — The Boat Yard Sauna Journal`} description={post.excerpt}>
   <article class="entry">
 
-    <div class="entry__top container">
-      <a class="entry__back link-underline" href="/journal">← Back to the Journal</a>
-      <header class="entry__head">
-        <p class="entry__meta">
-          <span class="entry__tag">{post.tag}</span>
-          <time datetime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
-        </p>
-        <h1 class="entry__title">{post.title}</h1>
-        {post.excerpt && <p class="entry__excerpt">{post.excerpt}</p>}
-      </header>
-    </div>
-
+    <!-- Full-height hero: image fills the background, text sits on top -->
     <div class="entry__hero">
       {
         isRemote ? (
-          <img src={post.image as string} alt={post.alt} loading="eager" decoding="async" />
+          <img class="entry__hero-img" src={post.image as string} alt={post.alt} loading="eager" decoding="async" />
         ) : (
           <Image
+            class="entry__hero-img"
             src={post.image}
             alt={post.alt}
-            width={2000}
-            widths={[768, 1280, 2000]}
+            width={2400}
+            widths={[768, 1280, 2400]}
             sizes="100vw"
             format="webp"
-            quality={75}
+            quality={80}
             loading="eager"
             fetchpriority="high"
           />
         )
       }
+      <div class="entry__hero-overlay" aria-hidden="true"></div>
+
+      <div class="entry__hero-content container">
+        <a class="entry__back" href="/journal">← Back to the Journal</a>
+        <header class="entry__head">
+          <p class="entry__meta">
+            <span class="entry__tag">{post.tag}</span>
+            <time datetime={post.publishedAt}>{formatDate(post.publishedAt)}</time>
+          </p>
+          <h1 class="entry__title">{post.title}</h1>
+          {post.excerpt && <p class="entry__excerpt">{post.excerpt}</p>}
+        </header>
+      </div>
     </div>
 
+    <!-- Body prose below the hero -->
     <div class="container entry__container">
       <div class="entry__body" set:html={bodyHtml} />
-
       <footer class="entry__footer">
-        <a class="entry__back link-underline" href="/journal">← Back to the Journal</a>
+        <a class="entry__back entry__back--dark link-underline" href="/journal">← Back to the Journal</a>
       </footer>
     </div>
+
   </article>
 </Base>
 
@@ -65,10 +69,46 @@ const isRemote = typeof post.image === 'string';
     padding-bottom: var(--space-section);
   }
 
-  /* ── Header block above the image ── */
-  .entry__top {
+  /* ── Hero: full viewport height, image fills the background ── */
+  .entry__hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .entry__hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+    display: block;
+  }
+
+  /* Gradient: transparent at top → deep navy at bottom for text legibility */
+  .entry__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(11, 29, 46, 0.25) 0%,
+      rgba(11, 29, 46, 0.1) 35%,
+      rgba(11, 29, 46, 0.65) 70%,
+      rgba(11, 29, 46, 0.92) 100%
+    );
+  }
+
+  /* Text content sits at the bottom of the hero */
+  .entry__hero-content {
+    position: relative;
+    z-index: 1;
     max-width: 52rem;
-    padding-top: clamp(3rem, 7vw, 5rem);
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+    padding-top: clamp(6rem, 12vw, 9rem);
   }
 
   .entry__back {
@@ -78,10 +118,19 @@ const isRemote = typeof post.image === 'string';
     font-weight: 600;
     letter-spacing: 0.14em;
     text-transform: uppercase;
+    color: rgba(237, 242, 240, 0.7);
+    text-decoration: none;
+    transition: color var(--dur) var(--ease);
+  }
+
+  .entry__back:hover { color: var(--ink); }
+
+  .entry__back--dark {
+    color: var(--ink-soft);
   }
 
   .entry__head {
-    margin-top: clamp(1.75rem, 4vw, 2.75rem);
+    margin-top: clamp(1.5rem, 4vw, 2.5rem);
   }
 
   .entry__meta {
@@ -91,7 +140,7 @@ const isRemote = typeof post.image === 'string';
     font-size: var(--text-tiny);
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-mid);
+    color: rgba(237, 242, 240, 0.6);
   }
 
   .entry__tag {
@@ -100,57 +149,26 @@ const isRemote = typeof post.image === 'string';
   }
 
   .entry__title {
-    margin-top: 1rem;
-    font-size: clamp(2.4rem, 5.5vw, 4rem);
-    line-height: 1.06;
+    margin-top: 0.9rem;
+    font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+    line-height: 1.05;
     letter-spacing: -0.02em;
     max-width: 22ch;
+    color: #edf2f0;
   }
 
   .entry__excerpt {
-    margin-top: 1.25rem;
-    max-width: 52ch;
-    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    margin-top: 1.1rem;
+    max-width: 50ch;
+    font-size: clamp(1rem, 1.3vw, 1.15rem);
     line-height: 1.65;
-    color: var(--ink-mid);
-  }
-
-  /* ── Hero image — aspect-ratio driven, never stretched ── */
-  .entry__hero {
-    margin-top: clamp(2rem, 4vw, 3rem);
-    width: 100%;
-    aspect-ratio: 21 / 9;
-    overflow: hidden;
-    border-radius: 0;
-  }
-
-  @media (max-width: 760px) {
-    .entry__hero {
-      aspect-ratio: 16 / 9;
-    }
-  }
-
-  @media (max-width: 480px) {
-    .entry__hero {
-      aspect-ratio: 4 / 3;
-    }
-  }
-
-  .entry__hero :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 40%;
-    display: block;
+    color: rgba(237, 242, 240, 0.75);
   }
 
   /* ── Body prose ── */
   .entry__container {
     max-width: 44rem;
-  }
-
-  .entry__body {
-    margin-top: clamp(2.75rem, 6vw, 4rem);
+    padding-top: clamp(3rem, 6vw, 4.5rem);
   }
 
   .entry__body :global(p) {
@@ -201,11 +219,7 @@ const isRemote = typeof post.image === 'string';
     color: var(--ink-soft);
   }
 
-  .entry__body :global(li) {
-    margin-top: 0.6em;
-    line-height: 1.75;
-  }
-
+  .entry__body :global(li) { margin-top: 0.6em; line-height: 1.75; }
   .entry__body :global(li::marker) { color: var(--cedar); }
 
   .entry__body :global(a) {
@@ -214,14 +228,8 @@ const isRemote = typeof post.image === 'string';
     text-underline-offset: 0.2em;
   }
 
-  .entry__body :global(figure) {
-    margin: 3em 0;
-  }
-
-  .entry__body :global(figure img) {
-    width: 100%;
-    border-radius: 6px;
-  }
+  .entry__body :global(figure) { margin: 3em 0; }
+  .entry__body :global(figure img) { width: 100%; border-radius: 6px; }
 
   .entry__body :global(code) {
     font-size: 0.9em;
@@ -230,14 +238,9 @@ const isRemote = typeof post.image === 'string';
     background: var(--mist-10);
   }
 
-  /* ── Footer ── */
   .entry__footer {
     margin-top: clamp(3.5rem, 8vw, 5.5rem);
     padding-top: 2rem;
     border-top: 1px solid var(--mist-10);
-  }
-
-  .entry__footer .entry__back {
-    margin-top: 0;
   }
 </style>
