@@ -401,18 +401,48 @@ const fallbackPosts: Post[] = [
     ),
   },
   {
-    title: 'Welcome to The Boat Yard Journal',
-    slug: 'welcome-to-the-boat-yard-journal',
+    title: 'The pier sauna',
+    slug: 'the-pier-sauna',
     excerpt:
-      'A place for news, sea temperatures, and stories from the sauna. New here? Start with what to expect on your first visit.',
-    publishedAt: '2026-06-18',
-    tag: 'News',
-    image: imgFlowerPlanter,
-    alt: 'Pink carnations and lavender in a planter beside the barrel sauna',
+      'There is no better spot for a sauna in Wicklow than right here — at the end of the pier, facing the open sea.',
+    publishedAt: '2026-06-23',
+    tag: 'Story',
+    image: waterImage,
+    alt: 'The lighthouse pier at Wicklow harbour on a calm day',
     body: paragraphs(
-      "This is the Boat Yard Journal — a simple place for updates, sea conditions, and stories from around the sauna.",
-      "We'll post here whenever there's something worth sharing: opening hours, new sessions, water temperatures, and the odd story from a regular or a first-timer.",
-      'Have a look around, and check back when you can. See you down at the water.',
+      'The thing about saunaing on a pier is that the cold water is never more than twenty steps away. You come out of the heat, walk across the stones, and you are in it — the harbour, the open channel, whatever the sea is doing that day. There is no transition, no corridor, no waiting.',
+      'The Wicklow pier was the obvious choice from the beginning. It sits at the edge of town in a way that feels separate from it — the lighthouse at one end, the moored boats behind you, the bay opening out ahead. On a calm morning you can see the shape of the Wicklow Head cliffs from inside the sauna through the cedar slats.',
+      'We think a lot about setting. The sauna itself matters — the heat, the wood, the stones, the smell of it — but so does what is around it. At Wicklow we are lucky. The pier gives you all of it: salt air, sea sound, harbour light, and the kind of quiet that only comes from being right at the edge of land.',
+    ),
+  },
+  {
+    title: 'Sauna in the heatwave',
+    slug: 'sauna-in-the-heatwave',
+    excerpt:
+      'Ireland hit 30° this week and the yard was busier than ever. Here is why the sauna makes more sense in a heatwave than you might think.',
+    publishedAt: '2026-06-24',
+    tag: 'Journal',
+    image: imgSeaSteps,
+    alt: 'Steps into the sea at sunrise on a warm summer morning',
+    body: paragraphs(
+      'Temperatures broke 30° across Wicklow and Arklow this week — rare enough to feel like an event. And the yard was busy. More busy than a wet Tuesday in March, more busy than a Bank Holiday weekend in May. People showed up in the heat to sit in more heat, and it made perfect sense.',
+      "Here's why: when the ambient temperature is 30°, the cold water gets you properly. Your body is already warm from the outside, so the contrast when you step into the harbour is sharper, cleaner, and lasts longer than it does on a grey November morning. The heat of the sauna pushes you further into that contrast — and when you come out the other side, the breeze off the sea hits you in a way that is genuinely hard to describe.",
+      'Summer is our favourite time at the yard. The sessions are longer, the evenings are light until late, and everyone is a little more relaxed. If the weather holds, we are running evening slots until 10pm across both locations. Book ahead — it is not just us who noticed the heat this week.',
+    ),
+  },
+  {
+    title: 'The best time to come',
+    slug: 'the-best-time-to-come',
+    excerpt:
+      'Early morning, late evening, midweek quiet — when the yard hits different, and why summer changes everything.',
+    publishedAt: '2026-06-20',
+    tag: 'Journal',
+    image: imgSaunaGate,
+    alt: 'The sauna gate at the harbour framing moored boats at early morning',
+    body: paragraphs(
+      "There is not really a bad time to come down. But there are some times that hit differently, and regulars always figure them out eventually.",
+      "Early morning is the most popular answer. The harbour is quiet, the pier is yours, and the light over the water at 7am in June is worth getting up for. You are done — truly done, with the cold and the heat and the whole thing behind you — before most people have started their day. People who have never been morning people come for one early session and stop being evening people.",
+      "Late evenings in summer run close. The sauna stays on until 10pm on weekends, the sky over the harbour goes gold and then pink and then that particular shade of Irish grey-blue, and there is no better place to be sitting than outside the cedar door with a cold water bottle and your shoulders properly loose. Both locations, Wicklow and Arklow. Come find your time.",
     ),
   },
   {
