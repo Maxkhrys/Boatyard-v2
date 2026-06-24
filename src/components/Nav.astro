@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import logoImg from '../assets/images/logo-nav.png';
+import logoImg from '../assets/images/WhatsApp Image 2026-06-24 at 19.07.05.jpeg';
 
 // Anchor links need a leading slash everywhere except the homepage.
 const onHome = Astro.url.pathname === '/';
@@ -156,10 +156,10 @@ const menuLinks = [
     width: 58px;
     height: 58px;
     flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;
     display: block;
     transition: transform var(--dur) var(--ease);
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
   }
 
   @media (max-width: 767.98px) {
