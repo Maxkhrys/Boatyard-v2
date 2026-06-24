@@ -216,8 +216,14 @@ export async function getAllPosts(): Promise<Post[]> {
   const result = await sanityQuery<SanityPost[]>(
     `*[_type == "post" && defined(title)] | order(publishedAt desc) ${POST_PROJECTION}`,
   );
-  if (result && result.length > 0) return result.map(toPost);
-  return useFallbackPosts ? fallbackPosts : [];
+  const sanityPosts = result && result.length > 0 ? result.map(toPost) : [];
+  if (!useFallbackPosts) return sanityPosts;
+  // Merge: Sanity posts first, then fallback posts that don't clash by slug.
+  const sanitySlug = new Set(sanityPosts.map((p) => p.slug));
+  const extras = fallbackPosts.filter((p) => !sanitySlug.has(p.slug));
+  const merged = [...sanityPosts, ...extras];
+  // Re-sort by date descending.
+  return merged.sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
 }
 
 export async function getPost(slug: string): Promise<Post | undefined> {
