@@ -26,6 +26,7 @@ if (projectId) {
 }
 
 export default defineConfig({
+  site: 'https://theboatyardsauna.io',
   output: 'static',
   adapter: vercel(),
   integrations,
