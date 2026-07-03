@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
+Disallow: /api/
+Disallow: /vouchers/success
 
-Sitemap: https://theboatyardsauna.io/sitemap-index.xml
+Sitemap: https://www.theboatyardsauna.io/sitemap-index.xml

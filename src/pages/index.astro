@@ -10,9 +10,11 @@ import Pricing from '../components/Pricing.astro';
 import Visit from '../components/Visit.astro';
 import Journal from '../components/Journal.astro';
 import MailingList from '../components/MailingList.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
 ---
 
 <Base>
+  <LocalBusinessSchema slot="head" />
   <Hero />
   <IntroStatement />
   <About />
