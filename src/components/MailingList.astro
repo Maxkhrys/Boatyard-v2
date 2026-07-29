@@ -37,6 +37,13 @@ import coastImage from '../assets/images/aerial-coast-golden.jpg';
         autocomplete="email"
         required
       />
+      <label class="mailing__consent">
+        <input type="checkbox" id="mailing-consent" required />
+        <span>
+          I agree to receive email updates and understand I can unsubscribe at any time. See our
+          <a href="/privacy">privacy policy</a>.
+        </span>
+      </label>
       <button class="btn btn--primary mailing__submit" type="submit">
         <span class="mailing__submit-label">Subscribe</span>
         <span class="mailing__submit-done" aria-hidden="true">You're in</span>
@@ -131,6 +138,31 @@ import coastImage from '../assets/images/aerial-coast-golden.jpg';
     overflow: hidden;
   }
 
+  .mailing__consent {
+    width: 100%;
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+    text-align: left;
+    font-size: var(--text-tiny);
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .mailing__consent input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.15rem;
+    accent-color: var(--cedar);
+    flex: 0 0 auto;
+  }
+
+  .mailing__consent a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
   /* Submit micro-interaction: labels swap inside the button */
   .mailing__submit-label,
   .mailing__submit-done {
@@ -196,6 +228,15 @@ import coastImage from '../assets/images/aerial-coast-golden.jpg';
 
     .mailing__form {
       position: relative;
+      flex-wrap: wrap;
+    }
+
+    .mailing__field {
+      flex: 1 1 20rem;
+    }
+
+    .mailing__consent {
+      order: 3;
     }
   }
 
