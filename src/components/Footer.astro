@@ -102,9 +102,18 @@ const socials = [
   <div class="container footer__base">
     <p>© {year} The Boat Yard Sauna</p>
     <a class="link-underline" href="/privacy">Privacy &amp; GDPR</a>
+    <button class="footer__preferences link-underline" id="cookie-preferences" type="button">
+      Cookie preferences
+    </button>
     <a class="footer__top link-underline" href="#top">Back to top ↑</a>
   </div>
 </footer>
+
+<script>
+  document.getElementById('cookie-preferences')?.addEventListener('click', () => {
+    window.dispatchEvent(new Event('boatyard:open-cookie-preferences'));
+  });
+</script>
 
 <style>
   .footer {
@@ -236,5 +245,14 @@ const socials = [
   .footer__top {
     color: var(--ink-soft);
     font-weight: 500;
+  }
+
+  .footer__preferences {
+    appearance: none;
+    border: 0;
+    padding: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
   }
 </style>
