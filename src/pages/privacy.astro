@@ -1,0 +1,268 @@
+---
+import Base from '../layouts/Base.astro';
+
+const updated = '29 July 2026';
+---
+
+<Base
+  title="Privacy & GDPR Policy — The Boat Yard Sauna"
+  description="How The Boat Yard Sauna collects, uses, stores, and protects your personal information."
+>
+  <article class="policy section">
+    <div class="container policy__inner">
+      <p class="eyebrow">Privacy &amp; GDPR</p>
+      <h1>Privacy policy</h1>
+      <p class="policy__updated">Last updated: {updated}</p>
+
+      <div class="policy__lead">
+        <p>
+          This notice explains how The Boat Yard Sauna handles your personal data when you use this
+          website, join our mailing list, buy a gift voucher, contact us, or follow a link to book a
+          sauna session.
+        </p>
+      </div>
+
+      <section>
+        <h2>1. Who controls your data</h2>
+        <p>
+          The data controller is The Boat Yard Sauna, operating at Wicklow Harbour, Wicklow Town,
+          and North Quay, Arklow Harbour, Ireland.
+        </p>
+        <p>
+          Privacy enquiries and data-rights requests can be sent to
+          <a href="mailto:theboatyardsauna@gmail.com">theboatyardsauna@gmail.com</a>.
+        </p>
+      </section>
+
+      <section>
+        <h2>2. Information we collect</h2>
+        <ul>
+          <li>Your email address when you subscribe to updates.</li>
+          <li>
+            Voucher purchase details, including the buyer’s name and email, payment confirmation,
+            and any recipient name, recipient email, or gift message you provide.
+          </li>
+          <li>Information you include when contacting us directly.</li>
+          <li>
+            Technical security information normally created when a website is accessed, such as an
+            IP address, browser type, request time, and server logs.
+          </li>
+          <li>
+            Booking information collected on an external booking service when you follow a booking
+            link. That service will also provide its own privacy notice.
+          </li>
+        </ul>
+        <p>
+          Please only provide another person’s details for a voucher if you have their permission
+          to do so.
+        </p>
+      </section>
+
+      <section>
+        <h2>3. Why we use it and our legal basis</h2>
+        <ul>
+          <li>
+            To process purchases, issue vouchers, answer booking enquiries, and provide requested
+            services. Our basis is performance of a contract or steps requested before a contract.
+          </li>
+          <li>
+            To send mailing-list updates. Our basis is your consent, which you can withdraw at any
+            time by using the unsubscribe link or contacting us.
+          </li>
+          <li>
+            To keep financial and transaction records where required by law. Our basis is
+            compliance with a legal obligation.
+          </li>
+          <li>
+            To protect the website, prevent fraud, resolve problems, and respond to claims. Our
+            basis is our legitimate interests in operating a secure and accountable service.
+          </li>
+        </ul>
+        <p>We do not sell your personal data.</p>
+      </section>
+
+      <section>
+        <h2>4. Services that receive data</h2>
+        <p>We share only the information needed with service providers that help us operate:</p>
+        <ul>
+          <li>Stripe, for secure voucher payments.</li>
+          <li>Resend, for delivery of voucher emails.</li>
+          <li>Buttondown, for mailing-list subscriptions and emails.</li>
+          <li>Our external booking provider, when you choose to make a booking.</li>
+          <li>Vercel, which hosts this website and may process technical request logs.</li>
+          <li>Sanity, which provides the website’s content-management service.</li>
+        </ul>
+        <p>
+          We may also disclose information where the law requires it or where necessary to protect
+          legal rights. Some providers may process data outside the European Economic Area. Where
+          that happens, the provider must use a lawful transfer mechanism and appropriate
+          safeguards, such as an adequacy decision or standard contractual clauses.
+        </p>
+      </section>
+
+      <section>
+        <h2>5. How long we keep it</h2>
+        <ul>
+          <li>Mailing-list details are kept until you unsubscribe or withdraw consent.</li>
+          <li>
+            Transaction and accounting records are kept for the period required by Irish law,
+            generally six years.
+          </li>
+          <li>
+            Voucher delivery details and correspondence are kept only as long as needed to provide
+            the voucher, handle queries, and establish or defend legal claims.
+          </li>
+          <li>
+            Security logs are retained for a limited period appropriate to website security and
+            troubleshooting.
+          </li>
+        </ul>
+        <p>We securely delete or anonymise personal data when it is no longer needed.</p>
+      </section>
+
+      <section>
+        <h2>6. Cookies and browser storage</h2>
+        <p>
+          This website does not currently use advertising or analytics cookies. It uses essential
+          browser storage only to remember that you have acknowledged this privacy notice. This
+          does not track you between websites and is not used for advertising.
+        </p>
+        <p>
+          External services opened from this website, including booking and payment services, may
+          use their own necessary or optional cookies under their own policies and consent
+          controls. If we add analytics, advertising, or other optional tracking to this website,
+          it will remain disabled until you make an informed choice.
+        </p>
+      </section>
+
+      <section>
+        <h2>7. Your GDPR rights</h2>
+        <p>
+          Depending on the circumstances, you may ask us for access to your personal data, to
+          correct it, erase it, restrict its use, object to its use, or provide it in a portable
+          format. Where processing relies on consent, you may withdraw that consent at any time
+          without affecting earlier lawful processing.
+        </p>
+        <p>
+          Email your request to
+          <a href="mailto:theboatyardsauna@gmail.com">theboatyardsauna@gmail.com</a>. We may need to
+          verify your identity before acting. You also have the right to complain to Ireland’s
+          <a href="https://www.dataprotection.ie/" target="_blank" rel="noopener noreferrer">
+            Data Protection Commission
+          </a>.
+        </p>
+      </section>
+
+      <section>
+        <h2>8. Security, children, and changes</h2>
+        <p>
+          We use appropriate technical and organisational measures to protect personal data, but no
+          internet service can guarantee absolute security. This website and its purchasing tools
+          are not directed at children acting independently. A parent or guardian should make any
+          booking or purchase involving a child.
+        </p>
+        <p>
+          We may update this notice when our services or legal obligations change. The date at the
+          top shows the latest revision.
+        </p>
+      </section>
+
+      <div class="policy__accept">
+        <button class="btn btn--primary" id="policy-accept" type="button">Accept &amp; continue</button>
+        <p id="policy-status" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </article>
+</Base>
+
+<script>
+  const button = document.getElementById('policy-accept');
+  const status = document.getElementById('policy-status');
+  button?.addEventListener('click', () => {
+    try {
+      localStorage.setItem('boatyard-privacy-notice-v1', 'accepted');
+    } catch {
+      // Continue even when browser storage is blocked.
+    }
+    if (status) status.textContent = 'Your acknowledgement has been saved on this device.';
+    button.textContent = 'Accepted';
+    (button as HTMLButtonElement).disabled = true;
+  });
+</script>
+
+<style>
+  .policy {
+    padding-top: clamp(7rem, 14vw, 10rem);
+  }
+
+  .policy__inner {
+    max-width: 52rem;
+  }
+
+  .policy h1 {
+    margin-top: 1.25rem;
+    font-size: var(--text-h2);
+  }
+
+  .policy__updated {
+    margin-top: 0.75rem;
+    color: var(--ink-faint);
+    font-size: var(--text-small);
+  }
+
+  .policy__lead {
+    margin: 2.5rem 0 3.5rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid var(--cedar);
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.5vw, 1.55rem);
+    line-height: 1.55;
+    color: var(--ink);
+  }
+
+  .policy section + section {
+    margin-top: 2.75rem;
+  }
+
+  .policy h2 {
+    margin-bottom: 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.45rem, 2.5vw, 1.9rem);
+    font-weight: 480;
+  }
+
+  .policy p,
+  .policy li {
+    color: var(--ink-soft);
+    line-height: 1.75;
+  }
+
+  .policy p + p,
+  .policy ul + p {
+    margin-top: 1rem;
+  }
+
+  .policy ul {
+    display: grid;
+    gap: 0.75rem;
+    padding-left: 1.25rem;
+  }
+
+  .policy a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .policy__accept {
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--mist-10);
+  }
+
+  .policy__accept p {
+    min-height: 1.5em;
+    margin-top: 0.9rem;
+    font-size: var(--text-small);
+  }
+</style>
