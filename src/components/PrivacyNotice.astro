@@ -1,36 +1,53 @@
-<aside class="privacy-notice" id="privacy-notice" aria-label="Privacy notice" hidden>
+<aside class="privacy-notice" id="privacy-notice" aria-label="Cookie preferences" hidden>
   <div class="privacy-notice__copy">
-    <p class="privacy-notice__title">Your privacy</p>
+    <p class="privacy-notice__title">Your cookie choices</p>
     <p>
-      We use only essential browser storage on this website. If you subscribe, buy a voucher, or
-      book through a linked service, your details are used to provide that service.
+      We use essential browser storage to remember your privacy choice. Optional analytics cookies
+      are currently switched off and will never load without your permission.
       <a href="/privacy">Read our privacy policy</a>.
     </p>
   </div>
-  <button class="btn btn--primary privacy-notice__accept" id="privacy-notice-accept" type="button">
-    Accept &amp; continue
-  </button>
+
+  <div class="privacy-notice__actions">
+    <button class="btn btn--ghost privacy-notice__reject" id="privacy-notice-reject" type="button">
+      Reject optional
+    </button>
+    <button class="btn btn--primary" id="privacy-notice-accept" type="button">
+      Accept optional
+    </button>
+  </div>
 </aside>
 
 <script>
   const notice = document.getElementById('privacy-notice');
   const accept = document.getElementById('privacy-notice-accept');
-  const storageKey = 'boatyard-privacy-notice-v1';
+  const reject = document.getElementById('privacy-notice-reject');
+  const storageKey = 'boatyard-cookie-preferences-v1';
 
-  if (notice && accept) {
+  const readChoice = () => {
     try {
-      notice.hidden = localStorage.getItem(storageKey) === 'accepted';
+      return localStorage.getItem(storageKey);
     } catch {
-      notice.hidden = false;
+      return null;
     }
+  };
 
-    accept.addEventListener('click', () => {
-      try {
-        localStorage.setItem(storageKey, 'accepted');
-      } catch {
-        // The acknowledgement still works when browser storage is unavailable.
-      }
-      notice.hidden = true;
+  const saveChoice = (choice: 'accepted' | 'rejected') => {
+    try {
+      localStorage.setItem(storageKey, choice);
+    } catch {
+      // The site remains usable when browser storage is unavailable.
+    }
+    if (notice) notice.hidden = true;
+  };
+
+  if (notice && accept && reject) {
+    notice.hidden = Boolean(readChoice());
+    accept.addEventListener('click', () => saveChoice('accepted'));
+    reject.addEventListener('click', () => saveChoice('rejected'));
+
+    window.addEventListener('boatyard:open-cookie-preferences', () => {
+      notice.hidden = false;
     });
   }
 </script>
@@ -41,16 +58,13 @@
     z-index: 1000;
     inset-inline: 1rem;
     bottom: 1rem;
-    width: min(46rem, calc(100% - 2rem));
+    width: min(48rem, calc(100% - 2rem));
     margin-inline: auto;
     padding: 1rem;
     border: 1px solid var(--mist-10);
     border-radius: 0.85rem;
     background: rgba(8, 21, 34, 0.97);
     box-shadow: 0 1.25rem 4rem rgba(0, 0, 0, 0.35);
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
     color: var(--ink-soft);
   }
 
@@ -75,17 +89,30 @@
     text-underline-offset: 0.2em;
   }
 
-  .privacy-notice__accept {
-    flex: 0 0 auto;
+  .privacy-notice__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    margin-top: 1rem;
+  }
+
+  .privacy-notice__actions .btn {
+    flex: 1 1 10rem;
     white-space: nowrap;
   }
 
   @media (min-width: 700px) {
     .privacy-notice {
       padding: 1.1rem 1.2rem;
-      flex-direction: row;
+      display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .privacy-notice__actions {
+      flex: 0 0 auto;
+      margin-top: 0;
     }
   }
 </style>
