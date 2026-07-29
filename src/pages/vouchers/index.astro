@@ -90,6 +90,14 @@ import asideImage from '../../assets/images/logo-sign.jpg';
             </div>
           </fieldset>
 
+          <label class="voucher__privacy">
+            <input type="checkbox" id="voucher-privacy" required />
+            <span>
+              I have read the <a href="/privacy">privacy policy</a> and understand how the details
+              provided for this purchase will be used.
+            </span>
+          </label>
+
           <button class="btn btn--primary voucher__submit" type="submit" id="voucher-submit">
             Continue to payment
           </button>
@@ -156,6 +164,11 @@ import asideImage from '../../assets/images/logo-sign.jpg';
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (form.classList.contains('is-pending')) return;
+
+      if (!form.reportValidity()) {
+        setMessage('Please complete the required privacy acknowledgement.', true);
+        return;
+      }
 
       const selected = form.querySelector<HTMLInputElement>('input[name="voucher"]:checked');
       if (!selected) {
@@ -238,6 +251,30 @@ import asideImage from '../../assets/images/logo-sign.jpg';
     border: 0;
     padding: 0;
     margin: 0 0 2.5rem;
+  }
+
+  .voucher__privacy {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    margin: 0 0 1.4rem;
+    font-size: var(--text-small);
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
+  .voucher__privacy input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.2rem;
+    accent-color: var(--cedar);
+    flex: 0 0 auto;
+  }
+
+  .voucher__privacy a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .voucher__legend {
