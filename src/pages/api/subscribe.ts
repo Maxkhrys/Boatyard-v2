@@ -32,22 +32,20 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
-    const response = await fetch('https://api.buttondown.email/v1/subscribers', {
+    const response = await fetch('https://api.buttondown.com/v1/subscribers', {
       method: 'POST',
       headers: {
         Authorization: `Token ${apiKey}`,
         'Content-Type': 'application/json',
       },
-      // `email_address` is the current field name; `email` keeps older
-      // API versions happy too.
-      body: JSON.stringify({ email_address: email, email }),
+      body: JSON.stringify({ email_address: email }),
     });
 
     if (response.ok) {
       return json({ ok: true }, 200);
     }
 
-    // Already on the list — that\'s a success as far as the visitor cares.
+    // Already on the list — that's a success as far as the visitor cares.
     const detail = await response.text();
     if (response.status === 400 && /already|exists/i.test(detail)) {
       return json({ ok: true }, 200);
