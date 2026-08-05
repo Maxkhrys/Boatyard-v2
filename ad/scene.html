@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Boat Yard Sauna — social ad</title>
+<style>
+  @font-face {
+    font-family: 'Fraunces';
+    src: url('node_modules/@fontsource-variable/fraunces/files/fraunces-latin-full-normal.woff2') format('woff2-variations');
+    font-weight: 100 900;
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2') format('woff2');
+    font-weight: 500;
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2') format('woff2');
+    font-weight: 600;
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Inter';
+    src: url('node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2') format('woff2');
+    font-weight: 700;
+    font-display: block;
+  }
+
+  :root {
+    --navy: #08151f;
+    --navy-deep: #050d15;
+    --mist: #eef3f1;
+    --cedar: #c8956c;
+    --amber: #e6ad68;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: #000;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+  }
+
+  #stage {
+    position: relative;
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: var(--navy-deep);
+    /* Every layer composites in sRGB; keep text rendering deterministic. */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: geometricPrecision;
+  }
+
+  /* ---------- photography ---------- */
+
+  .shot {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    will-change: opacity, filter, clip-path;
+    backface-visibility: hidden;
+  }
+  .shot__inner {
+    position: absolute;
+    inset: 0;
+    will-change: transform;
+    transform-origin: 50% 50%;
+  }
+  .shot img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1404px;
+    height: 2496px;
+    margin: -1248px 0 0 -702px;
+    object-fit: cover;
+    image-rendering: auto;
+  }
+  /* Per-shot colour grade: a soft-light wash that swings the film from
+     steel-blue to ember as the story warms. */
+  .shot__grade {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: soft-light;
+    will-change: opacity;
+  }
+  .shot__lift {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: multiply;
+    will-change: opacity;
+  }
+
+  /* ---------- global overlays ---------- */
+
+  #vignette {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 78% at 50% 42%, rgba(0,0,0,0) 42%, rgba(0,0,0,0.34) 78%, rgba(0,0,0,0.66) 100%);
+    pointer-events: none;
+  }
+  #scrim {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgba(3,10,16,0.86) 0%, rgba(3,10,16,0.5) 22%, rgba(3,10,16,0) 52%),
+      linear-gradient(to bottom, rgba(3,10,16,0.6) 0%, rgba(3,10,16,0) 28%);
+    pointer-events: none;
+    will-change: opacity;
+  }
+  #warmth {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(200deg, rgba(255,163,74,0.55) 0%, rgba(224,132,58,0.3) 45%, rgba(120,60,20,0.15) 100%);
+    mix-blend-mode: overlay;
+    opacity: 0;
+    pointer-events: none;
+    will-change: opacity;
+  }
+  #flash {
+    position: absolute;
+    inset: 0;
+    background: #fff;
+    opacity: 0;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    will-change: opacity;
+  }
+  #grain {
+    position: absolute;
+    inset: -80px;
+    opacity: 0.055;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    background-repeat: repeat;
+    background-size: 320px 320px;
+    will-change: background-position;
+  }
+  #bloom {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    opacity: 0;
+    background: radial-gradient(52% 34% at 50% 46%, rgba(255,196,122,0.5), rgba(255,150,60,0) 70%);
+    will-change: opacity, transform;
+  }
+
+  /* ---------- type ---------- */
+
+  .layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    will-change: opacity;
+  }
+
+  .eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(238,243,241,0.82);
+  }
+  .eyebrow .rule {
+    display: inline-block;
+    width: 54px;
+    height: 1px;
+    background: rgba(238,243,241,0.5);
+    vertical-align: 8px;
+    margin-right: 20px;
+  }
+
+  .display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 22, 'WONK' 0, 'opsz' 144;
+    font-weight: 520;
+    color: var(--mist);
+    line-height: 0.94;
+    letter-spacing: -0.022em;
+  }
+
+  .sub {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 33px;
+    line-height: 1.5;
+    letter-spacing: 0.004em;
+    color: rgba(238,243,241,0.78);
+  }
+
+  /* word/line reveal primitives — each word is clipped so its inner span can
+     rise from below with a blur, the signature move of the piece. */
+  .word {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    /* padded so ascenders/descenders survive the clip, pulled back by margin
+       so the type still sits on its original baseline grid */
+    padding: 0.06em 0.05em 0.16em 0.05em;
+    margin: -0.06em -0.05em -0.16em -0.05em;
+  }
+  .word > i {
+    display: inline-block;
+    font-style: inherit;
+    will-change: transform, filter, opacity;
+  }
+
+  /* ---------- chapter block (bottom-left anchored) ---------- */
+  .block {
+    position: absolute;
+    left: 96px;
+    right: 96px;
+    bottom: 372px;
+    will-change: transform, opacity;
+  }
+  .block .eyebrow { margin-bottom: 40px; display: block; }
+  .block .display { font-size: 146px; }
+  .block .sub { margin-top: 34px; max-width: 760px; }
+
+  /* ---------- big single word (centre) ---------- */
+  /* the ritual words land on bright water and bare skin, so each one carries
+     its own pool of shade rather than dimming the whole plate */
+  .wordwash {
+    position: absolute;
+    left: -8%;
+    right: -8%;
+    top: 50%;
+    height: 820px;
+    transform: translateY(-50%);
+    background: radial-gradient(56% 50% at 50% 50%,
+      rgba(3,10,16,0.74) 0%, rgba(3,10,16,0.42) 46%, rgba(3,10,16,0) 78%);
+  }
+  .bigword {
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    text-align: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 30, 'opsz' 144;
+    font-weight: 640;
+    font-size: 172px;
+    letter-spacing: 0.012em;
+    text-transform: uppercase;
+    color: #fff;
+    transform: translateY(-50%);
+    will-change: transform, opacity, filter;
+  }
+  .bigword em {
+    display: block;
+    font-style: normal;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 25px;
+    letter-spacing: 0.34em;
+    color: rgba(255,255,255,0.66);
+    margin-top: 34px;
+  }
+
+  /* ---------- swap module ---------- */
+  #swap {
+    position: absolute;
+    left: 96px;
+    right: 96px;
+    bottom: 452px;
+  }
+  #swap .lead {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 22, 'opsz' 144;
+    font-weight: 520;
+    font-size: 116px;
+    color: var(--mist);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  #pillrow {
+    position: relative;
+    height: 172px;
+    margin-top: 26px;
+  }
+  #pill {
+    position: absolute;
+    left: 0;
+    top: 22px;
+    height: 128px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.14);
+    border: 2.5px solid rgba(255,214,160,0.82);
+    box-shadow: 0 24px 70px rgba(0,0,0,0.38), inset 0 1px 0 rgba(255,255,255,0.22);
+    backdrop-filter: blur(14px);
+    will-change: width, transform;
+  }
+  #pillwords {
+    position: absolute;
+    left: 0;
+    top: 22px;
+    height: 128px;
+  }
+  .pillword {
+    position: absolute;
+    left: 46px;
+    top: 0;
+    height: 128px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 22, 'opsz' 144;
+    font-weight: 600;
+    font-size: 104px;
+    letter-spacing: -0.018em;
+    color: #ffd9a8;
+    will-change: transform, opacity, filter;
+  }
+
+  /* ---------- offer panel ---------- */
+  #offer { padding: 0 92px; }
+  #offer .head {
+    position: absolute;
+    left: 92px;
+    right: 92px;
+    top: 396px;
+  }
+  #offer .head .eyebrow { display: block; margin-bottom: 34px; }
+  #offer .head .display { font-size: 122px; }
+
+  .rows {
+    position: absolute;
+    left: 92px;
+    right: 92px;
+    top: 760px;
+  }
+  .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 44px 48px;
+    border-radius: 34px;
+    margin-bottom: 26px;
+    background: linear-gradient(118deg, rgba(255,255,255,0.13), rgba(255,255,255,0.045));
+    border: 1.5px solid rgba(255,255,255,0.16);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
+    will-change: transform, opacity, filter;
+  }
+  .row--hero {
+    background: linear-gradient(118deg, rgba(255,190,120,0.3), rgba(214,126,54,0.14));
+    border-color: rgba(255,203,144,0.6);
+  }
+  .row .name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 36px;
+    letter-spacing: 0.005em;
+    color: rgba(255,255,255,0.94);
+  }
+  .row .meta {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 24px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-top: 10px;
+  }
+  .row .price {
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 22, 'opsz' 96;
+    font-weight: 600;
+    font-size: 76px;
+    color: #fff;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .row--hero .price { color: #ffd9a8; }
+  .row .price small {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-top: 8px;
+    text-align: right;
+  }
+
+  /* ---------- locations ---------- */
+  #locations .head {
+    position: absolute;
+    left: 92px;
+    right: 92px;
+    top: 372px;
+  }
+  #locations .head .eyebrow { display: block; margin-bottom: 32px; }
+  #locations .head .display { font-size: 122px; }
+
+  .cards {
+    position: absolute;
+    left: 92px;
+    right: 92px;
+    top: 726px;
+  }
+  .loc {
+    position: relative;
+    height: 396px;
+    border-radius: 36px;
+    overflow: hidden;
+    margin-bottom: 34px;
+    box-shadow: 0 34px 90px rgba(0,0,0,0.5);
+    will-change: transform, opacity, filter;
+  }
+  .loc img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 1080px;
+    height: 720px;
+    margin: -360px 0 0 -540px;
+    will-change: transform;
+  }
+  .loc .tint {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(4,12,19,0.9) 4%, rgba(4,12,19,0.15) 62%);
+  }
+  .loc .label {
+    position: absolute;
+    left: 44px;
+    bottom: 38px;
+  }
+  .loc .label b {
+    display: block;
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 22, 'opsz' 96;
+    font-weight: 600;
+    font-size: 68px;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .loc .label span {
+    display: block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.66);
+    margin-top: 12px;
+  }
+
+  .footnote {
+    position: absolute;
+    left: 92px;
+    right: 92px;
+    top: 1614px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    letter-spacing: 0.06em;
+    color: rgba(255,255,255,0.62);
+    will-change: transform, opacity;
+  }
+
+  /* ---------- end card ---------- */
+  #end {
+    background: radial-gradient(78% 52% at 50% 42%, #123049 0%, #0a1a28 46%, #050d15 100%);
+  }
+  .ring {
+    position: absolute;
+    left: 50%;
+    top: 700px;
+    width: 400px;
+    height: 400px;
+    margin: -200px 0 0 -200px;
+    border-radius: 50%;
+    border: 2px solid rgba(200,224,236,0.34);
+    will-change: transform, opacity;
+  }
+  #logo {
+    position: absolute;
+    left: 50%;
+    top: 700px;
+    width: 424px;
+    height: 428px;
+    margin: -214px 0 0 -212px;
+    will-change: transform, opacity, filter;
+  }
+  #logo img { width: 100%; height: 100%; }
+
+  #wordmark {
+    position: absolute;
+    left: 60px; right: 60px;
+    top: 1042px;
+    text-align: center;
+    font-family: 'Fraunces', Georgia, serif;
+    font-variation-settings: 'SOFT' 22, 'opsz' 96;
+    font-weight: 540;
+    font-size: 66px;
+    line-height: 1.22;
+    letter-spacing: -0.01em;
+    color: var(--mist);
+    will-change: transform, opacity, filter;
+  }
+  #endsub {
+    position: absolute;
+    left: 0; right: 0;
+    top: 1214px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    color: rgba(238,243,241,0.6);
+    will-change: transform, opacity;
+  }
+  #cta {
+    position: absolute;
+    left: 50%;
+    top: 1354px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 34px 62px;
+    border-radius: 999px;
+    background: linear-gradient(120deg, #f0b673, #d98842);
+    box-shadow: 0 30px 80px rgba(217,136,66,0.34);
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: 0.02em;
+    color: #17202a;
+    white-space: nowrap;
+    will-change: transform, opacity;
+  }
+  #url {
+    position: absolute;
+    left: 0; right: 0;
+    top: 1524px;
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 30px;
+    letter-spacing: 0.16em;
+    color: rgba(238,243,241,0.8);
+    will-change: transform, opacity;
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- photography plates, stacked; the timeline decides who is visible -->
+  <div id="plates"></div>
+
+  <div id="bloom"></div>
+  <div id="vignette"></div>
+  <div id="scrim"></div>
+  <div id="warmth"></div>
+
+  <!-- chapter type -->
+  <div class="layer" id="ch1">
+    <div class="block">
+      <span class="eyebrow" data-fade><span class="rule"></span>Wicklow Town &nbsp;·&nbsp; Arklow</span>
+      <div class="display" data-split>Cold sea.</div>
+    </div>
+  </div>
+
+  <div class="layer" id="ch2">
+    <div class="block">
+      <div class="display" data-split>Hot sauna.</div>
+    </div>
+  </div>
+
+  <div class="layer" id="ch3">
+    <div class="block">
+      <div class="display" data-split>Clear head.</div>
+    </div>
+  </div>
+
+  <!-- ritual beats -->
+  <div class="layer" id="w1"><div class="wordwash"></div><div class="bigword">Heat<em>45 minutes, wood-fired</em></div></div>
+  <div class="layer" id="w2"><div class="wordwash"></div><div class="bigword">Plunge<em>Straight into the cold</em></div></div>
+  <div class="layer" id="w3"><div class="wordwash"></div><div class="bigword">Repeat<em>Then back to the sea</em></div></div>
+
+  <!-- harbour statement -->
+  <div class="layer" id="ch4">
+    <div class="block">
+      <div class="display" data-split style="font-size:118px">On the harbour's edge.</div>
+      <div class="sub" data-fade>Wood-fired heat, a cold plunge, and the Irish Sea two steps away.</div>
+    </div>
+  </div>
+
+  <!-- word swap -->
+  <div class="layer" id="swaplayer">
+    <div id="swap">
+      <div class="lead" data-split>Good for</div>
+      <div id="pillrow">
+        <div id="pill"></div>
+        <div id="pillwords"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- offer -->
+  <div class="layer" id="offer">
+    <div class="head">
+      <span class="eyebrow" data-fade><span class="rule"></span>Sessions</span>
+      <div class="display" data-split>Simple as the sea.</div>
+    </div>
+    <div class="rows">
+      <div class="row" data-row>
+        <div>
+          <div class="name">Single session</div>
+          <div class="meta">45 minutes · per person</div>
+        </div>
+        <div class="price">&euro;12</div>
+      </div>
+      <div class="row row--hero" data-row>
+        <div>
+          <div class="name">10-session pack</div>
+          <div class="meta">Best value · save &euro;10</div>
+        </div>
+        <div class="price">&euro;110<small>Bundle</small></div>
+      </div>
+      <div class="row" data-row>
+        <div>
+          <div class="name">Gift voucher</div>
+          <div class="meta">Online or in person</div>
+        </div>
+        <div class="price">Gift</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- locations -->
+  <div class="layer" id="locations">
+    <div class="head">
+      <span class="eyebrow" data-fade><span class="rule"></span>Two harbours</span>
+      <div class="display" data-split>Find your heat.</div>
+    </div>
+    <div class="cards">
+      <div class="loc" data-loc>
+        <img src="assets/card-wicklow.jpg" alt="">
+        <div class="tint"></div>
+        <div class="label"><b>Wicklow Town</b><span>Wicklow Harbour</span></div>
+      </div>
+      <div class="loc" data-loc>
+        <img src="assets/card-arklow.jpg" alt="">
+        <div class="tint"></div>
+        <div class="label"><b>Arklow</b><span>North Quay</span></div>
+      </div>
+    </div>
+    <div class="footnote" data-foot>Book online in advance &nbsp;·&nbsp; walk-ins subject to availability</div>
+  </div>
+
+  <!-- end card -->
+  <div class="layer" id="end">
+    <div class="ring" data-ring></div>
+    <div class="ring" data-ring></div>
+    <div class="ring" data-ring></div>
+    <div id="logo"><img src="assets/logo-white.png" alt=""></div>
+    <div id="wordmark">Cold sea. Hot sauna. Clear head.</div>
+    <div id="endsub">Wicklow Town &nbsp;·&nbsp; Arklow</div>
+    <div id="cta">Book your session</div>
+    <div id="url">theboatyardsauna.io</div>
+  </div>
+
+  <div id="grain"></div>
+  <div id="flash"></div>
+</div>
+
+<script src="timeline.js"></script>
+</body>
+</html>
