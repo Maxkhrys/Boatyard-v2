@@ -12,32 +12,58 @@ Outputs land in ad/assets (git-ignored — rebuild with `python3 prep-images.py`
 
 from __future__ import annotations
 
+import hashlib
 import os
+import urllib.request
 from PIL import Image, ImageOps
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(HERE, "..", "src", "assets", "images")
 OUT = os.path.join(HERE, "assets")
+CACHE = os.path.join(HERE, ".cache", "stock")
 
 # Output plate size: 1.3x the 1080x1920 frame, so a 1.0->1.14 push-in and a
 # small pan both stay above 1:1 pixel density.
 PLATE = (1404, 2496)
 CARD = (1080, 720)
 
+# Four plates are licensed stock (Pexels — free to use, no attribution
+# required) rather than site photography: the repo has nothing sharp for
+# "clear head", nothing that crops to 9:16 for "the harbour's edge" (the
+# source is near-square and the sign gets cut in half), and the HEAT/REPEAT
+# ritual beats read better on a premium sauna and a genuinely dynamic swim
+# than the dim interior and distant swimmers actually on hand. Fetched by
+# URL and cached locally rather than committed, since these aren't ours.
+STOCK = {
+    # Tiemy Pixel — sunrise over calm water. Centred on the sun itself,
+    # narrow enough at 9:16 to miss the industrial silhouette on both edges.
+    "sea-steps": ("https://images.pexels.com/photos/34089633/pexels-photo-34089633.jpeg", 0.47, 0.5),
+    # HUUM-brand sauna heater shots were the sharpest hit in this search but
+    # carry the manufacturer's logo twice in frame — wrong to run someone
+    # else's brand mark. This one is soft-focus. Went with a plain cedar
+    # bench + amber wall sconces instead: sharp, warm, no visible branding.
+    "interior": ("https://images.pexels.com/photos/25084818/pexels-photo-25084818.jpeg", 0.664, 0.5),
+    # Valera Rychman — pier at golden hour, Kemer. Framed on the far end
+    # (flags, rail, the silhouette at the edge) rather than the boardwalk,
+    # since that is what "on the harbour's edge" is actually about.
+    "gate-harbour": ("https://images.pexels.com/photos/20615294/pexels-photo-20615294.jpeg", 0.664, 0.5),
+    # ozanyavuzphoto — two open-water swimmers mid-stroke, close and wet.
+    "swimmers": ("https://images.pexels.com/photos/29280139/pexels-photo-29280139.jpeg", 0.42, 0.5),
+}
+
 # name -> (source file, focus x, focus y) as fractions of the source frame.
 PLATES = {
-    "sea-steps": ("sea-steps-sunrise.jpeg", 0.38, 0.55),
+    "sea-steps": STOCK["sea-steps"],
     "kayak": ("aerial-kayak.jpg", 0.50, 0.50),
     "rowers": ("aerial-rowers-emerald.jpg", 0.50, 0.50),
-    "swimmers": ("sea-swim-friends.jpg", 0.50, 0.55),
+    "swimmers": STOCK["swimmers"],
     "plunge": ("plunge-tank-splash.jpg", 0.46, 0.55),
     "ice-baths": ("ice-baths.jpg", 0.50, 0.50),
     "chimney": ("sauna-chimney-smoke.jpg", 0.50, 0.45),
-    "interior": ("sauna-interior-rest.jpg", 0.55, 0.50),
+    "interior": STOCK["interior"],
     "hat-profile": ("sauna-hat-profile.jpg", 0.50, 0.50),
     "cedar-door": ("sauna-hats-cedar-door.jpeg", 0.50, 0.50),
-    # Shot from behind the sign, so the lettering reads backwards — mirror it.
-    "gate-harbour": ("sauna-gate-harbour.jpeg", 0.50, 0.58, True),
+    "gate-harbour": STOCK["gate-harbour"],
     "barrel": ("sauna-flower-planter.jpg", 0.50, 0.50),
     "courtyard-night": ("sauna-courtyard-night.jpg", 0.50, 0.50),
     "aerial-dusk": ("wicklow-aerial-dusk.jpg", 0.45, 0.50),
@@ -71,8 +97,20 @@ def crop_to(im: Image.Image, size: tuple[int, int], fx: float, fy: float) -> Ima
     return im.crop((left, top, left + cw, top + ch)).resize(size, Image.LANCZOS)
 
 
+def fetch(url: str) -> str:
+    """Download a stock photo once and cache it locally by URL hash."""
+    os.makedirs(CACHE, exist_ok=True)
+    dest = os.path.join(CACHE, hashlib.sha1(url.encode()).hexdigest() + ".jpg")
+    if not os.path.exists(dest):
+        req = urllib.request.Request(url, headers={"User-Agent": "boatyard-ad-build/1.0"})
+        with urllib.request.urlopen(req, timeout=60) as r, open(dest, "wb") as f:
+            f.write(r.read())
+    return dest
+
+
 def load(name: str, flip: bool = False) -> Image.Image:
-    im = Image.open(os.path.join(SRC, name))
+    path = fetch(name) if name.startswith("http") else os.path.join(SRC, name)
+    im = Image.open(path)
     im = ImageOps.exif_transpose(im).convert("RGB")
     return ImageOps.mirror(im) if flip else im
 

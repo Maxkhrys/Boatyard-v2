@@ -8,7 +8,7 @@
 
 const W = 1080;
 const H = 1920;
-const DURATION = 24.0;
+const DURATION = 30.8;
 
 /* ---------------------------------------------------------------- easing */
 
@@ -65,8 +65,8 @@ const SHOTS = [
   // The last two plates only ever read as a field of colour behind the panels,
   // so they are chosen for their light — warm cedar, then a sunrise sky — and
   // pushed well out of focus.
-  { key: 'cedar-door',   t: 16.10, T: 0.62, tr: 'whip',     kb: [{ s: 1.20, x:   0, y:  24 }, { s: 1.06, x:   0, y: -20 }], grade: 'ember', b: 0.20, soft: 30, dim: 0.56 },
-  { key: 'lighthouse-sunrise', t: 19.20, T: 0.58, tr: 'wipe', kb: [{ s: 1.18, x:  16, y:   0 }, { s: 1.05, x: -14, y:  12 }], grade: 'ember', b: 0.18, soft: 26, dim: 0.5 },
+  { key: 'cedar-door',   t: 18.30, T: 0.62, tr: 'whip',     kb: [{ s: 1.20, x:   0, y:  24 }, { s: 1.06, x:   0, y: -20 }], grade: 'ember', b: 0.20, soft: 30, dim: 0.56 },
+  { key: 'lighthouse-sunrise', t: 21.40, T: 0.58, tr: 'wipe', kb: [{ s: 1.18, x:  16, y:   0 }, { s: 1.05, x: -14, y:  12 }], grade: 'ember', b: 0.18, soft: 26, dim: 0.5 },
 ];
 
 /* soft-light washes that carry the cold → warm arc */
@@ -80,14 +80,14 @@ const GRADES = {
 const WARMTH = [
   [0.0, 0.0], [2.3, 0.04], [3.4, 0.4], [5.0, 0.46], [6.4, 0.22],
   [7.3, 0.34], [8.4, 0.62], [8.7, 0.16], [9.9, 0.3], [11.4, 0.44],
-  [13.8, 0.62], [16.3, 0.8], [19.4, 0.78], [21.3, 0.5], [24.0, 0.5],
+  [13.8, 0.62], [18.5, 0.8], [21.6, 0.78], [23.5, 0.5], [30.8, 0.5],
 ];
 
 /* the amber core-light that blooms on the heat beats */
 const BLOOM = [
   [0.0, 0.0], [2.6, 0.0], [4.2, 0.34], [5.2, 0.1], [7.3, 0.18],
-  [8.4, 0.46], [8.6, 0.05], [11.0, 0.1], [13.8, 0.3], [16.2, 0.36],
-  [19.2, 0.28], [21.3, 0.0], [24.0, 0.0],
+  [8.4, 0.46], [8.6, 0.05], [11.0, 0.1], [13.8, 0.3], [18.4, 0.36],
+  [21.4, 0.28], [23.5, 0.0], [30.8, 0.0],
 ];
 
 /* ------------------------------------------------------------- type beats
@@ -101,10 +101,12 @@ const BEATS = {
   w2:        [8.61, 9.75],
   w3:        [9.86, 11.00],
   ch4:       [11.42, 13.52],
-  swaplayer: [13.92, 16.02],
-  offer:     [16.44, 19.12],
-  locations: [19.52, 21.22],
-  end:       [21.46, 24.00],
+  // Each of these three got more room after the first cut: the swap module
+  // and the locations pan were both moving faster than they could be read.
+  swaplayer: [13.92, 18.30],
+  offer:     [18.64, 21.32],
+  locations: [21.72, 24.52],
+  end:       [24.76, 30.80],
 };
 
 const SWAP_WORDS = ['sore legs', 'Sunday resets', 'after work'];
@@ -370,8 +372,8 @@ function renderSwap(t) {
   if (!renderChapter('swaplayer', t)) return;
   const [a, b] = BEATS.swaplayer;
   const first = a + 0.62;
-  const hold = 0.5;
-  const move = 0.34;
+  const hold = 0.78;
+  const move = 0.32;
 
   // which word, and how far through its handover
   let idx = 0;

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Sound design for the 24s Boat Yard Sauna ad.
+"""Sound design for the ~31s Boat Yard Sauna ad.
 
 Everything is synthesised from scratch with numpy — no samples, no licensing to
 worry about — and every event is placed against the same beat map the picture
@@ -18,7 +18,7 @@ import os
 import numpy as np
 
 SR = 48_000
-DUR = 24.0
+DUR = 30.8
 N = int(SR * DUR)
 T = np.arange(N) / SR
 
@@ -120,9 +120,9 @@ def ramp(keys: list[tuple[float, float]]) -> np.ndarray:
 # -------------------------------------------------------------- the beat map
 # Kept in sync with BEATS/SHOTS in timeline.js.
 
-CUTS_SOFT = [2.50, 5.00, 11.05, 13.60, 16.10, 19.20]   # dissolves and wipes
+CUTS_SOFT = [2.50, 5.00, 11.05, 13.60, 18.30, 21.40]   # dissolves and wipes
 CUTS_HARD = [7.30, 8.55, 9.80]                          # the ritual smash cuts
-END = 21.46
+END = 24.76
 
 
 # ------------------------------------------------------------------- layers
@@ -142,7 +142,9 @@ def sea_bed() -> np.ndarray:
         out[:, ch] = n * swell
     out /= np.max(np.abs(out)) + 1e-9
     # sits under everything; pulls back once the panels take over
-    return out * ramp([(0, 0.0), (1.2, 1.0), (13.0, 0.9), (16.0, 0.45), (21.0, 0.3), (24.0, 0.22)])[:, None]
+    return out * ramp(
+        [(0, 0.0), (1.2, 1.0), (13.0, 0.9), (18.2, 0.45), (23.7, 0.3), (24.76, 0.22), (30.8, 0.16)]
+    )[:, None]
 
 
 def pad() -> np.ndarray:
@@ -151,9 +153,9 @@ def pad() -> np.ndarray:
         (0.00, [110.00, 164.81, 261.63]),          # Am — cold, open
         (8.40, [87.31, 174.61, 261.63]),           # F  — the heat arrives
         (13.60, [98.00, 196.00, 293.66]),          # G  — lift
-        (16.10, [87.31, 174.61, 261.63]),          # F
-        (19.20, [98.00, 196.00, 246.94]),          # G  — tension into the end
-        (21.46, [130.81, 196.00, 329.63]),         # C  — resolve on the logo
+        (18.30, [87.31, 174.61, 261.63]),          # F
+        (21.40, [98.00, 196.00, 246.94]),          # G  — tension into the end
+        (24.76, [130.81, 196.00, 329.63]),         # C  — resolve on the logo
     ]
     out = np.zeros((N, 2))
     fade = 0.75
@@ -177,7 +179,9 @@ def pad() -> np.ndarray:
         out[i0:i1, 0] += v
         out[i0:i1, 1] += np.concatenate([np.zeros(11), v[:-11]])  # tiny Haas spread
     out /= np.max(np.abs(out)) + 1e-9
-    return out * ramp([(0, 0.0), (1.6, 0.72), (7.2, 0.8), (13.5, 0.9), (21.4, 1.0), (24.0, 0.9)])[:, None]
+    return out * ramp(
+        [(0, 0.0), (1.6, 0.72), (7.2, 0.8), (13.5, 0.9), (21.4, 1.0), (24.76, 0.95), (29.8, 0.75)]
+    )[:, None]
 
 
 def fire() -> np.ndarray:
@@ -275,12 +279,12 @@ def pulse() -> np.ndarray:
     step = 60.0 / bpm
     t = 13.62
     i = 0
-    while t < 21.3:
+    while t < 24.6:
         length = seconds(0.42)
         s = np.arange(length) / SR
         f = 58 + 62 * np.exp(-s * 30)
         kick = np.sin(2 * np.pi * np.cumsum(f) / SR) * env_ad(length, 0.001, 0.10, 4.0)
-        level = np.interp(t, [13.6, 14.6, 20.4, 21.3], [0.0, 0.34, 0.34, 0.0])
+        level = np.interp(t, [13.6, 14.6, 23.7, 24.6], [0.0, 0.34, 0.34, 0.0])
         place(out, kick, t, gain=level)
         if i % 2 == 1:
             hl = seconds(0.10)
