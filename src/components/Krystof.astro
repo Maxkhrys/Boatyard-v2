@@ -1,0 +1,65 @@
+---
+import { KRYSTOF_BOOKING_EMAIL } from '../lib/krystofEmail';
+---
+
+<section class="krystof section" id="krystof">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Guided sessions</p>
+    <h2 class="krystof__heading" data-reveal>Sauna, guided by Krystof.</h2>
+    <p class="krystof__intro" data-reveal>
+      Krystof hosts our guided sauna sessions at Wicklow Harbour — heat, cold plunge, and breathwork,
+      paced by someone who does this every day. Join a scheduled group session, or book him privately
+      for just you or your group.
+    </p>
+
+    <div class="krystof__book" data-reveal>
+      <p class="krystof__book-label">Book Krystof privately</p>
+      <a class="btn btn--primary krystof__book-email" href={`mailto:${KRYSTOF_BOOKING_EMAIL}`}>
+        {KRYSTOF_BOOKING_EMAIL}
+      </a>
+      <p class="krystof__book-note">Email Krystof directly to arrange a private guided session.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .krystof__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+  }
+
+  .krystof__intro {
+    margin-top: 1.5rem;
+    max-width: 60ch;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .krystof__book {
+    margin-top: clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    max-width: 32rem;
+    border: 2px solid var(--cedar);
+    border-radius: 10px;
+    background: rgba(200, 149, 108, 0.07);
+    text-align: center;
+  }
+
+  .krystof__book-label {
+    font-size: var(--text-tiny);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .krystof__book-email {
+    margin-top: 1rem;
+  }
+
+  .krystof__book-note {
+    margin-top: 0.9rem;
+    font-size: var(--text-small);
+    color: var(--ink-mid);
+  }
+</style>

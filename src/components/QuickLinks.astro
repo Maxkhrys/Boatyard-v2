@@ -1,0 +1,126 @@
+---
+// Fast-access grid — the first thing after the hero's "Book a Session" CTA.
+// Surfaces the same destinations as the burger menu up front, so visitors
+// don't have to scroll the whole page (or open the menu) to find them.
+const onHome = Astro.url.pathname === '/';
+const home = onHome ? '' : '/';
+
+const links = [
+  {
+    title: "Krystof's Sessions",
+    text: 'Guided sauna sessions, or book him privately.',
+    href: `${home}#krystof`,
+  },
+  {
+    title: 'Wicklow Booking',
+    text: 'Book a session at Wicklow Harbour.',
+    href: 'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
+    external: true,
+  },
+  {
+    title: 'Arklow Booking',
+    text: 'Book a session at Arklow Harbour.',
+    href: 'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_Boat_Yard_Sauna_Arklow',
+    external: true,
+  },
+  {
+    title: 'FAQ',
+    text: 'What to bring, booking rules, and more.',
+    href: `${home}#tab-faq`,
+  },
+  {
+    title: 'Journal',
+    text: 'Sea temperatures, news, and swimmer stories.',
+    href: '/journal',
+  },
+];
+---
+
+<section class="quicklinks" aria-label="Quick links">
+  <div class="container">
+    <div class="quicklinks__grid">
+      {
+        links.map((link) => (
+          <a
+            class="quicklinks__card"
+            href={link.href}
+            data-reveal
+            target={link.external ? '_blank' : undefined}
+            rel={link.external ? 'noopener noreferrer' : undefined}
+          >
+            <span class="quicklinks__title">{link.title}</span>
+            <span class="quicklinks__text">{link.text}</span>
+            <span class="quicklinks__arrow" aria-hidden="true">→</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .quicklinks {
+    padding-block: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .quicklinks__grid {
+    display: grid;
+    gap: clamp(0.9rem, 2vw, 1.25rem);
+    grid-template-columns: 1fr;
+  }
+
+  @media (min-width: 560px) {
+    .quicklinks__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .quicklinks__grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  .quicklinks__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: clamp(1.4rem, 2.5vw, 1.75rem) clamp(1.25rem, 2vw, 1.5rem);
+    border: 1px solid var(--mist-10);
+    border-radius: 8px;
+    background: rgba(237, 242, 240, 0.02);
+    text-decoration: none;
+    color: var(--ink);
+    transition:
+      border-color var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+
+  .quicklinks__card:hover {
+    border-color: var(--cedar);
+    transform: translateY(-3px);
+  }
+
+  .quicklinks__title {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 480;
+  }
+
+  .quicklinks__text {
+    font-size: var(--text-small);
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  .quicklinks__arrow {
+    margin-top: 0.4rem;
+    color: var(--cedar);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .quicklinks__card:hover .quicklinks__arrow {
+    transform: translateX(4px);
+  }
+</style>

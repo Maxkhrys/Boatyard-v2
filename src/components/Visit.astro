@@ -212,6 +212,9 @@ const tabs = [
       if (focus) tabs[index].focus();
     };
 
+    const hashIndex = tabs.findIndex((tab) => tab.id === window.location.hash.slice(1));
+    if (hashIndex > -1) select(hashIndex, false);
+
     tabs.forEach((tab, index) => {
       tab.addEventListener('click', () => select(index, false));
       tab.addEventListener('keydown', (event) => {
