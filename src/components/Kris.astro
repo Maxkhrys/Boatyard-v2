@@ -13,6 +13,7 @@ const hosts = [
     id: 'kris',
     name: 'Kris',
     role: 'Guided sauna host · Wicklow',
+    price: '€50 / session',
     email: KRIS_EMAIL,
     cc: KRIS_EMAIL_CC,
     image: krisImage,
@@ -24,7 +25,7 @@ const hosts = [
 <section class="hosts section" id="kris">
   <div class="container">
     <p class="eyebrow" data-reveal>Session hosts</p>
-    <h2 class="hosts__heading" data-reveal>Guided by the people who run it.</h2>
+    <h2 class="hosts__heading" data-reveal>Guided Sessions</h2>
 
     <div class="hosts__grid" data-reveal>
       {
@@ -47,6 +48,7 @@ const hosts = [
                 loading="lazy"
               />
               <span class="hosts__scrim" aria-hidden="true" />
+              <span class="hosts__price-badge">{host.price}</span>
               <div class="hosts__overlay">
                 <p class="hosts__role">{host.role}</p>
                 <h3 class="hosts__name">{host.name}</h3>
@@ -248,6 +250,21 @@ const hosts = [
     position: absolute;
     inset: 0;
     background: linear-gradient(to top, rgba(8, 21, 34, 0.88) 0%, rgba(8, 21, 34, 0.05) 55%);
+  }
+
+  .hosts__price-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4em 0.9em;
+    border-radius: 999px;
+    background: rgba(11, 29, 34, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: var(--text-tiny);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--cedar);
   }
 
   .hosts__overlay {
