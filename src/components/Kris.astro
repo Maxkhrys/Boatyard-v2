@@ -70,6 +70,11 @@ const hosts = [
       }
     </div>
 
+    <p class="hosts__disclaimer" data-reveal>
+      <strong>Do not book a sauna session before liaising with Krystof.</strong> Read the full private-session
+      steps in the <a href="#tab-private">FAQ</a>.
+    </p>
+
     {
       hosts.map((host) => (
         <dialog id={`host-dialog-${host.id}`} class="host-dialog">
@@ -223,6 +228,30 @@ const hosts = [
     margin-top: clamp(3rem, 6vw, 4.5rem);
     display: flex;
     justify-content: center;
+  }
+
+  .hosts__disclaimer {
+    margin: 1.75rem auto 0;
+    max-width: 26rem;
+    padding: 0.9rem 1.25rem;
+    border: 1px solid rgba(200, 149, 108, 0.35);
+    border-radius: 10px;
+    background: rgba(200, 149, 108, 0.06);
+    text-align: center;
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .hosts__disclaimer strong {
+    color: var(--cedar);
+    font-weight: 700;
+  }
+
+  .hosts__disclaimer a {
+    color: var(--cedar);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   /* The host card itself — a real <button>, his photo fills the whole thing */

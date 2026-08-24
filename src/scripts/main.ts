@@ -28,6 +28,12 @@ document.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach((anchor) =>
     const target = document.querySelector(href);
     if (!target || !lenis) return;
     event.preventDefault();
+    // Links into the Visit tabs (e.g. "#tab-faq") need the matching tab actually
+    // selected — this handler swallows the click before that hash ever lands, so
+    // trigger the tab's own click handler directly rather than relying on the hash.
+    if (target.getAttribute('role') === 'tab') {
+      (target as HTMLElement).click();
+    }
     lenis.scrollTo(target as HTMLElement, { offset: href === '#top' ? 0 : -40 });
   });
 });
