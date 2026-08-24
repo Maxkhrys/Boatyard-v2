@@ -80,7 +80,11 @@ const hosts = [
             <p class="host-form__eyebrow">Private session</p>
             <h3 class="host-form__title">Book in with {host.name}</h3>
             <p class="host-form__note">
-              This opens your email app with everything {host.name} needs, ready to send from your own address.
+              This opens your email app with everything {host.name} needs, ready to send from your own address —
+              step 1 of the private-session process. {host.name} will confirm availability and agree a time with
+              you before you book or pay for anything. His guided-session fee is €50, paid to him directly and
+              separate from your Boat Yard Sauna booking. Please don't book your sauna session until he's
+              confirmed. <a href="#tab-private" data-close-host>See the full steps</a>.
             </p>
 
             <label class="host-form__field">
@@ -135,7 +139,9 @@ const hosts = [
   });
 
   document.querySelectorAll<HTMLDialogElement>('.host-dialog').forEach((dialog) => {
-    dialog.querySelector('[data-close-host]')?.addEventListener('click', () => dialog.close());
+    dialog.querySelectorAll('[data-close-host]').forEach((el) => {
+      el.addEventListener('click', () => dialog.close());
+    });
     dialog.addEventListener('click', (event) => {
       if (event.target === dialog) dialog.close();
     });
@@ -364,7 +370,14 @@ const hosts = [
   .host-form__note {
     margin-top: -0.4rem;
     font-size: var(--text-small);
+    line-height: 1.6;
     color: var(--ink-soft);
+  }
+
+  .host-form__note a {
+    color: var(--cedar);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 
   .host-form__row {
