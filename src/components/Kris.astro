@@ -508,6 +508,7 @@ const hosts = [
   @media (min-width: 720px) {
     .host-form {
       max-height: calc(100vh - 3rem);
+      overflow-x: hidden;
       overflow-y: auto;
     }
   }
@@ -535,6 +536,9 @@ const hosts = [
 
   .host-form__field input,
   .host-form__field textarea {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
     padding: 0.7em 0.85em;
     border: 1px solid var(--mist-10);
     border-radius: 8px;
