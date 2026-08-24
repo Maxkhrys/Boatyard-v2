@@ -1,0 +1,414 @@
+---
+// "Meet the host" section — the person who runs private guided sauna
+// sessions. Sits lower on the page (not right after the hero). Clicking
+// the card opens a <dialog> form; submitting it builds a mailto: link
+// pre-filled with everything Kris needs, so the visitor sends it
+// themselves, from their own email — no backend involved.
+import { Image } from 'astro:assets';
+import krisImage from '../assets/images/kris-profile.jpeg';
+import { KRIS_EMAIL, KRIS_EMAIL_CC } from '../lib/krisEmail';
+
+const hosts = [
+  {
+    id: 'kris',
+    name: 'Kris',
+    role: 'Guided sauna host · Wicklow',
+    email: KRIS_EMAIL,
+    cc: KRIS_EMAIL_CC,
+    image: krisImage,
+    alt: 'Kris, guided sauna host, at The Boat Yard Sauna in Wicklow',
+  },
+];
+---
+
+<section class="hosts section" id="kris">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Session hosts</p>
+    <h2 class="hosts__heading" data-reveal>Guided by the people who run it.</h2>
+
+    <div class="hosts__grid" data-reveal>
+      {
+        hosts.map((host) => (
+          <button
+            class="hosts__card"
+            type="button"
+            data-open-host={host.id}
+            aria-haspopup="dialog"
+            aria-controls={`host-dialog-${host.id}`}
+          >
+            <div class="hosts__media">
+              <Image
+                src={host.image}
+                alt={host.alt}
+                widths={[480, 720]}
+                sizes="(min-width: 700px) 22rem, 80vw"
+                format="webp"
+                quality={72}
+                loading="lazy"
+              />
+              <span class="hosts__scrim" aria-hidden="true" />
+              <div class="hosts__overlay">
+                <p class="hosts__role">{host.role}</p>
+                <h3 class="hosts__name">{host.name}</h3>
+                <span class="hosts__cta">
+                  Book in with {host.name}
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </button>
+        ))
+      }
+    </div>
+
+    {
+      hosts.map((host) => (
+        <dialog id={`host-dialog-${host.id}`} class="host-dialog">
+          <form
+            class="host-form"
+            data-host-form
+            data-host-email={host.email}
+            data-host-cc={host.cc}
+            data-host-name={host.name}
+          >
+            <button class="host-dialog__close" type="button" data-close-host aria-label="Close">
+              ×
+            </button>
+
+            <p class="host-form__eyebrow">Private session</p>
+            <h3 class="host-form__title">Book in with {host.name}</h3>
+            <p class="host-form__note">
+              This opens your email app with everything {host.name} needs, ready to send from your own address.
+            </p>
+
+            <label class="host-form__field">
+              <span>Your name</span>
+              <input type="text" name="name" required autocomplete="name" />
+            </label>
+
+            <label class="host-form__field">
+              <span>Your email</span>
+              <input type="email" name="email" required autocomplete="email" />
+            </label>
+
+            <div class="host-form__row">
+              <label class="host-form__field">
+                <span>Preferred date</span>
+                <input type="date" name="date" required />
+              </label>
+
+              <label class="host-form__field">
+                <span>Preferred time</span>
+                <input type="time" name="time" required />
+              </label>
+            </div>
+
+            <label class="host-form__field">
+              <span>Number of guests</span>
+              <input type="number" name="guests" min="1" value="1" required />
+            </label>
+
+            <label class="host-form__field">
+              <span>Anything else {host.name} should know</span>
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+
+            <button class="btn btn--primary host-form__submit" type="submit">
+              Send booking request
+            </button>
+          </form>
+        </dialog>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-open-host]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-open-host');
+      const dialog = document.getElementById(`host-dialog-${id}`);
+      if (dialog instanceof HTMLDialogElement) dialog.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('.host-dialog').forEach((dialog) => {
+    dialog.querySelector('[data-close-host]')?.addEventListener('click', () => dialog.close());
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+
+  document.querySelectorAll<HTMLFormElement>('[data-host-form]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '');
+      const email = String(data.get('email') ?? '');
+      const date = String(data.get('date') ?? '');
+      const time = String(data.get('time') ?? '');
+      const guests = String(data.get('guests') ?? '');
+      const notes = String(data.get('notes') ?? '');
+      const hostName = form.dataset.hostName ?? '';
+      const hostEmail = form.dataset.hostEmail ?? '';
+      const hostCc = form.dataset.hostCc;
+
+      const subject = `Private session request — ${name}`;
+      const body = [
+        `Hi ${hostName},`,
+        '',
+        "I'd like to book a private guided sauna session.",
+        '',
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Preferred date: ${date}`,
+        `Preferred time: ${time}`,
+        `Number of guests: ${guests}`,
+        notes ? `Notes: ${notes}` : '',
+        '',
+        'Thanks!',
+      ]
+        .filter((line) => line !== '')
+        .join('\n');
+
+      const params = new URLSearchParams({ subject, body });
+      if (hostCc) params.set('cc', hostCc);
+
+      window.location.href = `mailto:${hostEmail}?${params.toString()}`;
+      form.closest('dialog')?.close();
+    });
+  });
+</script>
+
+<style>
+  .hosts__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .hosts__grid {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    display: flex;
+    justify-content: center;
+  }
+
+  /* The host card itself — a real <button>, his photo fills the whole thing */
+  .hosts__card {
+    position: relative;
+    width: 100%;
+    max-width: 22rem;
+    padding: 0;
+    border: 3px solid var(--cedar);
+    border-radius: 18px;
+    overflow: hidden;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    box-shadow: 0 0 0 6px rgba(200, 149, 108, 0.1);
+    transition:
+      transform var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+
+  .hosts__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 48px rgba(200, 149, 108, 0.22);
+  }
+
+  .hosts__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+  }
+
+  .hosts__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 68% 60%;
+    transition: transform 1.1s var(--ease);
+  }
+
+  .hosts__card:hover .hosts__media img {
+    transform: scale(1.05);
+  }
+
+  .hosts__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 21, 34, 0.88) 0%, rgba(8, 21, 34, 0.05) 55%);
+  }
+
+  .hosts__overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.75rem 1.5rem;
+    text-align: left;
+    color: var(--mist);
+  }
+
+  .hosts__role {
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .hosts__name {
+    margin-top: 0.3rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.1rem);
+    color: var(--mist);
+  }
+
+  .hosts__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 1rem;
+    padding: 0.6em 1.2em;
+    border: 1px solid var(--mist-25);
+    border-radius: 999px;
+    font-size: var(--text-tiny);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mist);
+    transition:
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      gap var(--dur) var(--ease);
+  }
+
+  .hosts__card:hover .hosts__cta {
+    border-color: var(--cedar);
+    color: var(--cedar);
+    gap: 0.8em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hosts__card:hover .hosts__media img {
+      transform: none;
+    }
+  }
+
+  /* ----- Booking dialog ----- */
+
+  .host-dialog {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 14px;
+    max-width: 32rem;
+    width: calc(100vw - 2.5rem);
+    max-height: calc(100vh - 4rem);
+    background: var(--navy);
+    color: var(--ink);
+  }
+
+  .host-dialog::backdrop {
+    background: rgba(8, 21, 34, 0.72);
+    backdrop-filter: blur(4px);
+  }
+
+  .host-form {
+    position: relative;
+    padding: clamp(1.75rem, 4vw, 2.5rem);
+    display: grid;
+    gap: 1.1rem;
+  }
+
+  .host-dialog__close {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    width: 2.25rem;
+    height: 2.25rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--mist-10);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--ink);
+    font-size: 1.4rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+  }
+
+  .host-dialog__close:hover {
+    border-color: var(--cedar);
+    color: var(--cedar);
+  }
+
+  .host-form__eyebrow {
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .host-form__title {
+    font-size: var(--text-h3);
+  }
+
+  .host-form__note {
+    margin-top: -0.4rem;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  .host-form__row {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .host-form__field {
+    display: grid;
+    gap: 0.45rem;
+    font-size: var(--text-small);
+    color: var(--ink-soft);
+  }
+
+  .host-form__field input,
+  .host-form__field textarea {
+    padding: 0.75em 0.9em;
+    border: 1px solid var(--mist-25);
+    border-radius: 6px;
+    background: rgba(237, 242, 240, 0.04);
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--text-small);
+  }
+
+  .host-form__field input:focus-visible,
+  .host-form__field textarea:focus-visible {
+    outline: 2px solid var(--cedar);
+    outline-offset: 1px;
+  }
+
+  .host-form__field textarea {
+    resize: vertical;
+  }
+
+  .host-form__submit {
+    margin-top: 0.5rem;
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    .host-form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

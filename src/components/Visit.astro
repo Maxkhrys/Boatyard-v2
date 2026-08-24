@@ -43,7 +43,7 @@ const tabs = [
       'Under-18s must follow the site age policy and be accompanied where required.',
       'If you are pregnant, have a heart or medical condition, or are unsure whether sauna or cold exposure suits you, please seek medical advice and avoid the sauna.',
       'Use of the sauna, ice baths, and sea is at your own responsibility.',
-      'Cancellations, rescheduling, and credits follow the booking system policy.',
+      'Cancel or reschedule at least 1 hour before your session starts — cancellations after that may not be refunded or credited.',
     ],
   },
   {
@@ -103,7 +103,7 @@ const tabs = [
       },
       {
         q: 'Do you offer private bookings?',
-        a: 'Private bookings may be available depending on location, day, and time. Check the booking page or contact us directly.',
+        a: 'Yes. Contact Krystof at <a href="mailto:krystof@theboatyardsauna.ie">krystof@theboatyardsauna.ie</a> and let him know the date and approximate time you would like to visit.',
       },
       {
         q: 'Is the sauna good for recovery?',
@@ -115,7 +115,7 @@ const tabs = [
       },
       {
         q: 'Can I cancel or move my booking?',
-        a: 'Cancellations and changes are handled through the booking system. Check the cancellation policy when booking.',
+        a: 'Yes — you must cancel or reschedule at least 1 hour before your session starts. Cancellations made after that may not be refunded or credited. Changes are handled through the booking system.',
       },
       {
         q: 'Lost property?',
@@ -185,7 +185,7 @@ const tabs = [
                 {tab.qa!.map((item) => (
                   <div class="visit__faq-item">
                     <dt>{item.q}</dt>
-                    <dd>{item.a}</dd>
+                    <dd set:html={item.a} />
                   </div>
                 ))}
               </dl>
@@ -390,5 +390,11 @@ const tabs = [
     color: var(--ink-soft);
     font-size: var(--text-small);
     line-height: 1.7;
+  }
+
+  .visit__faq dd a {
+    color: var(--cedar);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 </style>
