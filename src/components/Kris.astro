@@ -79,50 +79,57 @@ const hosts = [
               ×
             </button>
 
-            <p class="host-form__eyebrow">Private session</p>
-            <h3 class="host-form__title">Book in with {host.name}</h3>
-            <p class="host-form__note">
-              This opens your email app with everything {host.name} needs, ready to send from your own address —
-              step 1 of the private-session process. {host.name} will confirm availability and agree a time with
-              you before you book or pay for anything. His guided-session fee is €50, paid to him directly and
-              separate from your Boat Yard Sauna booking. Please don't book your sauna session until he's
-              confirmed. <a href="#tab-private" data-close-host>See the full steps</a>.
-            </p>
+            <header class="host-form__header">
+              <p class="host-form__eyebrow">Private session &middot; &euro;50</p>
+              <h3 class="host-form__title">Book in with {host.name}</h3>
+              <p class="host-form__note">
+                Tell {host.name} when you'd like to visit. He'll confirm availability before you book or pay
+                anything.
+              </p>
+              <a class="host-form__link" href="#tab-private" data-close-host>How private sessions work →</a>
+            </header>
 
-            <label class="host-form__field">
-              <span>Your name</span>
-              <input type="text" name="name" required autocomplete="name" />
-            </label>
+            <div class="host-form__fields">
+              <div class="host-form__row">
+                <label class="host-form__field">
+                  <span>Your name</span>
+                  <input type="text" name="name" required autocomplete="name" />
+                </label>
 
-            <label class="host-form__field">
-              <span>Your email</span>
-              <input type="email" name="email" required autocomplete="email" />
-            </label>
+                <label class="host-form__field">
+                  <span>Your email</span>
+                  <input type="email" name="email" required autocomplete="email" />
+                </label>
+              </div>
 
-            <div class="host-form__row">
-              <label class="host-form__field">
-                <span>Preferred date</span>
-                <input type="date" name="date" required />
+              <div class="host-form__row">
+                <label class="host-form__field">
+                  <span>Preferred date</span>
+                  <input type="date" name="date" required />
+                </label>
+
+                <label class="host-form__field">
+                  <span>Preferred time</span>
+                  <input type="time" name="time" required />
+                </label>
+              </div>
+
+              <label class="host-form__field host-form__field--narrow">
+                <span>Number of guests</span>
+                <input type="number" name="guests" min="1" value="1" required />
               </label>
 
               <label class="host-form__field">
-                <span>Preferred time</span>
-                <input type="time" name="time" required />
+                <span>Anything else {host.name} should know</span>
+                <textarea name="notes" rows="3" placeholder="Optional"></textarea>
               </label>
             </div>
 
-            <label class="host-form__field">
-              <span>Number of guests</span>
-              <input type="number" name="guests" min="1" value="1" required />
-            </label>
-
-            <label class="host-form__field">
-              <span>Anything else {host.name} should know</span>
-              <textarea name="notes" rows="3"></textarea>
-            </label>
-
             <button class="btn btn--primary host-form__submit" type="submit">
               Send booking request
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
             </button>
           </form>
         </dialog>
@@ -329,42 +336,49 @@ const hosts = [
     margin: auto;
     padding: 0;
     border: 0;
-    border-radius: 14px;
-    max-width: 32rem;
+    border-radius: 18px;
+    max-width: 30rem;
     width: calc(100vw - 2.5rem);
     max-height: calc(100vh - 4rem);
+    overflow: hidden;
     background: var(--navy);
     color: var(--ink);
+    box-shadow: 0 24px 64px rgba(8, 21, 34, 0.5);
   }
 
   .host-dialog::backdrop {
     background: rgba(8, 21, 34, 0.72);
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 
   .host-form {
     position: relative;
-    padding: clamp(1.75rem, 4vw, 2.5rem);
+    height: 100%;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    padding: clamp(2rem, 5vw, 2.75rem);
     display: grid;
-    gap: 1.1rem;
+    gap: 1.75rem;
   }
 
   .host-dialog__close {
     position: absolute;
-    top: 0.9rem;
-    right: 0.9rem;
-    width: 2.25rem;
-    height: 2.25rem;
+    top: 1.1rem;
+    right: 1.1rem;
+    width: 2.1rem;
+    height: 2.1rem;
     display: grid;
     place-items: center;
     border: 1px solid var(--mist-10);
     border-radius: 50%;
-    background: transparent;
-    color: var(--ink);
-    font-size: 1.4rem;
+    background: var(--navy);
+    color: var(--ink-soft);
+    font-size: 1.25rem;
     line-height: 1;
     cursor: pointer;
     transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+    z-index: 1;
   }
 
   .host-dialog__close:hover {
@@ -372,29 +386,54 @@ const hosts = [
     color: var(--cedar);
   }
 
+  .host-form__header {
+    padding-right: 2rem;
+    display: grid;
+    gap: 0.55rem;
+  }
+
   .host-form__eyebrow {
     font-size: var(--text-tiny);
     font-weight: 600;
-    letter-spacing: 0.24em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--cedar);
   }
 
   .host-form__title {
-    font-size: var(--text-h3);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 1.85rem);
+    font-weight: 460;
   }
 
   .host-form__note {
-    margin-top: -0.4rem;
     font-size: var(--text-small);
     line-height: 1.6;
     color: var(--ink-soft);
   }
 
-  .host-form__note a {
+  .host-form__link {
+    justify-self: start;
+    margin-top: 0.15rem;
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.04em;
     color: var(--cedar);
-    text-decoration: underline;
-    text-underline-offset: 0.2em;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200, 149, 108, 0.4);
+    padding-bottom: 0.1rem;
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  .host-form__link:hover {
+    border-color: var(--cedar);
+  }
+
+  .host-form__fields {
+    display: grid;
+    gap: 1.35rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--mist-10);
   }
 
   .host-form__row {
@@ -405,40 +444,66 @@ const hosts = [
 
   .host-form__field {
     display: grid;
-    gap: 0.45rem;
-    font-size: var(--text-small);
-    color: var(--ink-soft);
+    gap: 0.5rem;
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  .host-form__field--narrow {
+    max-width: 9rem;
   }
 
   .host-form__field input,
   .host-form__field textarea {
-    padding: 0.75em 0.9em;
-    border: 1px solid var(--mist-25);
-    border-radius: 6px;
-    background: rgba(237, 242, 240, 0.04);
+    padding: 0.8em 0.95em;
+    border: 1px solid var(--mist-10);
+    border-radius: 8px;
+    background: rgba(237, 242, 240, 0.045);
     color: var(--ink);
     font: inherit;
     font-size: var(--text-small);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+
+  .host-form__field input::placeholder,
+  .host-form__field textarea::placeholder {
+    color: var(--ink-faint);
+  }
+
+  .host-form__field input:hover,
+  .host-form__field textarea:hover {
+    border-color: var(--mist-25);
   }
 
   .host-form__field input:focus-visible,
   .host-form__field textarea:focus-visible {
-    outline: 2px solid var(--cedar);
-    outline-offset: 1px;
+    outline: none;
+    border-color: var(--cedar);
+    background: rgba(237, 242, 240, 0.07);
   }
 
   .host-form__field textarea {
     resize: vertical;
+    min-height: 4.5rem;
   }
 
   .host-form__submit {
-    margin-top: 0.5rem;
     width: 100%;
   }
 
   @media (max-width: 480px) {
     .host-form__row {
       grid-template-columns: 1fr;
+    }
+
+    .host-form__field--narrow {
+      max-width: none;
     }
   }
 </style>

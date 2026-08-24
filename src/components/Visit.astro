@@ -102,7 +102,7 @@ const tabs = [
       'you have separately booked and paid for the sauna session',
     ],
     outro: 'Krystof&rsquo;s &euro;50 fee does not include the cost of your sauna booking.',
-    cta: { label: 'Email Krystof', href: 'mailto:krystof@theboatyardsauna.ie' },
+    cta: { label: 'Email Krystof', hostId: 'kris' },
   },
   {
     id: 'faq',
@@ -237,9 +237,13 @@ const tabs = [
                   <p class="visit__process-note" set:html={tab.outro} />
                 </div>
 
-                <a class="btn btn--primary visit__process-cta" href={tab.cta!.href}>
+                <button
+                  type="button"
+                  class="btn btn--primary visit__process-cta"
+                  data-open-host={tab.cta!.hostId}
+                >
                   {tab.cta!.label}
-                </a>
+                </button>
               </>
             )}
 
