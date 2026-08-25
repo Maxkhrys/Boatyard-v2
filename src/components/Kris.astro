@@ -162,7 +162,14 @@ const hosts = [
     btn.addEventListener('click', () => {
       const id = btn.getAttribute('data-open-host');
       const dialog = document.getElementById(`host-dialog-${id}`);
-      if (dialog instanceof HTMLDialogElement) dialog.showModal();
+      if (!(dialog instanceof HTMLDialogElement)) return;
+      dialog.showModal();
+      // iOS Safari won't honour the autoplay attribute for a <video> that was
+      // display:none (inside a closed <dialog>) until JS reveals it — it needs
+      // an explicit play() call inside this click handler to count as a
+      // user-gesture-triggered play.
+      const video = dialog.querySelector('video');
+      video?.play().catch(() => {});
     });
   });
 
