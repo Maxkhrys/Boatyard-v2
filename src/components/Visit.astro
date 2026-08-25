@@ -43,7 +43,7 @@ const tabs = [
       'Under-18s must follow the site age policy and be accompanied where required.',
       'If you are pregnant, have a heart or medical condition, or are unsure whether sauna or cold exposure suits you, please seek medical advice and avoid the sauna.',
       'Use of the sauna, ice baths, and sea is at your own responsibility.',
-      'Cancellations, rescheduling, and credits follow the booking system policy.',
+      'Cancel or reschedule at least 1 hour before your session starts — cancellations after that may not be refunded or credited.',
     ],
   },
   {
@@ -66,6 +66,43 @@ const tabs = [
       'We also run and support recurring wellness rituals — sauna and dip sessions, recovery nights, guided sauna experiences, Sunday resets, sunrise sessions, and collaborations with local businesses and wellness practitioners.',
       'For group bookings or collaborations, contact us directly at theboatyardsauna@gmail.com.',
     ],
+  },
+  {
+    id: 'private',
+    label: 'Private Sessions',
+    kind: 'process',
+    intro:
+      'Private guided sessions with Kris are arranged directly with him and are subject to his availability.',
+    steps: [
+      {
+        title: 'Email Kris',
+        body: 'Contact Kris at <a href="mailto:krystof@theboatyardsauna.ie">krystof@theboatyardsauna.ie</a> and let him know the date and approximate time you would like to visit.',
+      },
+      {
+        title: 'Agree a time with Kris',
+        body: 'Kris will confirm whether he is available and agree a suitable time with you.',
+        note: 'Please do not book your sauna session until Kris has confirmed his availability.',
+      },
+      {
+        title: 'Find a suitable sauna session',
+        body: 'Once you have agreed a time with Kris, check Wunderbook for an available sauna session that matches the agreed time.',
+      },
+      {
+        title: 'Pay Kris separately',
+        body: 'Kris&rsquo;s guided-session fee is <strong>&euro;50</strong>. This is paid directly to Kris and is separate from your Boat Yard Sauna booking fee.',
+      },
+      {
+        title: 'Book your sauna session',
+        body: 'Once Kris has confirmed and you have found a suitable available session, complete your sauna booking through Wunderbook as normal.',
+      },
+    ],
+    confirmItems: [
+      'Kris has agreed the time with you',
+      'you have arranged payment of his &euro;50 guided-session fee',
+      'you have separately booked and paid for the sauna session',
+    ],
+    outro: 'Kris&rsquo;s &euro;50 fee does not include the cost of your sauna booking.',
+    cta: { label: 'Email Kris', hostId: 'kris' },
   },
   {
     id: 'faq',
@@ -103,7 +140,7 @@ const tabs = [
       },
       {
         q: 'Do you offer private bookings?',
-        a: 'Private bookings may be available depending on location, day, and time. Check the booking page or contact us directly.',
+        a: 'Yes — private guided sessions with Kris, subject to his availability, for a separate €50 fee. See the <a href="#tab-private">Private Sessions</a> tab for the full step-by-step.',
       },
       {
         q: 'Is the sauna good for recovery?',
@@ -115,7 +152,7 @@ const tabs = [
       },
       {
         q: 'Can I cancel or move my booking?',
-        a: 'Cancellations and changes are handled through the booking system. Check the cancellation policy when booking.',
+        a: 'Yes — you must cancel or reschedule at least 1 hour before your session starts. Cancellations made after that may not be refunded or credited. Changes are handled through the booking system.',
       },
       {
         q: 'Lost property?',
@@ -180,12 +217,42 @@ const tabs = [
             {tab.kind === 'prose' &&
               tab.body!.map((p) => <p class="visit__prose">{p}</p>)}
 
+            {tab.kind === 'process' && (
+              <>
+                <ol class="visit__process">
+                  {tab.steps!.map((step) => (
+                    <li>
+                      <h3 class="visit__process-title">{step.title}</h3>
+                      <p class="visit__process-body" set:html={step.body} />
+                      {step.note && <p class="visit__process-note">{step.note}</p>}
+                    </li>
+                  ))}
+                </ol>
+
+                <div class="visit__process-confirm">
+                  <p>Your booking is only confirmed once:</p>
+                  <ul class="visit__checklist">
+                    {tab.confirmItems!.map((item) => <li set:html={item} />)}
+                  </ul>
+                  <p class="visit__process-note" set:html={tab.outro} />
+                </div>
+
+                <button
+                  type="button"
+                  class="btn btn--primary visit__process-cta"
+                  data-open-host={tab.cta!.hostId}
+                >
+                  {tab.cta!.label}
+                </button>
+              </>
+            )}
+
             {tab.kind === 'faq' && (
               <dl class="visit__faq">
                 {tab.qa!.map((item) => (
                   <div class="visit__faq-item">
                     <dt>{item.q}</dt>
-                    <dd>{item.a}</dd>
+                    <dd set:html={item.a} />
                   </div>
                 ))}
               </dl>
@@ -211,6 +278,13 @@ const tabs = [
       });
       if (focus) tabs[index].focus();
     };
+
+    const selectFromHash = () => {
+      const hashIndex = tabs.findIndex((tab) => tab.id === window.location.hash.slice(1));
+      if (hashIndex > -1) select(hashIndex, false);
+    };
+    selectFromHash();
+    window.addEventListener('hashchange', selectFromHash);
 
     tabs.forEach((tab, index) => {
       tab.addEventListener('click', () => select(index, false));
@@ -351,6 +425,80 @@ const tabs = [
     background: var(--cedar);
   }
 
+  /* Private-session process */
+  .visit__process {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: process-step;
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .visit__process > li {
+    counter-increment: process-step;
+    position: relative;
+    padding-left: 3rem;
+  }
+
+  .visit__process > li::before {
+    content: counter(process-step);
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    width: 2rem;
+    height: 2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(200, 149, 108, 0.45);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    color: var(--cedar);
+  }
+
+  .visit__process-title {
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    font-weight: 480;
+  }
+
+  .visit__process-body {
+    margin-top: 0.4rem;
+    color: var(--ink-soft);
+    line-height: 1.7;
+  }
+
+  .visit__process-body a {
+    color: var(--cedar);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .visit__process-note {
+    margin-top: 0.6rem;
+    font-size: var(--text-small);
+    font-style: italic;
+    color: var(--ink-mid);
+  }
+
+  .visit__process-confirm {
+    margin-top: 2.25rem;
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--mist-10);
+  }
+
+  .visit__process-confirm > p:first-child {
+    font-weight: 600;
+  }
+
+  .visit__process-confirm .visit__checklist {
+    margin-top: 1rem;
+  }
+
+  .visit__process-cta {
+    margin-top: 2rem;
+  }
+
   .visit__prose {
     color: var(--ink-soft);
   }
@@ -387,5 +535,11 @@ const tabs = [
     color: var(--ink-soft);
     font-size: var(--text-small);
     line-height: 1.7;
+  }
+
+  .visit__faq dd a {
+    color: var(--cedar);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 </style>

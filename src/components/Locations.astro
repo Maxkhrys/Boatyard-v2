@@ -13,10 +13,9 @@ const wicklowDefaultHours: HoursRow[] = [
 ];
 
 const arklowDefaultHours: HoursRow[] = [
-  { days: 'Mon – Wed', times: 'Closed' },
-  { days: 'Thursday', times: '4 – 10pm' },
-  { days: 'Friday', times: '10am – 10pm' },
-  { days: 'Sat – Sun', times: '8am – 10pm' },
+  { days: 'Mon – Tue', times: 'Closed' },
+  { days: 'Wed – Fri', times: '4 – 10pm' },
+  { days: 'Sat – Sun', times: '9am – 10pm' },
 ];
 
 const wicklowHours: HoursRow[] =
@@ -30,6 +29,7 @@ const arklowHours: HoursRow[] =
     : arklowDefaultHours;
 
 const hoursNote = siteSettings?.hoursNote ?? 'Book online in advance — walk-ins subject to availability';
+const cancellationNote = 'Please cancel at least 1 hour before your session starts.';
 
 const locations = [
   {
@@ -41,6 +41,7 @@ const locations = [
     address: 'Wicklow Harbour, Wicklow Town',
     hours: wicklowHours,
     hoursNote,
+    cancellationNote,
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Wicklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_boat_yard_sauna',
@@ -56,6 +57,7 @@ const locations = [
     address: 'North Quay, Arklow Harbour, Arklow',
     hours: arklowHours,
     hoursNote,
+    cancellationNote,
     mapUrl: 'https://maps.google.com/?q=The+Boat+Yard+Sauna+Arklow',
     bookUrl:
       'https://flutterwbdev.azurewebsites.net/#/tenantDetails?tenantName=The_Boat_Yard_Sauna_Arklow',
@@ -116,6 +118,7 @@ const locations = [
                       </span>
                     ))}
                     <span class="locations__hours-note">{location.hoursNote}</span>
+                    <span class="locations__hours-note">{location.cancellationNote}</span>
                   </dd>
                 </div>
                 <div class="locations__detail">

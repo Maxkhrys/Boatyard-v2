@@ -1,0 +1,628 @@
+---
+// "Meet the host" section — the person who runs private guided sauna
+// sessions. Sits lower on the page (not right after the hero). Clicking
+// the card opens a <dialog> form; submitting it builds a mailto: link
+// pre-filled with everything Kris needs, so the visitor sends it
+// themselves, from their own email — no backend involved.
+import { Image } from 'astro:assets';
+import krisImage from '../assets/images/kris-profile.jpeg';
+import { KRIS_EMAIL, KRIS_EMAIL_CC } from '../lib/krisEmail';
+
+// Served straight from /public — not processed by astro:assets.
+const videoLoopMp4 = '/video/kris-loop.mp4';
+const videoLoopWebm = '/video/kris-loop.webm';
+const videoPoster = '/video/kris-loop-poster.jpg';
+
+const hosts = [
+  {
+    id: 'kris',
+    name: 'Kris',
+    role: 'Guided sauna host · Wicklow',
+    price: '€50 / session',
+    email: KRIS_EMAIL,
+    cc: KRIS_EMAIL_CC,
+    image: krisImage,
+    alt: 'Kris, guided sauna host, at The Boat Yard Sauna in Wicklow',
+  },
+];
+---
+
+<section class="hosts section" id="kris">
+  <div class="container">
+    <p class="eyebrow" data-reveal>Session hosts</p>
+    <h2 class="hosts__heading" data-reveal>Guided Sessions</h2>
+
+    <div class="hosts__grid" data-reveal>
+      {
+        hosts.map((host) => (
+          <button
+            class="hosts__card"
+            type="button"
+            data-open-host={host.id}
+            aria-haspopup="dialog"
+            aria-controls={`host-dialog-${host.id}`}
+          >
+            <div class="hosts__media">
+              <Image
+                src={host.image}
+                alt={host.alt}
+                widths={[480, 720]}
+                sizes="(min-width: 700px) 22rem, 80vw"
+                format="webp"
+                quality={72}
+                loading="lazy"
+              />
+              <span class="hosts__scrim" aria-hidden="true" />
+              <span class="hosts__price-badge">{host.price}</span>
+              <div class="hosts__overlay">
+                <p class="hosts__role">{host.role}</p>
+                <h3 class="hosts__name">{host.name}</h3>
+                <span class="hosts__cta">
+                  Book in with {host.name}
+                  <svg width="12" height="12" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                    <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+          </button>
+        ))
+      }
+    </div>
+
+    <p class="hosts__disclaimer" data-reveal>
+      <strong>Do not book a sauna session before liaising with Kris.</strong> Read the full private-session
+      steps in the <a href="#tab-private">FAQ</a>.
+    </p>
+
+    {
+      hosts.map((host) => (
+        <dialog id={`host-dialog-${host.id}`} class="host-dialog">
+          <button class="host-dialog__close" type="button" data-close-host aria-label="Close">
+            ×
+          </button>
+
+          <div class="host-dialog__grid">
+            <div class="host-dialog__visual" style={`background-image:url(${videoPoster})`}>
+              <video class="host-dialog__video" poster={videoPoster} autoplay muted loop playsinline>
+                <source src={videoLoopMp4} type="video/mp4" />
+                <source src={videoLoopWebm} type="video/webm" />
+              </video>
+              <span class="host-dialog__visual-scrim" aria-hidden="true" />
+              <div class="host-dialog__visual-copy">
+                <p class="host-dialog__eyebrow">Private session &middot; &euro;50</p>
+                <h3 class="host-dialog__title">Book in with {host.name}</h3>
+                <p class="host-dialog__note">
+                  Tell {host.name} when you'd like to visit. He'll confirm availability before you book or pay
+                  anything.
+                </p>
+                <a class="host-dialog__link" href="#tab-private" data-close-host>
+                  How private sessions work →
+                </a>
+              </div>
+            </div>
+
+            <form
+              class="host-form"
+              data-host-form
+              data-host-email={host.email}
+              data-host-cc={host.cc}
+              data-host-name={host.name}
+            >
+              <div class="host-form__row">
+                <label class="host-form__field">
+                  <span>Name</span>
+                  <input type="text" name="name" required autocomplete="name" />
+                </label>
+
+                <label class="host-form__field">
+                  <span>Email</span>
+                  <input type="email" name="email" required autocomplete="email" />
+                </label>
+              </div>
+
+              <div class="host-form__row host-form__row--three">
+                <label class="host-form__field">
+                  <span>Date</span>
+                  <input type="date" name="date" required />
+                </label>
+
+                <label class="host-form__field">
+                  <span>Time</span>
+                  <input type="time" name="time" required />
+                </label>
+
+                <label class="host-form__field host-form__field--narrow">
+                  <span>Guests</span>
+                  <input type="number" name="guests" min="1" value="1" required />
+                </label>
+              </div>
+
+              <label class="host-form__field">
+                <span>Anything else {host.name} should know</span>
+                <textarea name="notes" rows="2" placeholder="Optional"></textarea>
+              </label>
+
+              <button class="btn btn--primary host-form__submit" type="submit">
+                Send booking request
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </dialog>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-open-host]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-open-host');
+      const dialog = document.getElementById(`host-dialog-${id}`);
+      if (!(dialog instanceof HTMLDialogElement)) return;
+      dialog.showModal();
+      // iOS Safari won't honour the autoplay attribute for a <video> that was
+      // display:none (inside a closed <dialog>) until JS reveals it — it needs
+      // an explicit play() call inside this click handler to count as a
+      // user-gesture-triggered play.
+      const video = dialog.querySelector('video');
+      video?.play().catch(() => {});
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('.host-dialog').forEach((dialog) => {
+    dialog.querySelectorAll('[data-close-host]').forEach((el) => {
+      el.addEventListener('click', () => dialog.close());
+    });
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+  });
+
+  document.querySelectorAll<HTMLFormElement>('[data-host-form]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const data = new FormData(form);
+      const name = String(data.get('name') ?? '');
+      const email = String(data.get('email') ?? '');
+      const date = String(data.get('date') ?? '');
+      const time = String(data.get('time') ?? '');
+      const guests = String(data.get('guests') ?? '');
+      const notes = String(data.get('notes') ?? '');
+      const hostName = form.dataset.hostName ?? '';
+      const hostEmail = form.dataset.hostEmail ?? '';
+      const hostCc = form.dataset.hostCc;
+
+      const subject = `Private session request — ${name}`;
+      const body = [
+        `Hi ${hostName},`,
+        '',
+        "I'd like to book a private guided sauna session.",
+        '',
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Preferred date: ${date}`,
+        `Preferred time: ${time}`,
+        `Number of guests: ${guests}`,
+        notes ? `Notes: ${notes}` : '',
+        '',
+        'Thanks!',
+      ]
+        .filter((line) => line !== '')
+        .join('\n');
+
+      const params = new URLSearchParams({ subject, body });
+      if (hostCc) params.set('cc', hostCc);
+
+      window.location.href = `mailto:${hostEmail}?${params.toString()}`;
+      form.closest('dialog')?.close();
+    });
+  });
+</script>
+
+<style>
+  .hosts__heading {
+    font-size: var(--text-h2);
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  .hosts__grid {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    display: flex;
+    justify-content: center;
+  }
+
+  .hosts__disclaimer {
+    margin: 1.75rem auto 0;
+    max-width: 26rem;
+    padding: 0.9rem 1.25rem;
+    border: 1px solid rgba(200, 149, 108, 0.35);
+    border-radius: 10px;
+    background: rgba(200, 149, 108, 0.06);
+    text-align: center;
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+
+  .hosts__disclaimer strong {
+    color: var(--cedar);
+    font-weight: 700;
+  }
+
+  .hosts__disclaimer a {
+    color: var(--cedar);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* The host card itself — a real <button>, his photo fills the whole thing */
+  .hosts__card {
+    position: relative;
+    width: 100%;
+    max-width: 22rem;
+    padding: 0;
+    border: 3px solid var(--cedar);
+    border-radius: 18px;
+    overflow: hidden;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    box-shadow: 0 0 0 6px rgba(200, 149, 108, 0.1);
+    transition:
+      transform var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease);
+  }
+
+  .hosts__card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 48px rgba(200, 149, 108, 0.22);
+  }
+
+  .hosts__media {
+    position: relative;
+    aspect-ratio: 3 / 4;
+  }
+
+  .hosts__media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 68% 60%;
+    transition: transform 1.1s var(--ease);
+  }
+
+  .hosts__card:hover .hosts__media img {
+    transform: scale(1.05);
+  }
+
+  .hosts__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 21, 34, 0.88) 0%, rgba(8, 21, 34, 0.05) 55%);
+  }
+
+  .hosts__price-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.4em 0.9em;
+    border-radius: 999px;
+    background: rgba(11, 29, 34, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    font-size: var(--text-tiny);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--cedar);
+  }
+
+  .hosts__overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.75rem 1.5rem;
+    text-align: left;
+    color: var(--mist);
+  }
+
+  .hosts__role {
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .hosts__name {
+    margin-top: 0.3rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 3vw, 2.1rem);
+    color: var(--mist);
+  }
+
+  .hosts__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-top: 1rem;
+    padding: 0.6em 1.2em;
+    border: 1px solid var(--mist-25);
+    border-radius: 999px;
+    font-size: var(--text-tiny);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mist);
+    transition:
+      border-color var(--dur) var(--ease),
+      color var(--dur) var(--ease),
+      gap var(--dur) var(--ease);
+  }
+
+  .hosts__card:hover .hosts__cta {
+    border-color: var(--cedar);
+    color: var(--cedar);
+    gap: 0.8em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hosts__card:hover .hosts__media img {
+      transform: none;
+    }
+  }
+
+  /* ----- Booking dialog: two panes, video ambience + form ----- */
+
+  .host-dialog {
+    margin: auto;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    max-width: 54rem;
+    width: calc(100vw - 2.5rem);
+    max-height: calc(100vh - 3rem);
+    overflow: hidden;
+    background: var(--navy);
+    color: var(--ink);
+    box-shadow: 0 30px 80px rgba(8, 21, 34, 0.55);
+  }
+
+  .host-dialog::backdrop {
+    background: rgba(8, 21, 34, 0.78);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .host-dialog__close {
+    position: absolute;
+    top: 1.1rem;
+    right: 1.1rem;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(237, 242, 240, 0.25);
+    border-radius: 50%;
+    background: rgba(8, 21, 34, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: var(--mist);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+    z-index: 2;
+  }
+
+  .host-dialog__close:hover {
+    border-color: var(--cedar);
+    color: var(--cedar);
+  }
+
+  .host-dialog__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    max-height: calc(100vh - 3rem);
+    overflow-y: auto;
+  }
+
+  @media (min-width: 720px) {
+    .host-dialog__grid {
+      grid-template-columns: 0.85fr minmax(0, 1fr);
+      align-items: stretch;
+      overflow: visible;
+      max-height: none;
+    }
+  }
+
+  /* Video pane */
+  .host-dialog__visual {
+    position: relative;
+    min-height: 13rem;
+    background-size: cover;
+    background-position: center;
+  }
+
+  @media (min-width: 720px) {
+    .host-dialog__visual {
+      min-height: 100%;
+    }
+  }
+
+  .host-dialog__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .host-dialog__visual-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(8, 21, 34, 0.92) 0%, rgba(8, 21, 34, 0.35) 60%, rgba(8, 21, 34, 0.15) 100%);
+  }
+
+  @media (min-width: 720px) {
+    .host-dialog__visual-scrim {
+      background: linear-gradient(to top, rgba(8, 21, 34, 0.9) 0%, rgba(8, 21, 34, 0.4) 65%, rgba(8, 21, 34, 0.25) 100%);
+    }
+  }
+
+  .host-dialog__visual-copy {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.75rem 1.75rem 2rem;
+    display: grid;
+    gap: 0.55rem;
+  }
+
+  .host-dialog__eyebrow {
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cedar);
+  }
+
+  .host-dialog__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 2.6vw, 1.8rem);
+    font-weight: 460;
+    color: var(--mist);
+  }
+
+  .host-dialog__note {
+    font-size: var(--text-small);
+    line-height: 1.6;
+    color: var(--mist-70);
+    max-width: 30ch;
+  }
+
+  .host-dialog__link {
+    justify-self: start;
+    margin-top: 0.2rem;
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--cedar);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200, 149, 108, 0.4);
+    padding-bottom: 0.1rem;
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  .host-dialog__link:hover {
+    border-color: var(--cedar);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .host-dialog__video {
+      display: none;
+    }
+  }
+
+  /* Form pane */
+  .host-form {
+    padding: clamp(1.75rem, 3.5vw, 2.25rem);
+    display: grid;
+    align-content: center;
+    gap: 1.1rem;
+  }
+
+  @media (min-width: 720px) {
+    .host-form {
+      max-height: calc(100vh - 3rem);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+  }
+
+  .host-form__row {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .host-form__row--three {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(4.5rem, 5.5rem);
+  }
+
+  .host-form__field {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+    font-size: var(--text-tiny);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-mid);
+  }
+
+  .host-form__field input,
+  .host-form__field textarea {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 0.7em 0.85em;
+    border: 1px solid var(--mist-10);
+    border-radius: 8px;
+    background: rgba(237, 242, 240, 0.045);
+    color: var(--ink);
+    font: inherit;
+    font-size: var(--text-small);
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: normal;
+    transition: border-color var(--dur) var(--ease), background-color var(--dur) var(--ease);
+  }
+
+  .host-form__field input::placeholder,
+  .host-form__field textarea::placeholder {
+    color: var(--ink-faint);
+  }
+
+  .host-form__field input:hover,
+  .host-form__field textarea:hover {
+    border-color: var(--mist-25);
+  }
+
+  .host-form__field input:focus-visible,
+  .host-form__field textarea:focus-visible {
+    outline: none;
+    border-color: var(--cedar);
+    background: rgba(237, 242, 240, 0.07);
+  }
+
+  .host-form__field textarea {
+    resize: vertical;
+    min-height: 3.4rem;
+  }
+
+  .host-form__submit {
+    margin-top: 0.4rem;
+    width: 100%;
+  }
+
+  @media (max-width: 480px) {
+    .host-form__row,
+    .host-form__row--three {
+      grid-template-columns: 1fr;
+    }
+
+    .host-form__field--narrow {
+      width: 100%;
+    }
+  }
+</style>
