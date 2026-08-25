@@ -215,10 +215,16 @@ const hosts = [
         .filter((line) => line !== '')
         .join('\n');
 
-      const params = new URLSearchParams({ subject, body });
-      if (hostCc) params.set('cc', hostCc);
+      // URLSearchParams encodes spaces as "+" (the HTML form convention) —
+      // mailto: links need real percent-encoding (%20), or clients like Gmail
+      // render the raw "+" characters straight into the subject/body.
+      const params = [
+        `subject=${encodeURIComponent(subject)}`,
+        `body=${encodeURIComponent(body)}`,
+      ];
+      if (hostCc) params.push(`cc=${encodeURIComponent(hostCc)}`);
 
-      window.location.href = `mailto:${hostEmail}?${params.toString()}`;
+      window.location.href = `mailto:${hostEmail}?${params.join('&')}`;
       form.closest('dialog')?.close();
     });
   });
