@@ -5,7 +5,7 @@
    KRIS_EMAIL_CC once we have it; the booking form only CCs it when set.
    ------------------------------------------------------------------ */
 
-export const KRIS_EMAIL = 'krystof@theboatyardsauna.ie';
+export const KRIS_EMAIL = 'krystoftheboatyardsauna@gmail.com';
 export const KRIS_EMAIL_CC = ''; // TODO: add Kris's second address here when we have it
 
 /* Not wired to any send pipeline — copy the HTML into Resend/Buttondown
